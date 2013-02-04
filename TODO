@@ -1,0 +1,11 @@
+//- do JSON auto marshalling also on messages from client to web service
+
+- avoid getters and setters on the entity classes? java 7?
+- setup Spring for injecting the DAOs in the Resources
+- setup GitHub (or SVN?)
+- setup Maven
+
+- log4j or commmons.logging? (both are being used currently: see jog4j.properties and HibernateSessionRequestFilter.java)
+
+- when done with DB
+	- in hibernate.properties, comment the lines under "#development config"
