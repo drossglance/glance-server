@@ -2,9 +2,7 @@ package uk.frequencymobile.flow.dev;
 
 import javax.ws.rs.core.MediaType;
 
-import uk.frequencymobile.flow.server.model.Event;
-import uk.frequencymobile.flow.server.model.Location;
-import uk.frequencymobile.flow.server.model.User;
+import uk.frequencymobile.flow.server.model.GenericEntity;
 
 import com.sun.jersey.api.client.Client;
 import com.sun.jersey.api.client.ClientResponse;
@@ -12,26 +10,11 @@ import com.sun.jersey.api.client.WebResource;
 
 public class RESTClient {
 
+	static Client client = Client.create();
+//	static String host = "localhost:8080";
+	static String host = "flow-server.herokuapp.com";
+	
 	public static void main(String[] args) {
-		Client client = Client.create();
-        
-//        // PUT user
-//        ClientResponse response = resource
-//        		.queryParam("username", "fionn")
-//        		.queryParam("password", "123")
-//        		.queryParam("fullname", "Fionn")
-//        		.queryParam("image_url", "bla")
-//        		.queryParam("bg_image_url", "ble")
-//        		.accept(MediaType.WILDCARD)
-//        		.put(ClientResponse.class);
-////        if (response.getStatus() != 201) {
-//        if (response.getStatus() != 200) {
-//			throw new RuntimeException("Failed : HTTP error code : " + response.getStatus());
-//		}
-//		System.out.println("output from server:");
-//		String output = response.getEntity(String.class);
-//		System.out.println("id = " + output);
-        
         
         // PUT user
 //        User user = new User();
@@ -40,17 +23,7 @@ public class RESTClient {
 //        user.setFullName("George Design Guy");
 //        user.setImageUrl("george.png");
 //        user.setBgImageUrl("bg.png");
-//
-//        WebResource resource = client.resource("http://localhost:8080/services/user");
-//        ClientResponse response = resource
-//				.accept(MediaType.TEXT_PLAIN)
-//				.put(ClientResponse.class, user);
-//		if (response.getStatus() != 201) {
-//			throw new RuntimeException("Failed : HTTP error code : " + response.getStatus());
-//		}
-//		System.out.println("output from server:");
-//		System.out.println(response.getLocation());
-		
+
 		
         // GET user
 //        User user = resource.path(""+output)
@@ -82,17 +55,8 @@ public class RESTClient {
 //		event.setImageUrl("bla.png");
 //		event.setLocation(location);
 //		event.setText("blAblbalBlablb a bal abl Lablab");
-//
-//		WebResource resource = client.resource("http://localhost:8080/services/event");
-//		ClientResponse response = resource
-//				.accept(MediaType.TEXT_PLAIN)
-//				.put(ClientResponse.class, event);
-//		if (response.getStatus() != 201) {
-//			throw new RuntimeException("Failed : HTTP error code : " + response.getStatus());
-//		}
-//		System.out.println("output from server:");
-//		System.out.println(response.getLocation());
-		
+//		put(event, "event");
+
 		
 		// GET event
 //		Event event = resource.path(""+1)
@@ -102,4 +66,17 @@ public class RESTClient {
 
 	}
 
+	public static void put(GenericEntity entity, String path){
+		WebResource resource = client.resource("http://" + host + "/services/" + path);
+		ClientResponse response = resource
+				.accept(MediaType.TEXT_PLAIN)
+				.put(ClientResponse.class, entity);
+		if (response.getStatus() != 201) {
+			throw new RuntimeException("Failed : HTTP error code : " + response.getStatus());
+		}
+		System.out.println("output from server:");
+		System.out.println(response.getLocation());
+		System.out.println(response.toString());
+	}
+	
 }

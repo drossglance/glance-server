@@ -1,4 +1,4 @@
-package com.example;
+package uk.frequencymobile.flow.server;
 
 import org.eclipse.jetty.server.Server;
 import org.eclipse.jetty.webapp.WebAppContext;
@@ -10,11 +10,8 @@ import org.eclipse.jetty.webapp.WebAppContext;
  * launching should fire this main method.
  *
  */
-public class Main {
+public class ServerStart {
 
-    /**
-     * @param args
-     */
     public static void main(String[] args) throws Exception{
         String webappDirLocation = "src/main/webapp/";
 
