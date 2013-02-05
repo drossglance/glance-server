@@ -7,6 +7,7 @@
 
 - tidy up NamingStrategy for db tables
 - clean com.example packages (and change Dyno classpath) and index.html
+- how to properly manage local and production versions of hibernate.properties 
 
 - log4j or commmons.logging? (both are being used currently: see jog4j.properties and HibernateSessionRequestFilter.java)
 
