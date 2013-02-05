@@ -2,8 +2,11 @@
 
 - avoid getters and setters on the entity classes? java 7?
 - setup Spring for injecting the DAOs in the Resources
-- setup GitHub (or SVN?)
-- setup Maven
+//- setup GitHub (or SVN?)
+//- setup Maven
+
+- tidy up NamingStrategy for db tables
+- clean com.example packages (and change Dyno classpath) and index.html
 
 - log4j or commmons.logging? (both are being used currently: see jog4j.properties and HibernateSessionRequestFilter.java)
 

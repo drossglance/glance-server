@@ -14,7 +14,6 @@ public class RESTClient {
 
 	public static void main(String[] args) {
 		Client client = Client.create();
-        WebResource resource = client.resource("http://localhost:8080/FlowServer/rest/event");
         
 //        // PUT user
 //        ClientResponse response = resource
@@ -33,8 +32,27 @@ public class RESTClient {
 //		String output = response.getEntity(String.class);
 //		System.out.println("id = " + output);
         
+        
+        // PUT user
+//        User user = new User();
+//        user.setUserName("george");
+//        user.setPassword("password");
+//        user.setFullName("George Design Guy");
+//        user.setImageUrl("george.png");
+//        user.setBgImageUrl("bg.png");
+//
+//        WebResource resource = client.resource("http://localhost:8080/services/user");
+//        ClientResponse response = resource
+//				.accept(MediaType.TEXT_PLAIN)
+//				.put(ClientResponse.class, user);
+//		if (response.getStatus() != 201) {
+//			throw new RuntimeException("Failed : HTTP error code : " + response.getStatus());
+//		}
+//		System.out.println("output from server:");
+//		System.out.println(response.getLocation());
 		
-//        // GET user
+		
+        // GET user
 //        User user = resource.path(""+output)
 //            .accept(MediaType.APPLICATION_JSON)
 //            .get(User.class);
@@ -51,28 +69,29 @@ public class RESTClient {
 //        	System.out.println(u);
 //        }
         
-        // PUT event
-        User author = new User();
-		author.setId(1);
-		Location location = new Location();
-		location.setLat(3.545484);
-		location.setLng(2.546464);
-		location.setAddress("5 Bonhill St.");
-		location.setDescription("Google Campus");
-		Event event = new Event();
-		event.setAuthor(author);
-		event.setImageUrl("bla.png");
-		event.setLocation(location);
-		event.setText("blAblbalBlablb a bal abl Lablab");
-
-		ClientResponse response = resource
-				.accept(MediaType.TEXT_PLAIN)
-				.put(ClientResponse.class, event);
-		if (response.getStatus() != 201) {
-			throw new RuntimeException("Failed : HTTP error code : " + response.getStatus());
-		}
-		System.out.println("output from server:");
-		System.out.println(response.getLocation());
+		// PUT event
+//		User author = new User();
+//		author.setId(1);
+//		Location location = new Location();
+//		location.setLat(3.545484);
+//		location.setLng(2.546464);
+//		location.setAddress("5 Bonhill St.");
+//		location.setDescription("Google Campus");
+//		Event event = new Event();
+//		event.setAuthor(author);
+//		event.setImageUrl("bla.png");
+//		event.setLocation(location);
+//		event.setText("blAblbalBlablb a bal abl Lablab");
+//
+//		WebResource resource = client.resource("http://localhost:8080/services/event");
+//		ClientResponse response = resource
+//				.accept(MediaType.TEXT_PLAIN)
+//				.put(ClientResponse.class, event);
+//		if (response.getStatus() != 201) {
+//			throw new RuntimeException("Failed : HTTP error code : " + response.getStatus());
+//		}
+//		System.out.println("output from server:");
+//		System.out.println(response.getLocation());
 		
 		
 		// GET event

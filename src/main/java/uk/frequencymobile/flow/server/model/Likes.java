@@ -7,7 +7,7 @@ import javax.persistence.OneToOne;
 public class Likes extends GenericEntity {
 
 	@OneToOne
-	User user;
+	User author;
 	
 	@OneToOne
 	Event event;

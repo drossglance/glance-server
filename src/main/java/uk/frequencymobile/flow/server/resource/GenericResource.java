@@ -59,7 +59,7 @@ public class GenericResource<T extends GenericEntity> {
 	@Produces(MediaType.TEXT_PLAIN)
 	public Response create(T entity){
 		dao.makePersistent(entity);
-		URI uri = uriInfo.getBaseUriBuilder().path(""+entity.getId()).build();
+		URI uri = uriInfo.getBaseUriBuilder().path(""+entity.getId()).build(); //TODO missing the enitity type in path
 		return Response.created(uri).build();
 	}
 	

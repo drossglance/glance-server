@@ -5,8 +5,10 @@ import java.util.List;
 import javax.persistence.Embedded;
 import javax.persistence.Entity;
 import javax.persistence.OneToMany;
+import javax.persistence.Table;
 
 @Entity
+@Table(name="tb_user")
 public class User extends GenericEntity{
 
 	String userName;
