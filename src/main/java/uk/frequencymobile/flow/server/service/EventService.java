@@ -1,4 +1,4 @@
-package uk.frequencymobile.flow.server.resource;
+package uk.frequencymobile.flow.server.service;
 
 import java.util.List;
 
@@ -13,12 +13,12 @@ import uk.frequencymobile.flow.server.model.Event;
 
 
 @Path("/event")
-public class EventResource extends GenericResource<Event>{
+public class EventService extends GenericService<Event>{
 
 	EventDAO eventDao;
 	UserDAO userDao;
 
-	public EventResource() {
+	public EventService() {
 		super(new EventDAO());
 		eventDao = (EventDAO)dao;
 		userDao = new UserDAO();

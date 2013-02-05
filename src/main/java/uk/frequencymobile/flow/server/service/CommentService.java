@@ -1,4 +1,4 @@
-package uk.frequencymobile.flow.server.resource;
+package uk.frequencymobile.flow.server.service;
 
 import java.util.List;
 
@@ -14,12 +14,12 @@ import uk.frequencymobile.flow.server.model.Event;
 
 
 @Path("/comment")
-public class CommentResource extends GenericResource<Comment>{
+public class CommentService extends GenericService<Comment>{
 
 	CommentDAO commentDao;
 	UserDAO userDao;
 
-	public CommentResource() {
+	public CommentService() {
 		super(new CommentDAO());
 		commentDao = (CommentDAO)dao;
 		userDao = new UserDAO();

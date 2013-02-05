@@ -1,4 +1,4 @@
-package uk.frequencymobile.flow.server.resource;
+package uk.frequencymobile.flow.server.service;
 
 import javax.ws.rs.Path;
 
@@ -7,11 +7,11 @@ import uk.frequencymobile.flow.server.model.User;
 
 
 @Path("/user")
-public class UserResource extends GenericResource<User>{
+public class UserService extends GenericService<User>{
 
 	UserDAO userDao = new UserDAO();
 
-	public UserResource() {
+	public UserService() {
 		super(new UserDAO());
 		userDao = (UserDAO)dao;
 	}

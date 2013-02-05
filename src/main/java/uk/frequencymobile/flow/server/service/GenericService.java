@@ -1,4 +1,4 @@
-package uk.frequencymobile.flow.server.resource;
+package uk.frequencymobile.flow.server.service;
 
 import java.lang.reflect.ParameterizedType;
 import java.net.URI;
@@ -25,7 +25,7 @@ import uk.frequencymobile.flow.server.model.GenericEntity;
  * TODO inject the DAO from spring
  */
 @SuppressWarnings("unchecked")
-public class GenericResource<T extends GenericEntity> {
+public class GenericService<T extends GenericEntity> {
 
 	Class<T> entityClass;
 	GenericDAO<T> dao;
@@ -33,7 +33,7 @@ public class GenericResource<T extends GenericEntity> {
 	@Context UriInfo uriInfo;
 	@Context Request request;
 	
-	public GenericResource(GenericDAO<T> dao) {
+	public GenericService(GenericDAO<T> dao) {
         this.entityClass = (Class<T>) ((ParameterizedType) getClass().getGenericSuperclass()).getActualTypeArguments()[0];
         this.dao = dao;
      }
