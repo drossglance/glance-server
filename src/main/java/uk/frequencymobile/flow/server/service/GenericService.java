@@ -41,7 +41,6 @@ public class GenericService<T extends GenericEntity> {
 	@GET
 	@Produces(MediaType.APPLICATION_JSON)
 	public List<T> findAll(){
-		/*TRACE*/System.out.println("findAll()");
 		List<T> list = dao.findAll();
 		return list;
 	}

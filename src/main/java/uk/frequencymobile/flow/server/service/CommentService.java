@@ -26,7 +26,7 @@ public class CommentService extends GenericService<Comment>{
 	}
 	
 	@GET
-	@Path("/{id}")
+	@Path("/user-{id}")
 	public Response findByAuthor(@PathParam("id") long userId) {
 		List<Event> list = commentDao.findByAuthor(userId);
 		String output = list.toString();
