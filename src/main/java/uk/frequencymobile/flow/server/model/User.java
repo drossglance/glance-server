@@ -2,72 +2,37 @@ package uk.frequencymobile.flow.server.model;
 
 import java.util.List;
 
+import javax.persistence.CollectionTable;
+import javax.persistence.ElementCollection;
 import javax.persistence.Embedded;
 import javax.persistence.Entity;
+import javax.persistence.JoinColumn;
 import javax.persistence.OneToMany;
 import javax.persistence.Table;
 
 @Entity
-@Table(name="tb_user")
+@Table(name="tb_user") //for PostgreSQL compatibility, TODO:do this for all tables as a NamingStrategy
 public class User extends GenericEntity{
 
-	String userName;
-	
-	String password;
-	
-	String fullName;
-	
-	String imageUrl;
-	
-	String bgImageUrl;
-	
-	@OneToMany
-	List<User> friends;
-	
-	@OneToMany
-	List<Event> feed;
+	@ElementCollection
+	@CollectionTable(joinColumns=@JoinColumn(name="user_id")) //for PostgreSQL compatibility, TODO:do this for all fks as a NamingStrategy
+	List<UserProfile> profileHistory;
 	
 	@Embedded
 	UserSettings settings;
 	
-	public String getUserName() {
-		return userName;
+	@OneToMany
+	List<User> friends;
+	
+	@OneToMany(mappedBy="author")
+	List<Event> events;
+	
+	public List<UserProfile> getUserProfile() {
+		return profileHistory;
 	}
-
-	public void setUserName(String userName) {
-		this.userName = userName;
-	}
-
-	public String getPassword() {
-		return password;
-	}
-
-	public void setPassword(String password) {
-		this.password = password;
-	}
-
-	public String getFullName() {
-		return fullName;
-	}
-
-	public void setFullName(String fullName) {
-		this.fullName = fullName;
-	}
-
-	public String getImageUrl() {
-		return imageUrl;
-	}
-
-	public void setImageUrl(String imageUrl) {
-		this.imageUrl = imageUrl;
-	}
-
-	public String getBgImageUrl() {
-		return bgImageUrl;
-	}
-
-	public void setBgImageUrl(String bgImageUrl) {
-		this.bgImageUrl = bgImageUrl;
+	
+	public void setUserProfile(List<UserProfile> userProfile) {
+		this.profileHistory = userProfile;
 	}
 
 	public List<User> getFriends() {
@@ -76,14 +41,6 @@ public class User extends GenericEntity{
 
 	public void setFriends(List<User> friends) {
 		this.friends = friends;
-	}
-
-	public List<Event> getFeed() {
-		return feed;
-	}
-
-	public void setFeed(List<Event> feed) {
-		this.feed = feed;
 	}
 
 	public UserSettings getSettings() {
@@ -97,11 +54,7 @@ public class User extends GenericEntity{
 	@Override
 	public String toString() {
 		return super.toString()
-				+ " | " + userName
-				+ " | " + password
-				+ " | " + fullName
-				+ " | " + imageUrl
-				+ " | " + bgImageUrl;
+				+ " | " + profileHistory;
 	}
 	
 }

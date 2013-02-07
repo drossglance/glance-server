@@ -1,11 +1,17 @@
 package uk.frequencymobile.flow.dev;
 
+import java.util.ArrayList;
+import java.util.List;
+
 import javax.ws.rs.core.MediaType;
 
 import uk.frequencymobile.flow.server.model.Event;
 import uk.frequencymobile.flow.server.model.GenericEntity;
 import uk.frequencymobile.flow.server.model.Location;
+import uk.frequencymobile.flow.server.model.Media;
+import uk.frequencymobile.flow.server.model.Media.Type;
 import uk.frequencymobile.flow.server.model.User;
+import uk.frequencymobile.flow.server.model.UserProfile;
 
 import com.sun.jersey.api.client.Client;
 import com.sun.jersey.api.client.ClientResponse;
@@ -21,12 +27,13 @@ public class RESTClient {
 		
 		for(int i=0; i<10; i++){
 			// PUT user
+			UserProfile profile = new UserProfile();
+			profile.setUserName("user" + i);
+			profile.setFullName("User Name " + i);
 			User user = new User();
-			user.setUserName("user" + i);
-			user.setPassword("password");
-			user.setFullName("User Name " + i);
-			user.setImageUrl("user" + i + ".png");
-			user.setBgImageUrl("user" + i + "_bg.png");
+			List<UserProfile> profiles = new ArrayList<UserProfile>();
+			profiles.add(profile);
+			user.setUserProfile(profiles);
 			put(user, "user");
 		}
 		
@@ -39,11 +46,16 @@ public class RESTClient {
 			location.setLng(-0.08553);
 			location.setAddress("5 Bonhill St.");
 			location.setDescription("Google Campus");
+			Media media = new Media();
+			media.setType(Type.IMAGE);
+			media.setUrl("image" + i + ".png");
+			List<Media> medias = new ArrayList<Media>();
+			medias.add(media);
 			Event event = new Event();
 			event.setAuthor(author);
-			event.setImageUrl("event" + i + ".png");
 			event.setLocation(location);
 			event.setText("bla bla bla bla bla..");
+			event.setMedia(medias);
 			put(event, "event");
 		}
 		

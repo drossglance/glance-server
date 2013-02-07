@@ -10,11 +10,17 @@ import org.hibernate.service.ServiceRegistry;
 import org.hibernate.service.ServiceRegistryBuilder;
 
 import uk.frequencymobile.flow.server.model.Comment;
+import uk.frequencymobile.flow.server.model.CommentFeeling;
 import uk.frequencymobile.flow.server.model.Event;
+import uk.frequencymobile.flow.server.model.EventFeeling;
+import uk.frequencymobile.flow.server.model.Feeling;
 import uk.frequencymobile.flow.server.model.GenericEntity;
-import uk.frequencymobile.flow.server.model.Likes;
 import uk.frequencymobile.flow.server.model.Location;
+import uk.frequencymobile.flow.server.model.Media;
 import uk.frequencymobile.flow.server.model.User;
+import uk.frequencymobile.flow.server.model.UserContent;
+import uk.frequencymobile.flow.server.model.UserExpression;
+import uk.frequencymobile.flow.server.model.UserProfile;
 import uk.frequencymobile.flow.server.model.UserSettings;
 
 public class HibernateUtil {
@@ -28,11 +34,19 @@ public class HibernateUtil {
 				.addPackage("uk.frequencymobile.flow.server.model")
 				.addAnnotatedClass(GenericEntity.class)
 				.addAnnotatedClass(User.class)
+				.addAnnotatedClass(UserProfile.class)
+				.addAnnotatedClass(UserSettings.class)
 				.addAnnotatedClass(Location.class)
+				.addAnnotatedClass(UserContent.class)
 				.addAnnotatedClass(Event.class)
+				.addAnnotatedClass(UserExpression.class)
 				.addAnnotatedClass(Comment.class)
-				.addAnnotatedClass(Likes.class)
-				.addAnnotatedClass(UserSettings.class);
+				.addAnnotatedClass(Feeling.class)
+				.addAnnotatedClass(EventFeeling.class)
+				.addAnnotatedClass(CommentFeeling.class)
+				.addAnnotatedClass(Media.class);
+			
+			
 //			new SchemaExport(config).create(true, true);
 			ServiceRegistry serviceRegistry = new ServiceRegistryBuilder().applySettings(config.getProperties()).buildServiceRegistry();
 			sessionFactory = config.buildSessionFactory(serviceRegistry);

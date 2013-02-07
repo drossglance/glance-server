@@ -9,7 +9,8 @@ import javax.persistence.MappedSuperclass;
 @MappedSuperclass
 public abstract class GenericEntity {
 
-	@Id @GeneratedValue
+	@Id
+	@GeneratedValue
 	long id;
 	
 	Date creationTime;
