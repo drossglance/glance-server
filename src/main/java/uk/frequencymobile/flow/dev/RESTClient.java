@@ -20,8 +20,8 @@ import com.sun.jersey.api.client.WebResource;
 public class RESTClient {
 
 	static Client client = Client.create();
-	static String host = "localhost:8080";
-//	static String host = "flow-server.herokuapp.com";
+//	static String host = "localhost:8080";
+	static String host = "flow-server.herokuapp.com";
 	
 	public static void createDummyData() {
 		
