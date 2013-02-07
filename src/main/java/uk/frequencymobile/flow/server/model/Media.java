@@ -5,11 +5,11 @@ import javax.persistence.Embeddable;
 @Embeddable
 public class Media{
 
-	public enum Type { IMAGE, DRAWING, SOUND }
+	public enum MediaType { IMAGE, DRAWING, SOUND }
 	
 	String url;
 	
-	Type type;
+	MediaType type;
 	
 	public String getUrl() {
 		return url;
@@ -19,11 +19,11 @@ public class Media{
 		this.url = url;
 	}
 
-	public Type getType() {
+	public MediaType getType() {
 		return type;
 	}
 
-	public void setType(Type type) {
+	public void setType(MediaType type) {
 		this.type = type;
 	}
 

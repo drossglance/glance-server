@@ -1,17 +1,17 @@
 package uk.frequencymobile.flow.dev;
 
+import static javax.ws.rs.core.MediaType.TEXT_PLAIN;
+
 import java.util.ArrayList;
 import java.util.List;
 
-import javax.ws.rs.core.MediaType;
-
-import uk.frequencymobile.flow.server.model.Event;
-import uk.frequencymobile.flow.server.model.GenericEntity;
 import uk.frequencymobile.flow.server.model.Location;
 import uk.frequencymobile.flow.server.model.Media;
-import uk.frequencymobile.flow.server.model.Media.Type;
-import uk.frequencymobile.flow.server.model.User;
+import uk.frequencymobile.flow.server.model.Media.MediaType;
 import uk.frequencymobile.flow.server.model.UserProfile;
+import uk.frequencymobile.flow.server.transfer.EventDTO;
+import uk.frequencymobile.flow.server.transfer.GenericDTO;
+import uk.frequencymobile.flow.server.transfer.UserDTO;
 
 import com.sun.jersey.api.client.Client;
 import com.sun.jersey.api.client.ClientResponse;
@@ -30,29 +30,25 @@ public class RESTClient {
 			UserProfile profile = new UserProfile();
 			profile.setUserName("user" + i);
 			profile.setFullName("User Name " + i);
-			User user = new User();
-			List<UserProfile> profiles = new ArrayList<UserProfile>();
-			profiles.add(profile);
-			user.setUserProfile(profiles);
+			UserDTO user = new UserDTO();
+			user.setProfile(profile);
 			put(user, "user");
 		}
 		
 		for(int i=0; i<10; i++){
 			// PUT event
-			User author = new User();
-			author.setId(1);
 			Location location = new Location();
 			location.setLat(51.52257);
 			location.setLng(-0.08553);
 			location.setAddress("5 Bonhill St.");
 			location.setDescription("Google Campus");
 			Media media = new Media();
-			media.setType(Type.IMAGE);
-			media.setUrl("image" + i + ".png");
+			media.setType(MediaType.IMAGE);
+			media.setUrl("http://www.nottingham.ac.uk/UGstudy/images-multimedia/Open-day-image-dtp-Cropped-714x474.jpg");
 			List<Media> medias = new ArrayList<Media>();
 			medias.add(media);
-			Event event = new Event();
-			event.setAuthor(author);
+			EventDTO event = new EventDTO();
+			event.setAuthorId(1);
 			event.setLocation(location);
 			event.setText("bla bla bla bla bla..");
 			event.setMedia(medias);
@@ -61,9 +57,9 @@ public class RESTClient {
 		
 	}
 
-	public static void put(GenericEntity entity, String path) {
+	public static void put(GenericDTO dto, String path) {
 		WebResource resource = client.resource("http://" + host + "/services/" + path);
-		ClientResponse response = resource.accept(MediaType.TEXT_PLAIN).put(ClientResponse.class, entity);
+		ClientResponse response = resource.accept(TEXT_PLAIN).put(ClientResponse.class, dto);
 		if (response.getStatus() != 201) {
 			throw new RuntimeException("Failed : HTTP error code : " + response.getStatus());
 		}

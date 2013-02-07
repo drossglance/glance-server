@@ -17,4 +17,20 @@ public class Comment extends UserContent {
 	@OneToMany(mappedBy="subject")
 	List<CommentFeeling> feelings;
 
+	public Event getSubject() {
+		return subject;
+	}
+
+	public void setSubject(Event subject) {
+		this.subject = subject;
+	}
+
+	public List<CommentFeeling> getFeelings() {
+		return feelings;
+	}
+
+	public void setFeelings(List<CommentFeeling> feelings) {
+		this.feelings = feelings;
+	}
+
 }

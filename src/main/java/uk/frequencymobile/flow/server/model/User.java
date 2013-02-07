@@ -27,14 +27,6 @@ public class User extends GenericEntity{
 	@OneToMany(mappedBy="author")
 	List<Event> events;
 	
-	public List<UserProfile> getUserProfile() {
-		return profileHistory;
-	}
-	
-	public void setUserProfile(List<UserProfile> userProfile) {
-		this.profileHistory = userProfile;
-	}
-
 	public List<User> getFriends() {
 		return friends;
 	}
@@ -49,6 +41,23 @@ public class User extends GenericEntity{
 
 	public void setSettings(UserSettings settings) {
 		this.settings = settings;
+	}
+	
+
+	public List<UserProfile> getProfileHistory() {
+		return profileHistory;
+	}
+
+	public void setProfileHistory(List<UserProfile> profileHistory) {
+		this.profileHistory = profileHistory;
+	}
+
+	public List<Event> getEvents() {
+		return events;
+	}
+
+	public void setEvents(List<Event> events) {
+		this.events = events;
 	}
 
 	@Override

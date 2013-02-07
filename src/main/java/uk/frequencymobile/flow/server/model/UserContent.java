@@ -6,7 +6,7 @@ import javax.persistence.ElementCollection;
 import javax.persistence.Embedded;
 import javax.persistence.MappedSuperclass;
 
-import uk.frequencymobile.flow.server.model.Media.Type;
+import uk.frequencymobile.flow.server.model.Media.MediaType;
 
 @MappedSuperclass
 public abstract class UserContent extends UserExpression{
@@ -19,7 +19,7 @@ public abstract class UserContent extends UserExpression{
 	@ElementCollection
 	List<Media> media;
 	
-	Type mediaType;
+	MediaType mediaType;
 	
 	public String getText() {
 		return text;
@@ -45,11 +45,11 @@ public abstract class UserContent extends UserExpression{
 		this.media = media;
 	}
 
-	public Type getMediaType() {
+	public MediaType getMediaType() {
 		return mediaType;
 	}
 
-	public void setMediaType(Type mediaType) {
+	public void setMediaType(MediaType mediaType) {
 		this.mediaType = mediaType;
 	}
 

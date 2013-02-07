@@ -11,10 +11,12 @@ import uk.frequencymobile.flow.server.data.CommentDAO;
 import uk.frequencymobile.flow.server.data.UserDAO;
 import uk.frequencymobile.flow.server.model.Comment;
 import uk.frequencymobile.flow.server.model.Event;
+import uk.frequencymobile.flow.server.model.User;
+import uk.frequencymobile.flow.server.transfer.CommentDTO;
 
 
 @Path("/comment")
-public class CommentService extends GenericService<Comment>{
+public class CommentService extends GenericService<Comment, CommentDTO>{
 
 	CommentDAO commentDao;
 	UserDAO userDao;
@@ -31,6 +33,37 @@ public class CommentService extends GenericService<Comment>{
 		List<Event> list = commentDao.findByAuthor(userId);
 		String output = list.toString();
 		return Response.status(200).entity(output).build();
+	}
+
+	@Override
+	protected CommentDTO toDTO(Comment comment) {
+		CommentDTO dto = new CommentDTO();
+		dto.setId(comment.getId());
+		dto.setAuthorId(comment.getAuthor().getId());
+		dto.setSubjectId(comment.getSubject().getId());
+		dto.setLocation(comment.getLocation());
+		dto.setMedia(comment.getMedia());
+		dto.setMediaType(comment.getMediaType());
+		dto.setText(comment.getText());
+		return dto;
+	}
+	
+	@Override
+	protected Comment fromDTO(CommentDTO dto) {
+
+		User user = new User();
+		user.setId(dto.getAuthorId());
+		Event event = new Event();
+		event.setId(dto.getSubjectId());
+		Comment comment = new Comment();
+		comment.setAuthor(user);
+		comment.setSubject(event);
+		comment.setLocation(dto.getLocation());
+		comment.setMedia(dto.getMedia());
+		comment.setMediaType(dto.getMediaType());
+		comment.setText(dto.getText());
+		
+		return comment;
 	}
 	
 }

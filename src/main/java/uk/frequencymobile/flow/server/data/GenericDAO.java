@@ -8,6 +8,7 @@ import org.hibernate.Session;
 import org.hibernate.criterion.Criterion;
 import org.hibernate.criterion.Example;
 
+import uk.frequencymobile.flow.server.model.GenericEntity;
 import uk.frequencymobile.flow.server.util.HibernateUtil;
 
 /**
@@ -15,12 +16,9 @@ import uk.frequencymobile.flow.server.util.HibernateUtil;
  * Provides common DAO methods and initializes the session.
  * https://community.jboss.org/wiki/GenericDataAccessObjects
  * http://www.ibm.com/developerworks/java/library/j-genericdao/index.html
- * 
- * @param <T>
- * The type of the persisted entity
  */
 @SuppressWarnings("unchecked")
-public class GenericDAO<T> {
+public class GenericDAO<T extends GenericEntity> {
 
 	Class<T> entityClass;
     Session session;

@@ -5,8 +5,8 @@ import javax.persistence.MappedSuperclass;
 @MappedSuperclass
 public abstract class Feeling extends UserExpression {
 
-	public enum Type{ LIKES, DISLIKES }
+	public enum FeelingValue{ LIKES, DISLIKES }
 	
-	Type type;
+	FeelingValue value;
 	
 }
