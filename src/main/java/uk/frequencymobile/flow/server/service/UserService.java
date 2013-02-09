@@ -22,16 +22,6 @@ public class UserService extends GenericService<User, UserDTO>{
 		userDao = (UserDAO)dao;
 	}
 	
-	//TODO use this if generic method in GenericService doesn't work
-//	@Override
-//	protected List<UserDTO> buildDTO(List<User> users){
-//		List<UserDTO> dto = new ArrayList<UserDTO>();
-//		for(User u : users){
-//			dto.add(buildDTO(u));
-//		}
-//		return dto;
-//	}
-	
 	@Override
 	protected UserDTO toDTO(User user){
 		UserDTO dto = new UserDTO();

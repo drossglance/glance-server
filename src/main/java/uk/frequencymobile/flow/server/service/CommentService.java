@@ -5,7 +5,6 @@ import java.util.List;
 import javax.ws.rs.GET;
 import javax.ws.rs.Path;
 import javax.ws.rs.PathParam;
-import javax.ws.rs.core.Response;
 
 import uk.frequencymobile.flow.server.data.CommentDAO;
 import uk.frequencymobile.flow.server.data.UserDAO;
@@ -29,10 +28,9 @@ public class CommentService extends GenericService<Comment, CommentDTO>{
 	
 	@GET
 	@Path("/user-{id}")
-	public Response findByAuthor(@PathParam("id") long userId) {
-		List<Event> list = commentDao.findByAuthor(userId);
-		String output = list.toString();
-		return Response.status(200).entity(output).build();
+	public List<CommentDTO> findByAuthor(@PathParam("id") long userId) {
+		List<Comment> list = commentDao.findByAuthor(userId);
+		return toDTO(list);
 	}
 
 	@Override

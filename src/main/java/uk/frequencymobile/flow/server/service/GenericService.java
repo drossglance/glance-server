@@ -1,6 +1,5 @@
 package uk.frequencymobile.flow.server.service;
 
-import java.lang.reflect.ParameterizedType;
 import java.net.URI;
 import java.util.ArrayList;
 import java.util.List;
@@ -24,19 +23,16 @@ import uk.frequencymobile.flow.server.transfer.GenericDTO;
 
 /**
  * @author Victor Basso
- * TODO inject the DAO from spring
+ * TODO inject the DAOs through spring
  */
-@SuppressWarnings("unchecked")
 public abstract class GenericService<T extends GenericEntity, U extends GenericDTO> {
 
-	Class<T> entityClass;
 	GenericDAO<T> dao;
 	
 	@Context UriInfo uriInfo;
 	@Context Request request;
 	
 	public GenericService(GenericDAO<T> dao) {
-        this.entityClass = (Class<T>) ((ParameterizedType) getClass().getGenericSuperclass()).getActualTypeArguments()[0];
         this.dao = dao;
      }
 	
