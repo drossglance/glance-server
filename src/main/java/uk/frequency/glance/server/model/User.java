@@ -1,5 +1,6 @@
 package uk.frequency.glance.server.model;
 
+import java.util.Arrays;
 import java.util.List;
 
 import javax.persistence.CollectionTable;
@@ -50,6 +51,10 @@ public class User extends GenericEntity{
 
 	public void setProfileHistory(List<UserProfile> profileHistory) {
 		this.profileHistory = profileHistory;
+	}
+	
+	public void setProfile(UserProfile... profile){
+		this.profileHistory = Arrays.asList(profile);
 	}
 
 	public List<Event> getEvents() {

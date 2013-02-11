@@ -1,4 +1,4 @@
-package uk.frequency.glance.dev;
+package uk.frequency.glance.test;
 
 import static javax.ws.rs.core.MediaType.TEXT_PLAIN;
 
@@ -20,8 +20,8 @@ import com.sun.jersey.api.client.WebResource;
 public class RESTClient {
 
 	static Client client = Client.create();
-//	static String host = "localhost:8080";
-	static String host = "flow-server.herokuapp.com";
+	static String host = "localhost:8080";
+//	static String host = "flow-server.herokuapp.com";
 	
 	public static void createDummyData() {
 		
@@ -41,7 +41,7 @@ public class RESTClient {
 			location.setLat(51.52257);
 			location.setLng(-0.08553);
 			location.setAddress("5 Bonhill St.");
-			location.setDescription("Google Campus");
+			location.setName("Google Campus");
 			Media media = new Media();
 			media.setType(MediaType.IMAGE);
 			media.setUrl("http://www.nottingham.ac.uk/UGstudy/images-multimedia/Open-day-image-dtp-Cropped-714x474.jpg");
@@ -70,7 +70,7 @@ public class RESTClient {
 
 	public static void main(String[] args) {
         
-		createDummyData();
+//		createDummyData();
 		
         // GET user
 //        User user = resource.path(""+output)
@@ -94,6 +94,13 @@ public class RESTClient {
 //			.accept(MediaType.APPLICATION_JSON)
 //	        .get(Event.class);
 //		System.out.println(event);
+		
+//		//PUT auto generated event
+//		WebResource resource = client.resource("http://" + host + "/services/" + "event/user-" + 1 + "/auto-generated")
+//			.queryParam("lat", "51.501397")
+//			.queryParam("lng", "-0.124369");
+//		ClientResponse response = resource.put(ClientResponse.class);
+//		System.out.println("status = " + response.getStatus());
 
 	}
 	

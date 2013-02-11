@@ -1,5 +1,6 @@
 package uk.frequency.glance.server.model;
 
+import java.util.Arrays;
 import java.util.List;
 
 import javax.persistence.ElementCollection;
@@ -43,6 +44,10 @@ public abstract class UserContent extends UserExpression{
 
 	public void setMedia(List<Media> media) {
 		this.media = media;
+	}
+	
+	public void setMedia(Media... media){
+		this.media = Arrays.asList(media);
 	}
 
 	public MediaType getMediaType() {

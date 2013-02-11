@@ -70,7 +70,14 @@
 			<version>9.1-901-1.jdbc4</version>
 		</dependency>
 		
-		<!-- TODO: clean this later -->
+		<!-- 3rd Party APIs -->
+		<dependency>
+			<groupId>com.google.code.geocoder-java</groupId>
+			<artifactId>geocoder-java</artifactId>
+			<version>0.12</version>
+		</dependency>
+		
+		<!-- TODO: clean this later (use log4j) -->
 		<dependency>
 			<groupId>org.apache.directory.studio</groupId>
 			<artifactId>org.apache.commons.logging</artifactId>

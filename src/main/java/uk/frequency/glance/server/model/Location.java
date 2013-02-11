@@ -10,8 +10,8 @@ public class Location{
 	
 	double lng;
 	
-	@Column(name="location_descr")
-	String description;
+	@Column(name="location_name")
+	String name;
 	
 	@Column(name="location_address")
 	String address;
@@ -32,12 +32,12 @@ public class Location{
 		this.lng = lng;
 	}
 
-	public String getDescription() {
-		return description;
+	public String getName() {
+		return name;
 	}
 
-	public void setDescription(String description) {
-		this.description = description;
+	public void setName(String name) {
+		this.name = name;
 	}
 
 	public String getAddress() {
@@ -53,7 +53,7 @@ public class Location{
 		return super.toString()
 				+ " | " + lat
 				+ " | " + lng
-				+ " | " + description
+				+ " | " + name
 				+ " | " + address;
 	}
 	

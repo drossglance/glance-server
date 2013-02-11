@@ -1,9 +1,11 @@
-- set creation date and default values on entity creation
+- set creation date at database level
 - tidy up NamingStrategy for db tables (workaround reserved words: user, like)
 
 - how to properly manage local and production versions of hibernate.properties 
 - avoid getters and setters on the entity classes? java 7?
 - setup Spring for injecting the DAOs in the Resources
 - log4j or commmons.logging? (both are being used currently: see jog4j.properties and HibernateSessionRequestFilter.java)
+- https on internal and external requests (hide user location, data, etc)
+- authentication for the REST api
 - when done with DB
 	- in hibernate.properties, comment the lines under "#development config"

@@ -37,17 +37,21 @@ public class EventSL extends GenericSL<Event, EventDTO>{
 	}
 	
 	@PUT
-	@Path("/auto-generated")
+	@Path("/user-{id}/auto-generated")
 	@Produces()
 	public Response generateEvent(
+			@PathParam("id") long userId,
 			@QueryParam("lat") double lat,
 			@QueryParam("lng") double lng){
-		eventBl.generateEvent(lat, lng);
+		
+		eventBl.generateEvent(lat, lng, userId);
+		
 		return Response.status(Status.ACCEPTED).build();
 	}
 	
 	@Override
 	protected EventDTO toDTO(Event event){
+		
 		EventDTO dto = new EventDTO();
 		dto.setId(event.getId());
 		dto.setAuthorId(event.getAuthor().getId());
