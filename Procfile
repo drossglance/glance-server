@@ -1,1 +1,1 @@
-web: java -cp target/classes:target/dependency/* uk.frequencymobile.flow.server.ServerStart
+web: java -cp target/classes:target/dependency/* uk.frequency.glance.server.ServerStart
