@@ -3,18 +3,19 @@ package uk.frequency.glance.server.service;
 import java.util.ArrayList;
 import java.util.List;
 
+import javax.ws.rs.Consumes;
 import javax.ws.rs.GET;
 import javax.ws.rs.PUT;
 import javax.ws.rs.Path;
 import javax.ws.rs.PathParam;
-import javax.ws.rs.Produces;
-import javax.ws.rs.QueryParam;
+import javax.ws.rs.core.MediaType;
 import javax.ws.rs.core.Response;
 import javax.ws.rs.core.Response.Status;
 
 import uk.frequency.glance.server.business.EventBL;
 import uk.frequency.glance.server.model.Comment;
 import uk.frequency.glance.server.model.Event;
+import uk.frequency.glance.server.model.Location;
 import uk.frequency.glance.server.model.User;
 import uk.frequency.glance.server.transfer.EventDTO;
 
@@ -38,14 +39,11 @@ public class EventSL extends GenericSL<Event, EventDTO>{
 	
 	@PUT
 	@Path("/user-{id}/auto-generated")
-	@Produces()
-	public Response generateEvent(
-			@PathParam("id") long userId,
-			@QueryParam("lat") double lat,
-			@QueryParam("lng") double lng){
-		
-		eventBl.generateEvent(lat, lng, userId);
-		
+	@Consumes(MediaType.APPLICATION_JSON)
+	public Response generateEvent(Location location, 
+			@PathParam("id") long userId){
+		/*DEBUG*/System.out.println("Request received. user=" + userId + ", lat=" + location.getLat() + ", lng=" + location.getLng());
+		eventBl.generateEvent(location, userId);
 		return Response.status(Status.ACCEPTED).build();
 	}
 	

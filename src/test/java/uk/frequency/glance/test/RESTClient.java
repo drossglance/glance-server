@@ -22,10 +22,13 @@ public class RESTClient {
 	static Client client = Client.create();
 	static String host = "localhost:8080";
 //	static String host = "flow-server.herokuapp.com";
-	
-	public static void createDummyData() {
-		
-		for(int i=0; i<10; i++){
+
+	public static void main(String[] args) {
+		putDummyUsers(1);
+	}
+
+	static void putDummyUsers(int n) {
+		for(int i=0; i<n; i++){
 			// PUT user
 			UserProfile profile = new UserProfile();
 			profile.setUserName("user" + i);
@@ -34,8 +37,10 @@ public class RESTClient {
 			user.setProfile(profile);
 			put(user, "user");
 		}
-		
-		for(int i=0; i<10; i++){
+	}
+	
+	static void putDummyEvents(int n) {
+		for(int i=0; i<n; i++){
 			// PUT event
 			Location location = new Location();
 			location.setLat(51.52257);
@@ -54,10 +59,9 @@ public class RESTClient {
 			event.setMedia(medias);
 			put(event, "event");
 		}
-		
 	}
 
-	public static void put(GenericDTO dto, String path) {
+	static void put(GenericDTO dto, String path) {
 		WebResource resource = client.resource("http://" + host + "/services/" + path);
 		ClientResponse response = resource.accept(TEXT_PLAIN).put(ClientResponse.class, dto);
 		if (response.getStatus() != 201) {
@@ -68,40 +72,5 @@ public class RESTClient {
 		System.out.println(response.toString());
 	}
 
-	public static void main(String[] args) {
-        
-//		createDummyData();
-		
-        // GET user
-//        User user = resource.path(""+output)
-//            .accept(MediaType.APPLICATION_JSON)
-//            .get(User.class);
-//        System.out.println(user);
- 
-        
-//        // GET all users
-//        List<User> users = resource
-//            .accept(MediaType.APPLICATION_JSON)
-//            .get(new GenericType<List<User>>(){});
-//        System.out.println("size = " + users.size());
-//        
-//        for(User u : users){
-//        	System.out.println(u);
-//        }
-        
-		// GET event
-//		Event event = resource.path(""+1)
-//			.accept(MediaType.APPLICATION_JSON)
-//	        .get(Event.class);
-//		System.out.println(event);
-		
-//		//PUT auto generated event
-//		WebResource resource = client.resource("http://" + host + "/services/" + "event/user-" + 1 + "/auto-generated")
-//			.queryParam("lat", "51.501397")
-//			.queryParam("lng", "-0.124369");
-//		ClientResponse response = resource.put(ClientResponse.class);
-//		System.out.println("status = " + response.getStatus());
-
-	}
 	
 }

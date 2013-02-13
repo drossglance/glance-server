@@ -24,17 +24,14 @@ public class EventBL extends GenericBL<Event>{
 		return list;
 	}
 	
-	public void generateEvent(double lat, double lng, long userId){
-		String imageUrl = GoogleAPIs.getStreetViewImageUrl(lat, lng); //TODO get more from google places and also streetview with different headings, choose best image somehow
-		String address = GoogleAPIs.getAddress(lat, lng);
+	public void generateEvent(Location location, long userId){
+		String imageUrl = GoogleAPIs.getStreetViewImageUrl(location.getLat(), location.getLng()); //TODO get more from google places and also streetview with different headings, choose best image somehow
+		String address = GoogleAPIs.getAddress(location.getLat(), location.getLng());
 		String description = null; //TODO get from google places
 		String text = "auto generated"; //TODO
 
-		Location location = new Location();
 		location.setAddress(address);
 		location.setName(description);
-		location.setLat(lat);
-		location.setLng(lng);
 		MediaType mediaType = MediaType.IMAGE;
 		Media media = new Media();
 		media.setType(mediaType);
