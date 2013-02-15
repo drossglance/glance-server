@@ -2,9 +2,10 @@ package uk.frequency.glance.server.business;
 
 import java.util.List;
 
+import org.hibernate.ObjectNotFoundException;
+
 import uk.frequency.glance.server.data_access.EventDAL;
 import uk.frequency.glance.server.data_access.UserDAL;
-import uk.frequency.glance.server.data_access.exception.InvalidParameterException;
 import uk.frequency.glance.server.model.Event;
 import uk.frequency.glance.server.model.Location;
 import uk.frequency.glance.server.model.Media;
@@ -23,11 +24,10 @@ public class EventBL extends GenericBL<Event>{
 		userDal = new UserDAL();
 	}
 	
-	public List<Event> findByAuthor(long userId) throws InvalidParameterException {
+	public List<Event> findByAuthor(long userId) throws ObjectNotFoundException {
 
 		User user = userDal.findById(userId);
-		if(user == null)
-			throw new InvalidParameterException("user id " + userId + " doesn't exist");
+		user.getId(); //make hibernate do the actual select so it can throw ObjectNotFound. TODO understand why hibernate doesn't throw the exception without this, find appropriate way to accomplish this. 
 		
 		List<Event> list = eventDal.findByAuthor(userId);
 		return list;

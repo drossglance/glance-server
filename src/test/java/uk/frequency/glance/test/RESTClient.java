@@ -20,13 +20,15 @@ import com.sun.jersey.api.client.WebResource;
 public class RESTClient {
 
 	static Client client = Client.create();
-//	static String host = "localhost:8080";
-	static String host = "glance-server.herokuapp.com";
+	static String host = "localhost:8080";
+//	static String host = "glance-server.herokuapp.com";
 
 	public static void main(String[] args) {
-		Object ref = null;
-		String str = "response: " + null + ", location: " + ((ref == null) ? "null" : ref.toString());
-		System.out.println(str);
+		WebResource resource = client.resource("http://" + host + "/services/event/user-3");
+		ClientResponse response = resource.accept(TEXT_PLAIN).get(ClientResponse.class);
+		if (response.getStatus() != 200) {
+			throw new RuntimeException("Failed : HTTP error code : " + response.getStatus());
+		}
 	}
 
 	static void putDummyUsers(int n) {
