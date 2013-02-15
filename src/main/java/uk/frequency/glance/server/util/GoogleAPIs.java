@@ -1,9 +1,13 @@
 package uk.frequency.glance.server.util;
 
+import java.util.List;
+
 import com.google.code.geocoder.Geocoder;
 import com.google.code.geocoder.GeocoderRequestBuilder;
 import com.google.code.geocoder.model.GeocodeResponse;
+import com.google.code.geocoder.model.GeocoderAddressComponent;
 import com.google.code.geocoder.model.GeocoderRequest;
+import com.google.code.geocoder.model.GeocoderResult;
 import com.google.code.geocoder.model.GeocoderStatus;
 import com.google.code.geocoder.model.LatLng;
 
@@ -45,7 +49,6 @@ public class GoogleAPIs {
 //		return url;
 //	}
 	
-	//TODO get from google places
 	public static String getAddress(double lat, double lng){
 		Geocoder geo = new Geocoder(); //TODO create clientId? https://developers.google.com/maps/documentation/business/guide
 		LatLng latlng = new LatLng(""+lat, ""+lng);
@@ -56,15 +59,34 @@ public class GoogleAPIs {
 		if(!status.equals(GeocoderStatus.OK))
 			throw new RuntimeException("geocoding api returned status: " + status);
 		
-//		for(GeocoderResult result : res.getResults()){
-//			for(GeocoderAddressComponent comp : result.getAddressComponents()){
-//				System.out.println(comp.getTypes().toString() + ": " + comp.getShortName());
-//			}
-//			/*TEST*/System.out.println();
-//		}
-		
 		String address = res.getResults().get(0).getFormattedAddress();
 		return address;
+	}
+	
+	// TODO get from google places
+	public static String getLocationName(double lat, double lng) {
+		Geocoder geo = new Geocoder(); // TODO create clientId? https://developers.google.com/maps/documentation/business/guide
+		LatLng latlng = new LatLng("" + lat, "" + lng);
+		GeocoderRequest req = new GeocoderRequestBuilder().setLocation(latlng).getGeocoderRequest();
+		GeocodeResponse res = geo.geocode(req);
+
+		GeocoderStatus status = res.getStatus();
+		if (!status.equals(GeocoderStatus.OK))
+			throw new RuntimeException("geocoding api returned status: " + status);
+
+		String[] preferedTypesInOrder = {"route", "locality", "political", "administrative_area_level_2", "administrative_area_level_2", "country"};  
+		for(String preferedType :  preferedTypesInOrder){
+			for(GeocoderResult result : res.getResults()){
+				for(GeocoderAddressComponent comp : result.getAddressComponents()){
+					List<String> types = comp.getTypes();
+					if(types.contains(preferedType)){
+						return comp.getLongName();
+					}
+				}
+			}
+		}
+		
+		return res.getResults().get(0).getFormattedAddress();
 	}
 
 }

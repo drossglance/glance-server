@@ -1,5 +1,6 @@
 package uk.frequency.glance.server.service;
 
+import java.net.URI;
 import java.util.ArrayList;
 import java.util.List;
 
@@ -10,7 +11,6 @@ import javax.ws.rs.Path;
 import javax.ws.rs.PathParam;
 import javax.ws.rs.core.MediaType;
 import javax.ws.rs.core.Response;
-import javax.ws.rs.core.Response.Status;
 
 import uk.frequency.glance.server.business.EventBL;
 import uk.frequency.glance.server.model.Comment;
@@ -43,8 +43,9 @@ public class EventSL extends GenericSL<Event, EventDTO>{
 	public Response generateEvent(Location location, 
 			@PathParam("id") long userId){
 		/*DEBUG*/System.out.println("Request received. user=" + userId + ", lat=" + location.getLat() + ", lng=" + location.getLng());
-		eventBl.generateEvent(location, userId);
-		return Response.status(Status.ACCEPTED).build();
+		long id = eventBl.generateEvent(location, userId);
+		URI uri = uriInfo.getBaseUriBuilder().path(""+id).build(); //TODO missing the enitity type in path
+		return Response.created(uri).build();
 	}
 	
 	@Override

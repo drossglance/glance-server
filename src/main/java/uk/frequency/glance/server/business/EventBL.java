@@ -24,9 +24,9 @@ public class EventBL extends GenericBL<Event>{
 		return list;
 	}
 	
-	public void generateEvent(Location location, long userId){
+	public long generateEvent(Location location, long userId){
 		String imageUrl = GoogleAPIs.getStreetViewImageUrl(location.getLat(), location.getLng()); //TODO get more from google places and also streetview with different headings, choose best image somehow
-		String address = GoogleAPIs.getAddress(location.getLat(), location.getLng());
+		String address = GoogleAPIs.getLocationName(location.getLat(), location.getLng());
 		String description = null; //TODO get from google places
 		String text = "auto generated"; //TODO
 
@@ -47,6 +47,8 @@ public class EventBL extends GenericBL<Event>{
 		event.setText(text);
 		
 		makePersistent(event);
+		
+		return event.getId();
 	}
 	
 }

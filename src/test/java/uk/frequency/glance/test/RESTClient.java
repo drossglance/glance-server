@@ -7,8 +7,8 @@ import java.util.List;
 
 import uk.frequency.glance.server.model.Location;
 import uk.frequency.glance.server.model.Media;
-import uk.frequency.glance.server.model.UserProfile;
 import uk.frequency.glance.server.model.Media.MediaType;
+import uk.frequency.glance.server.model.UserProfile;
 import uk.frequency.glance.server.transfer.EventDTO;
 import uk.frequency.glance.server.transfer.GenericDTO;
 import uk.frequency.glance.server.transfer.UserDTO;
@@ -20,11 +20,13 @@ import com.sun.jersey.api.client.WebResource;
 public class RESTClient {
 
 	static Client client = Client.create();
-	static String host = "localhost:8080";
-//	static String host = "flow-server.herokuapp.com";
+//	static String host = "localhost:8080";
+	static String host = "glance-server.herokuapp.com";
 
 	public static void main(String[] args) {
-		putDummyUsers(1);
+		Object ref = null;
+		String str = "response: " + null + ", location: " + ((ref == null) ? "null" : ref.toString());
+		System.out.println(str);
 	}
 
 	static void putDummyUsers(int n) {
