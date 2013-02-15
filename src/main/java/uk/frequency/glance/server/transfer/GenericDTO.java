@@ -1,14 +1,13 @@
 package uk.frequency.glance.server.transfer;
 
 import java.io.Serializable;
-import java.util.Date;
 
 @SuppressWarnings("serial")
 public abstract class GenericDTO implements Serializable {
 	
 	long id;
 
-	Date creationTime;
+	long creationTime;//TODO sort out Date convertion to JSON between Jersey and Gson
 
 	public long getId() {
 		return id;
@@ -18,11 +17,11 @@ public abstract class GenericDTO implements Serializable {
 		this.id = id;
 	}
 
-	public Date getCreationTime() {
+	public long getCreationTime() {
 		return creationTime;
 	}
 
-	public void setCreationTime(Date creationTime) {
+	public void setCreationTime(long creationTime) {
 		this.creationTime = creationTime;
 	}
 	
