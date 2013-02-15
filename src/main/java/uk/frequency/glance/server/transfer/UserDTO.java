@@ -7,21 +7,12 @@ import uk.frequency.glance.server.model.UserProfile;
 @SuppressWarnings("serial")
 public class UserDTO extends GenericDTO{
 
-	long id;
-	
 	UserProfile profile;
 	
 	List<Long> friendsIds;
 
 	List<Long> eventsIds;
 
-	public long getId() {
-		return id;
-	}
-
-	public void setId(long id) {
-		this.id = id;
-	}
 
 	public UserProfile getProfile() {
 		return profile;
