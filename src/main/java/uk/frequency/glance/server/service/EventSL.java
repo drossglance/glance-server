@@ -12,6 +12,7 @@ import javax.ws.rs.Path;
 import javax.ws.rs.PathParam;
 import javax.ws.rs.core.MediaType;
 import javax.ws.rs.core.Response;
+import javax.ws.rs.core.Response.Status;
 
 import uk.frequency.glance.server.business.EventBL;
 import uk.frequency.glance.server.model.Comment;
@@ -33,9 +34,14 @@ public class EventSL extends GenericSL<Event, EventDTO>{
 	
 	@GET
 	@Path("/user-{id}")
-	public List<EventDTO> findByAuthor(@PathParam("id") long userId) {
-		List<Event> list = eventBl.findByAuthor(userId);
-		return toDTO(list);
+	public Response findByAuthor(@PathParam("id") long userId) {
+		try {
+			List<Event> list = eventBl.findByAuthor(userId);
+			return Response.ok(toDTO(list)).build();
+		} catch (uk.frequency.glance.server.data_access.exception.InvalidParameterException e) {
+			return Response.status(Status.NOT_FOUND).build();
+		}
+		
 	}
 	
 	@PUT

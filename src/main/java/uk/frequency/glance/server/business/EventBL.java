@@ -3,6 +3,8 @@ package uk.frequency.glance.server.business;
 import java.util.List;
 
 import uk.frequency.glance.server.data_access.EventDAL;
+import uk.frequency.glance.server.data_access.UserDAL;
+import uk.frequency.glance.server.data_access.exception.InvalidParameterException;
 import uk.frequency.glance.server.model.Event;
 import uk.frequency.glance.server.model.Location;
 import uk.frequency.glance.server.model.Media;
@@ -13,13 +15,20 @@ import uk.frequency.glance.server.util.GoogleAPIs;
 public class EventBL extends GenericBL<Event>{
 
 	EventDAL eventDal;
+	UserDAL userDal;
 
 	public EventBL() {
 		super(new EventDAL());
 		eventDal = (EventDAL)dal;
+		userDal = new UserDAL();
 	}
 	
-	public List<Event> findByAuthor(long userId) {
+	public List<Event> findByAuthor(long userId) throws InvalidParameterException {
+
+		User user = userDal.findById(userId);
+		if(user == null)
+			throw new InvalidParameterException("user id " + userId + " doesn't exist");
+		
 		List<Event> list = eventDal.findByAuthor(userId);
 		return list;
 	}
