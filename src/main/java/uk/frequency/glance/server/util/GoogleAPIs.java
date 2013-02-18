@@ -56,8 +56,10 @@ public class GoogleAPIs {
 		GeocodeResponse res = geo.geocode(req);
 		
 		GeocoderStatus status = res.getStatus();
-		if(!status.equals(GeocoderStatus.OK))
-			throw new RuntimeException("geocoding api returned status: " + status);
+		if (!status.equals(GeocoderStatus.OK)){
+			System.err.println("geocoding api returned status: " + status);
+			return "Somewhere"; //TODO
+		}
 		
 		String address = res.getResults().get(0).getFormattedAddress();
 		return address;
@@ -71,8 +73,10 @@ public class GoogleAPIs {
 		GeocodeResponse res = geo.geocode(req);
 
 		GeocoderStatus status = res.getStatus();
-		if (!status.equals(GeocoderStatus.OK))
-			throw new RuntimeException("geocoding api returned status: " + status);
+		if (!status.equals(GeocoderStatus.OK)){
+			System.err.println("geocoding api returned status: " + status);
+			return "Somewhere"; //TODO
+		}
 
 		String[] preferedTypesInOrder = {"route", "locality", "political", "administrative_area_level_2", "administrative_area_level_2", "country"};  
 		for(String preferedType :  preferedTypesInOrder){
