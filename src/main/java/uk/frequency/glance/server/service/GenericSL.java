@@ -57,7 +57,7 @@ public abstract class GenericSL<T extends GenericEntity, U extends GenericDTO> {
 	public Response create(U dto){
 		T entity = fromDTO(dto);
 		business.makePersistent(entity);
-		URI uri = uriInfo.getBaseUriBuilder().path(""+entity.getId()).build(); //TODO missing the enitity type in path
+		URI uri = uriInfo.getBaseUriBuilder().path(""+entity.getId()).build(); //FIXME missing the enitity type in path
 		return Response.created(uri).build();
 	}
 	
