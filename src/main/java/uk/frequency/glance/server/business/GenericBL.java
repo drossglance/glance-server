@@ -1,7 +1,6 @@
 package uk.frequency.glance.server.business;
 
 import java.lang.reflect.ParameterizedType;
-import java.util.Date;
 import java.util.List;
 
 import uk.frequency.glance.server.data_access.GenericDAL;
@@ -33,20 +32,4 @@ public abstract class GenericBL<T extends GenericEntity> {
 		return dal.makePersistent(entity);
 	}
 	
-	/**
-	 * Initializes the entity with default values.
-	 */
-	protected T newEntity(){
-		T entity = null;
-		try {
-			entity = entityClass.newInstance();
-			entity.setCreationTime(new Date());
-		} catch (InstantiationException e) {
-			e.printStackTrace();
-		} catch (IllegalAccessException e) {
-			e.printStackTrace();
-		}
-		return entity;
-	}
-
 }

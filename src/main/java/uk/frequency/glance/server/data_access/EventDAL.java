@@ -4,8 +4,8 @@ import java.util.List;
 
 import org.hibernate.Query;
 
-import uk.frequency.glance.server.model.Event;
 import uk.frequency.glance.server.model.User;
+import uk.frequency.glance.server.model.event.Event;
 
 @SuppressWarnings("unchecked")
 public class EventDAL extends GenericDAL<Event>{

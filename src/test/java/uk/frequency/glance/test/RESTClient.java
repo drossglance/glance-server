@@ -8,9 +8,10 @@ import java.util.List;
 import uk.frequency.glance.server.model.Location;
 import uk.frequency.glance.server.model.Media;
 import uk.frequency.glance.server.model.Media.MediaType;
+import uk.frequency.glance.server.model.Position;
 import uk.frequency.glance.server.model.UserProfile;
-import uk.frequency.glance.server.transfer.EventDTO;
 import uk.frequency.glance.server.transfer.GenericDTO;
+import uk.frequency.glance.server.transfer.TellEventDTO;
 import uk.frequency.glance.server.transfer.UserDTO;
 
 import com.sun.jersey.api.client.Client;
@@ -46,9 +47,11 @@ public class RESTClient {
 	static void putDummyEvents(int n) {
 		for(int i=0; i<n; i++){
 			// PUT event
+			Position position = new Position();
+			position.setLat(51.52257);
+			position.setLng(-0.08553);
 			Location location = new Location();
-			location.setLat(51.52257);
-			location.setLng(-0.08553);
+			location.setPosition(position);
 			location.setAddress("5 Bonhill St.");
 			location.setName("Google Campus");
 			Media media = new Media();
@@ -56,7 +59,7 @@ public class RESTClient {
 			media.setUrl("http://www.nottingham.ac.uk/UGstudy/images-multimedia/Open-day-image-dtp-Cropped-714x474.jpg");
 			List<Media> medias = new ArrayList<Media>();
 			medias.add(media);
-			EventDTO event = new EventDTO();
+			TellEventDTO event = new TellEventDTO();
 			event.setAuthorId(1);
 			event.setLocation(location);
 			event.setText("bla bla bla bla bla..");

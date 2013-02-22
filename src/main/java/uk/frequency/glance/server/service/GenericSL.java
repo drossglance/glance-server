@@ -61,7 +61,7 @@ public abstract class GenericSL<T extends GenericEntity, U extends GenericDTO> {
 		return Response.created(uri).build();
 	}
 	
-	protected List<U> toDTO(List<T> list){
+	protected List<U> toDTO(List<? extends T> list){
 		List<U> dto = new ArrayList<U>();
 		for(T entity : list){
 			dto.add(toDTO(entity));

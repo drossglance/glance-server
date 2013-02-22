@@ -1,8 +1,8 @@
 package uk.frequency.glance.server.model;
 
-import javax.persistence.MappedSuperclass;
+import javax.persistence.Embeddable;
 
-@MappedSuperclass
+@Embeddable
 public abstract class Feeling extends UserExpression {
 
 	public enum FeelingValue{ LIKES, DISLIKES }

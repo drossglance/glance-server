@@ -11,6 +11,8 @@ import javax.persistence.JoinColumn;
 import javax.persistence.OneToMany;
 import javax.persistence.Table;
 
+import uk.frequency.glance.server.model.event.Event;
+
 @Entity
 @Table(name="tb_user") //for PostgreSQL compatibility, TODO:do this for all tables as a NamingStrategy
 public class User extends GenericEntity{

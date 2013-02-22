@@ -9,8 +9,8 @@ import javax.ws.rs.PathParam;
 
 import uk.frequency.glance.server.business.CommentBL;
 import uk.frequency.glance.server.model.Comment;
-import uk.frequency.glance.server.model.Event;
 import uk.frequency.glance.server.model.User;
+import uk.frequency.glance.server.model.event.Event;
 import uk.frequency.glance.server.transfer.CommentDTO;
 
 
@@ -40,7 +40,6 @@ public class CommentSL extends GenericSL<Comment, CommentDTO>{
 		dto.setSubjectId(comment.getSubject().getId());
 		dto.setLocation(comment.getLocation());
 		dto.setMedia(comment.getMedia());
-		dto.setMediaType(comment.getMediaType());
 		dto.setText(comment.getText());
 		return dto;
 	}
@@ -58,7 +57,6 @@ public class CommentSL extends GenericSL<Comment, CommentDTO>{
 		comment.setSubject(event);
 		comment.setLocation(dto.getLocation());
 		comment.setMedia(dto.getMedia());
-		comment.setMediaType(dto.getMediaType());
 		comment.setText(dto.getText());
 		
 		return comment;

@@ -9,7 +9,7 @@ public abstract class UserExpression extends GenericEntity{
 
 	@ManyToOne
 	@JoinColumn
-	User author;
+	protected User author;
 
 	public User getAuthor() {
 		return author;

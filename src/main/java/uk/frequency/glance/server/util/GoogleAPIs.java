@@ -2,6 +2,8 @@ package uk.frequency.glance.server.util;
 
 import java.util.List;
 
+import uk.frequency.glance.server.model.Position;
+
 import com.google.code.geocoder.Geocoder;
 import com.google.code.geocoder.GeocoderRequestBuilder;
 import com.google.code.geocoder.model.GeocodeResponse;
@@ -31,10 +33,10 @@ public class GoogleAPIs {
 		return url;
 	}
 	
-	public static String getStreetViewImageUrl(double lat, double lng){
+	public static String getStreetViewImageUrl(Position pos){
 		String url = streetViewUrl + 
 				"?size=" + imageSize + 
-				"&location=" + lat + ",%20" + lng +
+				"&location=" + pos.getLat() + ",%20" + pos.getLng() +
 				"&sensor=true" +
 				"&key="+ key;
 		return url;
@@ -49,9 +51,9 @@ public class GoogleAPIs {
 //		return url;
 //	}
 	
-	public static String getAddress(double lat, double lng){
+	public static String getAddress(Position pos){
 		Geocoder geo = new Geocoder(); //TODO create clientId? https://developers.google.com/maps/documentation/business/guide
-		LatLng latlng = new LatLng(""+lat, ""+lng);
+		LatLng latlng = new LatLng(""+pos.getLat(), ""+pos.getLng());
 		GeocoderRequest req = new GeocoderRequestBuilder().setLocation(latlng).getGeocoderRequest();
 		GeocodeResponse res = geo.geocode(req);
 		
@@ -66,9 +68,9 @@ public class GoogleAPIs {
 	}
 	
 	// TODO get from google places
-	public static String getLocationName(double lat, double lng) {
+	public static String getLocationName(Position pos) {
 		Geocoder geo = new Geocoder(); // TODO create clientId? https://developers.google.com/maps/documentation/business/guide
-		LatLng latlng = new LatLng("" + lat, "" + lng);
+		LatLng latlng = new LatLng("" + pos.getLat(), "" + pos.getLng());
 		GeocoderRequest req = new GeocoderRequestBuilder().setLocation(latlng).getGeocoderRequest();
 		GeocodeResponse res = geo.geocode(req);
 

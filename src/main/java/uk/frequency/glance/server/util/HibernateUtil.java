@@ -10,18 +10,22 @@ import org.hibernate.service.ServiceRegistry;
 import org.hibernate.service.ServiceRegistryBuilder;
 
 import uk.frequency.glance.server.model.Comment;
-import uk.frequency.glance.server.model.CommentFeeling;
-import uk.frequency.glance.server.model.Event;
-import uk.frequency.glance.server.model.EventFeeling;
 import uk.frequency.glance.server.model.Feeling;
 import uk.frequency.glance.server.model.GenericEntity;
 import uk.frequency.glance.server.model.Location;
 import uk.frequency.glance.server.model.Media;
+import uk.frequency.glance.server.model.Position;
 import uk.frequency.glance.server.model.User;
-import uk.frequency.glance.server.model.UserContent;
 import uk.frequency.glance.server.model.UserExpression;
 import uk.frequency.glance.server.model.UserProfile;
 import uk.frequency.glance.server.model.UserSettings;
+import uk.frequency.glance.server.model.event.Action;
+import uk.frequency.glance.server.model.event.Event;
+import uk.frequency.glance.server.model.event.EventScore;
+import uk.frequency.glance.server.model.event.ListenAction;
+import uk.frequency.glance.server.model.event.StayEvent;
+import uk.frequency.glance.server.model.event.TellEvent;
+import uk.frequency.glance.server.model.event.MoveEvent;
 
 public class HibernateUtil {
 
@@ -37,13 +41,17 @@ public class HibernateUtil {
 				.addAnnotatedClass(UserProfile.class)
 				.addAnnotatedClass(UserSettings.class)
 				.addAnnotatedClass(Location.class)
-				.addAnnotatedClass(UserContent.class)
+				.addAnnotatedClass(Position.class)
 				.addAnnotatedClass(Event.class)
+				.addAnnotatedClass(StayEvent.class)
+				.addAnnotatedClass(MoveEvent.class)
+				.addAnnotatedClass(TellEvent.class)
+				.addAnnotatedClass(Action.class)
+				.addAnnotatedClass(ListenAction.class)
+				.addAnnotatedClass(EventScore.class)
 				.addAnnotatedClass(UserExpression.class)
 				.addAnnotatedClass(Comment.class)
 				.addAnnotatedClass(Feeling.class)
-				.addAnnotatedClass(EventFeeling.class)
-				.addAnnotatedClass(CommentFeeling.class)
 				.addAnnotatedClass(Media.class);
 			
 			

@@ -11,11 +11,11 @@ public abstract class GenericEntity {
 
 	@Id
 	@GeneratedValue
-	long id;
+	protected long id;
 	
-	Date creationTime;
+	protected Date creationTime;
 	
-	boolean deleted;
+	protected boolean deleted;
 
 	public long getId() {
 		return id;

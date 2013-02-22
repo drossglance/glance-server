@@ -7,9 +7,9 @@ import java.util.List;
 import javax.ws.rs.Path;
 
 import uk.frequency.glance.server.business.UserBL;
-import uk.frequency.glance.server.model.Event;
 import uk.frequency.glance.server.model.User;
 import uk.frequency.glance.server.model.UserProfile;
+import uk.frequency.glance.server.model.event.Event;
 import uk.frequency.glance.server.transfer.UserDTO;
 
 

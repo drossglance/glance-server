@@ -5,7 +5,7 @@ import javax.persistence.Embeddable;
 @Embeddable
 public class Media{
 
-	public enum MediaType { IMAGE, DRAWING, SOUND }
+	public enum MediaType { IMAGE, DRAWING, SOUND, VIDEO }
 	
 	String url;
 	
