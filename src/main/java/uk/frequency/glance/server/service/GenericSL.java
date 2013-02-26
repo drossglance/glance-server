@@ -14,7 +14,12 @@ import javax.ws.rs.core.Context;
 import javax.ws.rs.core.MediaType;
 import javax.ws.rs.core.Request;
 import javax.ws.rs.core.Response;
+import javax.ws.rs.core.Response.Status;
 import javax.ws.rs.core.UriInfo;
+
+import org.hibernate.ObjectNotFoundException;
+import org.hibernate.TransientObjectException;
+import org.hibernate.exception.ConstraintViolationException;
 
 import uk.frequency.glance.server.business.GenericBL;
 import uk.frequency.glance.server.model.GenericEntity;
@@ -46,19 +51,32 @@ public abstract class GenericSL<T extends GenericEntity, U extends GenericDTO> {
 	@GET
 	@Path("/{id}")
 	@Produces(MediaType.APPLICATION_JSON)
-	public U findById(@PathParam("id") long id) {
-		T entity = business.findById(id);
-		return toDTO(entity);
+	public Response findById(@PathParam("id") long id) {
+		try{
+			T entity = business.findById(id);
+			return Response.status(Status.OK)
+					.entity(toDTO(entity)).build();
+		}catch(ObjectNotFoundException e){
+			return Response.status(Status.NOT_FOUND).build();
+		}
 	}
 	
 	@POST
 	@Consumes(MediaType.APPLICATION_JSON)
 	@Produces(MediaType.TEXT_PLAIN)
 	public Response create(U dto){
-		T entity = fromDTO(dto);
-		business.create(entity);
-		URI uri = uriInfo.getBaseUriBuilder().path(""+entity.getId()).build(); //FIXME missing the enitity type in path
-		return Response.created(uri).build();
+		try{
+			T entity = fromDTO(dto);
+			business.create(entity); //TODO capture ConstraintViolationExceptions
+			URI uri = uriInfo.getAbsolutePathBuilder().path("{index}").build(entity.getId());
+			return Response.created(uri).build();
+		}catch(ConstraintViolationException e){
+			return Response.status(Status.CONFLICT)
+					.entity("Object contains an invalid reference.").build();
+		}catch(TransientObjectException e){
+			return Response.status(Status.CONFLICT)
+					.entity("Object lacks a required reference.").build();
+		}
 	}
 	
 	protected List<U> toDTO(List<? extends T> list){

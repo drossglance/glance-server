@@ -21,7 +21,7 @@ import uk.frequency.glance.server.util.HibernateUtil;
 public class GenericDAL<T extends GenericEntity> {
 
 	Class<T> entityClass;
-    Session session;
+	Session session;
  
 	public GenericDAL() {
 		this.entityClass = (Class<T>) ((ParameterizedType) getClass().getGenericSuperclass()).getActualTypeArguments()[0];
@@ -29,7 +29,7 @@ public class GenericDAL<T extends GenericEntity> {
 	}
  
     public T findById(long id) {
-        T entity = (T) session.load(entityClass, id);
+        T entity = (T) getSession().load(entityClass, id);
         return entity;
     }
  
@@ -38,7 +38,7 @@ public class GenericDAL<T extends GenericEntity> {
     }
  
     public List<T> findByExample(T exampleInstance, String[] excludeProperty) {
-        Criteria crit = session.createCriteria(entityClass);
+        Criteria crit = getSession().createCriteria(entityClass);
         Example example =  Example.create(exampleInstance);
         for (String exclude : excludeProperty) {
             example.excludeProperty(exclude);
@@ -48,23 +48,42 @@ public class GenericDAL<T extends GenericEntity> {
     }
  
     public T makePersistent(T entity) {
-    	session.saveOrUpdate(entity);
+    	getSession().saveOrUpdate(entity);
         return entity;
     }
  
     public void makeTransient(T entity) {
-    	session.delete(entity);
+    	getSession().delete(entity);
     }
  
     /**
      * Use this inside subclasses as a convenience method.
      */
-    protected List<T> findByCriteria(Criterion... criterion) {
-        Criteria crit = session.createCriteria(entityClass);
-        for (Criterion c : criterion) {
-            crit.add(c);
-        }
-        return crit.list();
-   }
+	protected List<T> findByCriteria(Criterion... criterion) {
+		Criteria crit = getSession().createCriteria(entityClass);
+		for (Criterion c : criterion) {
+			crit.add(c);
+		}
+		return crit.list();
+	}
+	
+	public void flush(){
+		try{
+			getSession().getTransaction().commit();
+//			getSession().flush();
+		} catch (Throwable ex) {
+			if (getSession().getTransaction().isActive()) {
+				getSession().getTransaction().rollback();
+			}
+			getSession().beginTransaction();
+			throw ex;
+		}
+		getSession().beginTransaction();
+	}
+	
+	protected Session getSession(){
+		return HibernateUtil.getSessionFactory().getCurrentSession();
+//		return session;
+	}
 	
 }

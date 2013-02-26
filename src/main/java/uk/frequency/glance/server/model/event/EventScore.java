@@ -1,14 +1,18 @@
 package uk.frequency.glance.server.model.event;
 
+import javax.persistence.Column;
 import javax.persistence.Embeddable;
 
 @Embeddable
 public class EventScore {
 
+	@Column(columnDefinition="int default 0")
 	int work;
 	
+	@Column(columnDefinition="int default 0")
 	int fun;
 	
+	@Column(columnDefinition="int default 0")
 	int health;
 	
 	public int getWork() {

@@ -11,13 +11,13 @@ import uk.frequency.glance.server.model.user.User;
 public class TraceDAL extends GenericDAL<Trace>{
 
 	public List<Trace> findByUser(User user){
-		Query q = session.createQuery("from Event where user = :user")
+		Query q = getSession().createQuery("from Event where user = :user")
 			.setEntity("user", user);
 		return q.list();
 	}
 	
 	public List<Trace> findByUser(long userId){
-		Query q = session.createQuery("from Trace where user.id = :userId")
+		Query q = getSession().createQuery("from Trace where user.id = :userId")
 			.setParameter("userId", userId);
 		return q.list();
 	}

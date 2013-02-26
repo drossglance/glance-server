@@ -7,3 +7,6 @@
 - log4j or commmons.logging? (both are being used currently: see jog4j.properties and HibernateSessionRequestFilter.java)
 - https on internal and external requests (hide user location, data, etc)
 - authentication for the REST api
+
+- delete methods
+- return bad_request for json parsing errors

@@ -11,13 +11,13 @@ import uk.frequency.glance.server.model.user.User;
 public class CommentDAL extends GenericDAL<Comment>{
 	
 	public List<Comment> findByAuthor(User author){
-		Query q = session.createQuery("from Comment where user = :user")
+		Query q = getSession().createQuery("from Comment where user = :user")
 			.setEntity("user", author);
 		return q.list();
 	}
 	
 	public List<Comment> findByAuthor(long authorId){
-		Query q = session.createQuery("from Comment where user.id = :userId")
+		Query q = getSession().createQuery("from Comment where user.id = :userId")
 			.setParameter("userId", authorId);
 		return q.list();
 	}

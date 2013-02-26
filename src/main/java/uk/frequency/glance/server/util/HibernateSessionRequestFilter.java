@@ -18,7 +18,7 @@ import org.hibernate.StaleObjectStateException;
 /**
  * @author Victor Basso
  * Opens an Hibernate session in the beginning of each request and closes it in the end, implementing the "session-per-request" pattern.
- * Also does it transparently, allowing the use of the same session through multiple layers (from the data access to web service). 
+ * Also does it transparently, allowing the use of the same session through multiple layers (from data access to web service). 
  * 
  * https://community.jboss.org/wiki/Sessionsandtransactions
  * https://community.jboss.org/wiki/OpenSessionInView
@@ -48,9 +48,7 @@ public class HibernateSessionRequestFilter implements Filter {
             log.error("This interceptor does not implement optimistic concurrency control!");
             log.error("Your application will not work until you add compensation actions!");
             // Rollback, close everything, possibly compensate for any permanent changes
-            // during the conversation, and finally restart business conversation. Maybe
-            // give the user of the application a chance to merge some of his work with
-            // fresh data... what you do here depends on your applications design.
+            // during the conversation, and finally restart business conversation.
             throw staleEx;
         } catch (Throwable ex) {
             // Rollback only

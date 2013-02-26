@@ -32,8 +32,7 @@ public class EventBL extends GenericBL<Event>{
 	
 	public List<Event> findByAuthor(long userId) throws ObjectNotFoundException {
 		User user = userDal.findById(userId);
-		user.getId(); //make hibernate do the actual select so it can throw ObjectNotFound. TODO understand why hibernate doesn't throw the exception without this, find appropriate way to accomplish this. 
-		
+		user.getId(); //make hibernate do the actual select so it can throw ObjectNotFound. TODO find appropriate way to accomplish this. 
 		List<Event> list = eventDal.findByAuthor(userId);
 		return list;
 	}
