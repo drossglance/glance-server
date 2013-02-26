@@ -23,7 +23,7 @@ import uk.frequency.glance.server.transfer.GenericDTO;
 
 /**
  * @author Victor Basso
- * TODO inject the DAOs through spring
+ * TODO inject the DALs through spring
  */
 public abstract class GenericSL<T extends GenericEntity, U extends GenericDTO> {
 
@@ -56,7 +56,7 @@ public abstract class GenericSL<T extends GenericEntity, U extends GenericDTO> {
 	@Produces(MediaType.TEXT_PLAIN)
 	public Response create(U dto){
 		T entity = fromDTO(dto);
-		business.makePersistent(entity);
+		business.create(entity);
 		URI uri = uriInfo.getBaseUriBuilder().path(""+entity.getId()).build(); //FIXME missing the enitity type in path
 		return Response.created(uri).build();
 	}

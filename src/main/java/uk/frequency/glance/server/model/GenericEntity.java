@@ -10,7 +10,7 @@ import javax.persistence.MappedSuperclass;
 public abstract class GenericEntity {
 
 	@Id
-	@GeneratedValue
+	@GeneratedValue //TODO create different generators for each hierarchy
 	protected long id;
 	
 	protected Date creationTime;

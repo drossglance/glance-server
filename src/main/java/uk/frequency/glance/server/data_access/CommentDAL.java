@@ -5,19 +5,19 @@ import java.util.List;
 import org.hibernate.Query;
 
 import uk.frequency.glance.server.model.Comment;
-import uk.frequency.glance.server.model.User;
+import uk.frequency.glance.server.model.user.User;
 
 @SuppressWarnings("unchecked")
 public class CommentDAL extends GenericDAL<Comment>{
 	
 	public List<Comment> findByAuthor(User author){
-		Query q = session.createQuery("from Comment where author = :user")
+		Query q = session.createQuery("from Comment where user = :user")
 			.setEntity("user", author);
 		return q.list();
 	}
 	
 	public List<Comment> findByAuthor(long authorId){
-		Query q = session.createQuery("from Comment where author.id = :userId")
+		Query q = session.createQuery("from Comment where user.id = :userId")
 			.setParameter("userId", authorId);
 		return q.list();
 	}

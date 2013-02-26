@@ -3,9 +3,7 @@
 
 - how to properly manage local and production versions of hibernate.properties 
 - avoid getters and setters on the entity classes? java 7?
-- setup Spring for injecting the DAOs in the Resources
+- setup Spring for injecting the DAOs and BLs in the BLs and SLs
 - log4j or commmons.logging? (both are being used currently: see jog4j.properties and HibernateSessionRequestFilter.java)
 - https on internal and external requests (hide user location, data, etc)
 - authentication for the REST api
-- when done with DB
-	- in hibernate.properties, comment the lines under "#development config"

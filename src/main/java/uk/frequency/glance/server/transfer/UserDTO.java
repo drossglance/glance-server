@@ -2,8 +2,11 @@ package uk.frequency.glance.server.transfer;
 
 import java.util.List;
 
-import uk.frequency.glance.server.model.UserProfile;
+import javax.xml.bind.annotation.XmlRootElement;
 
+import uk.frequency.glance.server.model.user.UserProfile;
+
+@XmlRootElement
 @SuppressWarnings("serial")
 public class UserDTO extends GenericDTO{
 

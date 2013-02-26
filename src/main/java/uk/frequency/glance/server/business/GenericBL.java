@@ -7,7 +7,8 @@ import uk.frequency.glance.server.data_access.GenericDAL;
 import uk.frequency.glance.server.model.GenericEntity;
 
 /**
- * @author Victor Basso TODO inject the DAOs through spring
+ * @author Victor Basso
+ * TODO inject the DALs through spring
  */
 public abstract class GenericBL<T extends GenericEntity> {
 
@@ -28,7 +29,7 @@ public abstract class GenericBL<T extends GenericEntity> {
 		return dal.findAll();
 	}
 
-	public T makePersistent(T entity) {
+	public T create(T entity) {
 		return dal.makePersistent(entity);
 	}
 	

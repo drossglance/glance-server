@@ -2,7 +2,7 @@ package uk.frequency.glance.server.util;
 
 import java.util.List;
 
-import uk.frequency.glance.server.model.Position;
+import uk.frequency.glance.server.model.component.Position;
 
 import com.google.code.geocoder.Geocoder;
 import com.google.code.geocoder.GeocoderRequestBuilder;

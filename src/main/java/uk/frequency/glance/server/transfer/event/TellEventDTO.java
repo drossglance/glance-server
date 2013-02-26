@@ -1,7 +1,10 @@
-package uk.frequency.glance.server.transfer;
+package uk.frequency.glance.server.transfer.event;
 
-import uk.frequency.glance.server.model.Location;
+import javax.xml.bind.annotation.XmlRootElement;
 
+import uk.frequency.glance.server.model.component.Location;
+
+@XmlRootElement
 @SuppressWarnings("serial")
 public class TellEventDTO extends EventDTO{
 

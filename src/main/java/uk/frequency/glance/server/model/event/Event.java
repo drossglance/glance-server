@@ -4,44 +4,37 @@ import java.util.Arrays;
 import java.util.List;
 
 import javax.persistence.ElementCollection;
+import javax.persistence.Entity;
 import javax.persistence.Inheritance;
 import javax.persistence.InheritanceType;
-import javax.persistence.MappedSuperclass;
 import javax.persistence.OneToMany;
-import javax.persistence.OneToOne;
+
+import org.hibernate.annotations.Proxy;
 
 import uk.frequency.glance.server.model.Comment;
-import uk.frequency.glance.server.model.Feeling;
-import uk.frequency.glance.server.model.Media;
-import uk.frequency.glance.server.model.User;
 import uk.frequency.glance.server.model.UserExpression;
+import uk.frequency.glance.server.model.component.Media;
+import uk.frequency.glance.server.model.user.User;
 
-@MappedSuperclass
+@Entity
 @Inheritance(strategy=InheritanceType.JOINED)
+@Proxy(lazy=false)
 public class Event extends UserExpression {
 
-	public enum EventType {STAY, WORK, PUB, EXERCISE, SLEEP, WALK, CYCLING, COMUTE, TRAVEL, MEETING, MUSIC, MOVIE} //TODO define this right
+	public enum EventType {STAY, WORK, PUB, EXERCISE, SLEEP, WALK, CYCLING, COMUTE, TRAVEL, MEETING, MUSIC, MOVIE} //TODO this list is not definite
 	
-	@OneToOne
 	EventType type;
 	
-	@ElementCollection
 	EventScore score;
 	
 	@ElementCollection
 	List<Media> media;
-	
-	@ElementCollection
-	List<Action> actions;
 	
 	@OneToMany
 	List<User> participants;
 
 	@OneToMany(mappedBy = "subject")
 	List<Comment> comments;
-
-	@OneToMany(mappedBy = "subject")
-	List<Feeling> feelings;
 
 	public EventType getType() {
 		return type;
@@ -71,14 +64,6 @@ public class Event extends UserExpression {
 		this.media = Arrays.asList(media);
 	}
 
-	public List<Action> getActions() {
-		return actions;
-	}
-
-	public void setActions(List<Action> actions) {
-		this.actions = actions;
-	}
-
 	public List<User> getParticipants() {
 		return participants;
 	}
@@ -95,18 +80,10 @@ public class Event extends UserExpression {
 		this.comments = comments;
 	}
 
-	public List<Feeling> getFeelings() {
-		return feelings;
-	}
-
-	public void setFeelings(List<Feeling> feelings) {
-		this.feelings = feelings;
-	}
-
 	@Override
 	public String toString() {
 		return super.toString()
-				+ " | " + author.getId();
+				+ " | " + type;
 	}
 
 }

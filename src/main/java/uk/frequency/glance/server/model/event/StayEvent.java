@@ -2,10 +2,12 @@ package uk.frequency.glance.server.model.event;
 
 import java.util.Date;
 
-import javax.persistence.Embedded;
+import javax.persistence.AttributeOverride;
+import javax.persistence.AttributeOverrides;
+import javax.persistence.Column;
 import javax.persistence.Entity;
 
-import uk.frequency.glance.server.model.Location;
+import uk.frequency.glance.server.model.component.Location;
 
 @Entity
 public class StayEvent extends Event {
@@ -14,7 +16,12 @@ public class StayEvent extends Event {
 	
 	Date endTime;
 	
-	@Embedded
+	@AttributeOverrides({
+		@AttributeOverride(name="name", column=@Column(name="loc_name")),
+		@AttributeOverride(name="address", column=@Column(name="loc_address")),
+		@AttributeOverride(name="position.lat", column=@Column(name="loc_lat")),
+		@AttributeOverride(name="position.lng", column=@Column(name="loc_lng"))
+	})
 	Location location;
 	
 	public Date getStartTime() {

@@ -1,4 +1,4 @@
-package uk.frequency.glance.server.model;
+package uk.frequency.glance.server.model.user;
 
 import javax.persistence.Column;
 import javax.persistence.Embeddable;

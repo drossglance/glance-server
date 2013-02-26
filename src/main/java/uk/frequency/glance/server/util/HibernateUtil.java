@@ -10,22 +10,23 @@ import org.hibernate.service.ServiceRegistry;
 import org.hibernate.service.ServiceRegistryBuilder;
 
 import uk.frequency.glance.server.model.Comment;
-import uk.frequency.glance.server.model.Feeling;
 import uk.frequency.glance.server.model.GenericEntity;
-import uk.frequency.glance.server.model.Location;
-import uk.frequency.glance.server.model.Media;
-import uk.frequency.glance.server.model.Position;
-import uk.frequency.glance.server.model.User;
 import uk.frequency.glance.server.model.UserExpression;
-import uk.frequency.glance.server.model.UserProfile;
-import uk.frequency.glance.server.model.UserSettings;
-import uk.frequency.glance.server.model.event.Action;
+import uk.frequency.glance.server.model.component.Location;
+import uk.frequency.glance.server.model.component.Media;
+import uk.frequency.glance.server.model.component.Position;
 import uk.frequency.glance.server.model.event.Event;
 import uk.frequency.glance.server.model.event.EventScore;
-import uk.frequency.glance.server.model.event.ListenAction;
+import uk.frequency.glance.server.model.event.ListenEvent;
+import uk.frequency.glance.server.model.event.MoveEvent;
 import uk.frequency.glance.server.model.event.StayEvent;
 import uk.frequency.glance.server.model.event.TellEvent;
-import uk.frequency.glance.server.model.event.MoveEvent;
+import uk.frequency.glance.server.model.trace.ListenTrace;
+import uk.frequency.glance.server.model.trace.PositionTrace;
+import uk.frequency.glance.server.model.trace.Trace;
+import uk.frequency.glance.server.model.user.User;
+import uk.frequency.glance.server.model.user.UserProfile;
+import uk.frequency.glance.server.model.user.UserSettings;
 
 public class HibernateUtil {
 
@@ -42,16 +43,17 @@ public class HibernateUtil {
 				.addAnnotatedClass(UserSettings.class)
 				.addAnnotatedClass(Location.class)
 				.addAnnotatedClass(Position.class)
+				.addAnnotatedClass(Trace.class)
+				.addAnnotatedClass(PositionTrace.class)
+				.addAnnotatedClass(ListenTrace.class)
 				.addAnnotatedClass(Event.class)
 				.addAnnotatedClass(StayEvent.class)
 				.addAnnotatedClass(MoveEvent.class)
 				.addAnnotatedClass(TellEvent.class)
-				.addAnnotatedClass(Action.class)
-				.addAnnotatedClass(ListenAction.class)
+				.addAnnotatedClass(ListenEvent.class)
 				.addAnnotatedClass(EventScore.class)
 				.addAnnotatedClass(UserExpression.class)
 				.addAnnotatedClass(Comment.class)
-				.addAnnotatedClass(Feeling.class)
 				.addAnnotatedClass(Media.class);
 			
 			

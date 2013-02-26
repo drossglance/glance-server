@@ -1,4 +1,4 @@
-package uk.frequency.glance.server.model;
+package uk.frequency.glance.server.model.component;
 
 import javax.persistence.Embeddable;
 

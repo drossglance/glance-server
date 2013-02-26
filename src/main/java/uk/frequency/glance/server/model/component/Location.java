@@ -1,19 +1,14 @@
-package uk.frequency.glance.server.model;
+package uk.frequency.glance.server.model.component;
 
-import javax.persistence.Column;
 import javax.persistence.Embeddable;
-import javax.persistence.Embedded;
 
 @Embeddable
 public class Location{
 
-	@Embedded
 	Position position;
 	
-	@Column(name="location_name")
 	String name;
 	
-	@Column(name="location_address")
 	String address;
 
 	public Position getPosition() {

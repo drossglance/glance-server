@@ -1,6 +1,5 @@
 package uk.frequency.glance.server.service;
 
-import java.util.Date;
 import java.util.List;
 
 import javax.ws.rs.GET;
@@ -9,8 +8,8 @@ import javax.ws.rs.PathParam;
 
 import uk.frequency.glance.server.business.CommentBL;
 import uk.frequency.glance.server.model.Comment;
-import uk.frequency.glance.server.model.User;
 import uk.frequency.glance.server.model.event.Event;
+import uk.frequency.glance.server.model.user.User;
 import uk.frequency.glance.server.transfer.CommentDTO;
 
 
@@ -35,8 +34,7 @@ public class CommentSL extends GenericSL<Comment, CommentDTO>{
 	protected CommentDTO toDTO(Comment comment) {
 		CommentDTO dto = new CommentDTO();
 		dto.setId(comment.getId());
-		dto.setCreationTime(comment.getCreationTime().getTime());
-		dto.setAuthorId(comment.getAuthor().getId());
+		dto.setAuthorId(comment.getUser().getId());
 		dto.setSubjectId(comment.getSubject().getId());
 		dto.setLocation(comment.getLocation());
 		dto.setMedia(comment.getMedia());
@@ -52,8 +50,7 @@ public class CommentSL extends GenericSL<Comment, CommentDTO>{
 		Event event = new Event();
 		event.setId(dto.getSubjectId());
 		Comment comment = new Comment();
-		comment.setCreationTime(new Date(dto.getCreationTime()));
-		comment.setAuthor(user);
+		comment.setUser(user);
 		comment.setSubject(event);
 		comment.setLocation(dto.getLocation());
 		comment.setMedia(dto.getMedia());

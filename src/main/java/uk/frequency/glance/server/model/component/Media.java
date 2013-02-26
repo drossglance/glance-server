@@ -1,8 +1,11 @@
-package uk.frequency.glance.server.model;
+package uk.frequency.glance.server.model.component;
 
+import javax.persistence.DiscriminatorColumn;
+import javax.persistence.DiscriminatorType;
 import javax.persistence.Embeddable;
 
 @Embeddable
+@DiscriminatorColumn(name="discr", discriminatorType=DiscriminatorType.STRING)
 public class Media{
 
 	public enum MediaType { IMAGE, DRAWING, SOUND, VIDEO }

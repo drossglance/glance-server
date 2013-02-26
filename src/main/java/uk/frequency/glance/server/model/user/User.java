@@ -1,17 +1,18 @@
-package uk.frequency.glance.server.model;
+package uk.frequency.glance.server.model.user;
 
 import java.util.Arrays;
 import java.util.List;
 
 import javax.persistence.CollectionTable;
 import javax.persistence.ElementCollection;
-import javax.persistence.Embedded;
 import javax.persistence.Entity;
 import javax.persistence.JoinColumn;
 import javax.persistence.OneToMany;
 import javax.persistence.Table;
 
+import uk.frequency.glance.server.model.GenericEntity;
 import uk.frequency.glance.server.model.event.Event;
+import uk.frequency.glance.server.model.trace.Trace;
 
 @Entity
 @Table(name="tb_user") //for PostgreSQL compatibility, TODO:do this for all tables as a NamingStrategy
@@ -21,14 +22,16 @@ public class User extends GenericEntity{
 	@CollectionTable(joinColumns=@JoinColumn(name="user_id")) //for PostgreSQL compatibility, TODO:do this for all fks as a NamingStrategy
 	List<UserProfile> profileHistory;
 	
-	@Embedded
 	UserSettings settings;
 	
 	@OneToMany
 	List<User> friends;
 	
-	@OneToMany(mappedBy="author")
+	@OneToMany(mappedBy="user")
 	List<Event> events;
+	
+	@OneToMany(mappedBy="user")
+	List<Trace> traces;
 	
 	public List<User> getFriends() {
 		return friends;

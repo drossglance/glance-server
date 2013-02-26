@@ -38,9 +38,9 @@
 			<version>1.17</version>
 		</dependency>
 		<dependency>
-			<groupId>com.owlike</groupId>
-			<artifactId>genson</artifactId>
-			<version>0.93</version>
+			<groupId>com.google.code.gson</groupId>
+			<artifactId>gson</artifactId>
+			<version>2.2.2</version>
 		</dependency>
 
 		<!-- jUnit -->
@@ -83,6 +83,7 @@
 			<artifactId>org.apache.commons.logging</artifactId>
 			<version>1.1.1</version>
 		</dependency>
+
 	</dependencies>
 
 	<build>

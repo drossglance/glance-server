@@ -1,15 +1,14 @@
 package uk.frequency.glance.server.service;
 
 import java.util.ArrayList;
-import java.util.Date;
 import java.util.List;
 
 import javax.ws.rs.Path;
 
 import uk.frequency.glance.server.business.UserBL;
-import uk.frequency.glance.server.model.User;
-import uk.frequency.glance.server.model.UserProfile;
 import uk.frequency.glance.server.model.event.Event;
+import uk.frequency.glance.server.model.user.User;
+import uk.frequency.glance.server.model.user.UserProfile;
 import uk.frequency.glance.server.transfer.UserDTO;
 
 
@@ -27,7 +26,6 @@ public class UserSL extends GenericSL<User, UserDTO>{
 	protected UserDTO toDTO(User user){
 		UserDTO dto = new UserDTO();
 		dto.setId(user.getId());
-		dto.setCreationTime(user.getCreationTime().getTime());
 		dto.setProfile(user.getProfileHistory().get(0)); //TODO get most recent profile
 		
 		List<Long> friendIds = new ArrayList<Long>();
@@ -49,7 +47,6 @@ public class UserSL extends GenericSL<User, UserDTO>{
 	protected User fromDTO(UserDTO dto) {
 
 		User user = new User();
-		user.setCreationTime(new Date(dto.getCreationTime()));
 		List<UserProfile> profiles = new ArrayList<UserProfile>();
 		profiles.add(dto.getProfile());
 		user.setProfileHistory(profiles);

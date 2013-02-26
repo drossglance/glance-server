@@ -13,7 +13,7 @@ import uk.frequency.glance.server.util.HibernateUtil;
 
 /**
  * @author Victor Basso
- * Provides common DAO methods and initializes the session.
+ * Provides common Data Access Layer methods and initialises the session.
  * https://community.jboss.org/wiki/GenericDataAccessObjects
  * http://www.ibm.com/developerworks/java/library/j-genericdao/index.html
  */
@@ -23,10 +23,10 @@ public class GenericDAL<T extends GenericEntity> {
 	Class<T> entityClass;
     Session session;
  
-    public GenericDAL() {
-        this.entityClass = (Class<T>) ((ParameterizedType) getClass().getGenericSuperclass()).getActualTypeArguments()[0];
-        this.session = HibernateUtil.getSessionFactory().getCurrentSession();
-     }
+	public GenericDAL() {
+		this.entityClass = (Class<T>) ((ParameterizedType) getClass().getGenericSuperclass()).getActualTypeArguments()[0];
+		this.session = HibernateUtil.getSessionFactory().getCurrentSession();
+	}
  
     public T findById(long id) {
         T entity = (T) session.load(entityClass, id);

@@ -1,15 +1,13 @@
 package uk.frequency.glance.server.service;
 
-import java.net.URI;
 import java.util.ArrayList;
 import java.util.Date;
 import java.util.List;
 
-import javax.ws.rs.Consumes;
 import javax.ws.rs.GET;
-import javax.ws.rs.PUT;
 import javax.ws.rs.Path;
 import javax.ws.rs.PathParam;
+import javax.ws.rs.Produces;
 import javax.ws.rs.core.MediaType;
 import javax.ws.rs.core.Response;
 import javax.ws.rs.core.Response.Status;
@@ -18,16 +16,17 @@ import org.hibernate.ObjectNotFoundException;
 
 import uk.frequency.glance.server.business.EventBL;
 import uk.frequency.glance.server.model.Comment;
-import uk.frequency.glance.server.model.Location;
-import uk.frequency.glance.server.model.User;
 import uk.frequency.glance.server.model.event.Event;
+import uk.frequency.glance.server.model.event.ListenEvent;
 import uk.frequency.glance.server.model.event.MoveEvent;
 import uk.frequency.glance.server.model.event.StayEvent;
 import uk.frequency.glance.server.model.event.TellEvent;
-import uk.frequency.glance.server.transfer.EventDTO;
-import uk.frequency.glance.server.transfer.MoveEventDTO;
-import uk.frequency.glance.server.transfer.StayEventDTO;
-import uk.frequency.glance.server.transfer.TellEventDTO;
+import uk.frequency.glance.server.model.user.User;
+import uk.frequency.glance.server.transfer.event.EventDTO;
+import uk.frequency.glance.server.transfer.event.ListenEventDTO;
+import uk.frequency.glance.server.transfer.event.MoveEventDTO;
+import uk.frequency.glance.server.transfer.event.StayEventDTO;
+import uk.frequency.glance.server.transfer.event.TellEventDTO;
 
 
 @Path("/event")
@@ -52,15 +51,14 @@ public class EventSL extends GenericSL<Event, EventDTO>{
 		
 	}
 	
-	@PUT
-	@Path("/user-{id}/auto-generated")
-	@Consumes(MediaType.APPLICATION_JSON)
-	public Response generateEvent(Location location, 
-			@PathParam("id") long userId){
-		/*DEBUG*/System.out.println("Request received. user=" + userId + ", position=" + location.getPosition());
-		long id = eventBl.generateEvent(location, userId);
-		URI uri = uriInfo.getBaseUriBuilder().path(""+id).build(); //TODO missing the enitity type in path
-		return Response.created(uri).build();
+	@GET
+	@Produces(MediaType.APPLICATION_JSON)
+	@Path("/{start}to{end}")
+	public List<EventDTO> findByTimeRange(
+			@PathParam("start") long start,
+			@PathParam("start") long end) {
+		List<Event> list = eventBl.findByTimeRange(new Date(start), new Date(end)); 
+		return toDTO(list);
 	}
 	
 	@Override
@@ -90,18 +88,22 @@ public class EventSL extends GenericSL<Event, EventDTO>{
 			tellDto.setLocation(tell.getLocation());
 			tellDto.setText(tell.getText());
 			dto = tellDto;
+		}else if(event instanceof ListenEvent){
+			ListenEvent listen = (ListenEvent)event;
+			ListenEventDTO listenDto = new ListenEventDTO();
+			listenDto.setStartTime(listen.getStartTime().getTime());
+			listenDto.setEndTime(listen.getEndTime().getTime());
+			listenDto.setSongMetadata(listen.getSongMetadata());
+			dto = listenDto;
 		}else{
 			throw new AssertionError();
 		}
 		
 		dto.setId(event.getId());
-		dto.setCreationTime(event.getCreationTime().getTime());
-		dto.setAuthorId(event.getAuthor().getId());
+		dto.setAuthorId(event.getUser().getId());
 		dto.setType(event.getType());
 		dto.setScore(event.getScore());
 		dto.setMedia(event.getMedia());
-		dto.setActions(event.getActions());
-		dto.setFeelings(event.getFeelings());
 		
 		List<Long> participantIds = new ArrayList<Long>();
 		for(User participant : event.getParticipants()){
@@ -148,35 +150,43 @@ public class EventSL extends GenericSL<Event, EventDTO>{
 			tell.setLocation(tellDto.getLocation());
 			tell.setText(tellDto.getText());
 			event = tell;
+		}else if(dto instanceof ListenEventDTO){
+			ListenEventDTO listenDto = (ListenEventDTO)dto;
+			ListenEvent listen = new ListenEvent();
+			listen.setStartTime(new Date(listenDto.getStartTime()));
+			listen.setEndTime(new Date(listenDto.getEndTime()));
+			listen.setSongMetadata(listenDto.getSongMetadata());
+			event = listen;
 		}else{
 			throw new AssertionError();
 		}
 		
 		event.setId(dto.getId());
-		event.setCreationTime(new Date(dto.getCreationTime()));
-		event.setAuthor(user);
+		event.setUser(user);
 		event.setMedia(dto.getMedia());
 		event.setType(dto.getType());
 		event.setScore(dto.getScore());
 		event.setMedia(dto.getMedia());
-		event.setActions(dto.getActions());
-		event.setFeelings(dto.getFeelings());
 		
-		List<User> participants = new ArrayList<User>();
-		for(Long id : dto.getParticipantIds()){
-			User participant = new User();
-			participant.setId(id);
-			participants.add(participant);
+		if(dto.getParticipantIds() != null){
+			List<User> participants = new ArrayList<User>();
+			for(Long id : dto.getParticipantIds()){
+				User participant = new User();
+				participant.setId(id);
+				participants.add(participant);
+			}
+			event.setParticipants(participants);
 		}
-		event.setParticipants(participants);
 		
-		List<Comment> comments = new ArrayList<Comment>();
-		for(Long id : dto.getCommentIds()){
-			Comment comment = new Comment();
-			comment.setId(id);
-			comments.add(comment);
+		if(dto.getCommentIds() != null){
+			List<Comment> comments = new ArrayList<Comment>();
+			for(Long id : dto.getCommentIds()){
+				Comment comment = new Comment();
+				comment.setId(id);
+				comments.add(comment);
+			}
+			event.setComments(comments);
 		}
-		event.setComments(comments);
 		
 		return event;
 	}

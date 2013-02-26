@@ -1,15 +1,19 @@
-package uk.frequency.glance.server.transfer;
+package uk.frequency.glance.server.transfer.event;
 
 import java.util.List;
 
-import uk.frequency.glance.server.model.Feeling;
-import uk.frequency.glance.server.model.Media;
-import uk.frequency.glance.server.model.event.Action;
+import org.codehaus.jackson.annotate.JsonTypeInfo;
+import org.codehaus.jackson.annotate.JsonTypeInfo.As;
+import org.codehaus.jackson.annotate.JsonTypeInfo.Id;
+
+import uk.frequency.glance.server.model.component.Media;
 import uk.frequency.glance.server.model.event.Event.EventType;
 import uk.frequency.glance.server.model.event.EventScore;
+import uk.frequency.glance.server.transfer.GenericDTO;
 
+@JsonTypeInfo(use=Id.CLASS, include=As.PROPERTY, property="@class")
 @SuppressWarnings("serial")
-public class EventDTO extends GenericDTO{
+public abstract class EventDTO extends GenericDTO{
 
 	long authorId;
 	
@@ -19,13 +23,9 @@ public class EventDTO extends GenericDTO{
 	
 	List<Media> media;
 	
-	List<Action> actions;
-	
 	List<Long> participantIds;
 	
 	List<Long> commentIds;
-	
-	List<Feeling> feelings;
 	
 	public long getAuthorId() {
 		return authorId;
@@ -59,14 +59,6 @@ public class EventDTO extends GenericDTO{
 		this.media = media;
 	}
 
-	public List<Action> getActions() {
-		return actions;
-	}
-
-	public void setActions(List<Action> actions) {
-		this.actions = actions;
-	}
-
 	public List<Long> getParticipantIds() {
 		return participantIds;
 	}
@@ -81,14 +73,6 @@ public class EventDTO extends GenericDTO{
 
 	public void setCommentIds(List<Long> commentIds) {
 		this.commentIds = commentIds;
-	}
-
-	public List<Feeling> getFeelings() {
-		return feelings;
-	}
-
-	public void setFeelings(List<Feeling> feelings) {
-		this.feelings = feelings;
 	}
 
 }

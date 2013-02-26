@@ -10,7 +10,7 @@ import org.eclipse.jetty.webapp.WebAppContext;
  * launching should fire this main method.
  *
  */
-public class ServerStart {
+public class ServerStarter {
 
     public static void main(String[] args) throws Exception{
         String webappDirLocation = "src/main/webapp/";
