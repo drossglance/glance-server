@@ -67,11 +67,11 @@ public class GenericDAL<T extends GenericEntity> {
 		return crit.list();
 	}
 	
-	public void flush(){
+	public void flush() throws RuntimeException{
 		try{
 			getSession().getTransaction().commit();
 //			getSession().flush();
-		} catch (Throwable ex) {
+		} catch (RuntimeException ex) {
 			if (getSession().getTransaction().isActive()) {
 				getSession().getTransaction().rollback();
 			}
