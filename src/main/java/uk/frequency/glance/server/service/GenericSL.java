@@ -72,10 +72,12 @@ public abstract class GenericSL<T extends GenericEntity, U extends GenericDTO> {
 			return Response.created(uri).build();
 		}catch(ConstraintViolationException e){
 			return Response.status(Status.CONFLICT)
-					.entity("Resource contains an invalid reference.").build();
+//					.entity("Object contains a reference to an inexistent resource.").build();
+					.entity(e.getMessage()).build();
 		}catch(TransientObjectException e){
 			return Response.status(Status.CONFLICT)
-					.entity("Resource lacks a required reference.").build();
+//					.entity("Object lacks a required reference.").build();
+					.entity(e.getMessage()).build();
 		}
 	}
 	
@@ -87,6 +89,10 @@ public abstract class GenericSL<T extends GenericEntity, U extends GenericDTO> {
 			return Response.status(Status.NO_CONTENT).build();
 		}catch(ObjectNotFoundException e){
 			throw new WebApplicationException(Status.NOT_FOUND);
+		}catch(ConstraintViolationException e){
+			return Response.status(Status.CONFLICT)
+//					.entity("Unable to delete. Resource is referenced by another resource.").build();
+					.entity(e.getMessage()).build();
 		}
 	}
 	

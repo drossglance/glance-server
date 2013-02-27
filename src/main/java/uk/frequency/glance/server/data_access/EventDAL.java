@@ -6,18 +6,12 @@ import java.util.List;
 import org.hibernate.Query;
 
 import uk.frequency.glance.server.model.event.Event;
-import uk.frequency.glance.server.model.user.User;
 
 @SuppressWarnings("unchecked")
 public class EventDAL extends GenericDAL<Event>{
 
-	public List<Event> findByAuthor(User author){
-		Query q = getSession().createQuery("from Event where user = :user")
-			.setEntity("user", author);
-		return q.list();
-	}
-	
-	public List<Event> findByAuthor(long authorId){
+	//TODO order by time
+	public List<Event> findByUser(long authorId){
 		Query q = getSession().createQuery("from Event where user.id = :userId")
 			.setParameter("userId", authorId);
 		return q.list();

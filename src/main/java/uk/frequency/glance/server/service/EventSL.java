@@ -43,7 +43,7 @@ public class EventSL extends GenericSL<Event, EventDTO>{
 	@Path("/user-{id}")
 	public Response findByAuthor(@PathParam("id") long userId) {
 		try {
-			List<Event> list = eventBl.findByAuthor(userId);
+			List<Event> list = eventBl.findByUser(userId);
 			return Response.ok(toDTO(list)).build();
 		} catch (ObjectNotFoundException e) {
 			return Response.status(Status.NOT_FOUND).build();
