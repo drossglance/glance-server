@@ -44,13 +44,13 @@ public class EventBL extends GenericBL<Event>{
 	public long generateStayEvent(PositionTrace trace){
 		Position pos = trace.getPosition();
 		String imageUrl = GoogleAPIs.getStreetViewImageUrl(pos); //TODO get more from google places and also streetview with different headings, choose best image somehow
+		String name = GoogleAPIs.getLocationName(pos); //TODO get from google places
 		String address = GoogleAPIs.getLocationName(pos);
-		String description = null; GoogleAPIs.getLocationName(pos); //TODO get from google places
 
 		Location location = new Location();
 		location.setPosition(pos);
 		location.setAddress(address);
-		location.setName(description);
+		location.setName(name);
 		Media media = new Media();
 		media.setType(MediaType.IMAGE);
 		media.setUrl(imageUrl);
