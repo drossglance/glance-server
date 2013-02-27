@@ -13,8 +13,8 @@ import uk.frequency.glance.server.model.component.Media;
 import uk.frequency.glance.server.model.component.Media.MediaType;
 import uk.frequency.glance.server.model.component.Position;
 import uk.frequency.glance.server.model.event.Event;
-import uk.frequency.glance.server.model.event.Event.EventType;
 import uk.frequency.glance.server.model.event.EventScore;
+import uk.frequency.glance.server.model.event.EventType;
 import uk.frequency.glance.server.model.event.StayEvent;
 import uk.frequency.glance.server.model.trace.PositionTrace;
 import uk.frequency.glance.server.model.user.User;
@@ -45,7 +45,7 @@ public class EventBL extends GenericBL<Event>{
 		Position pos = trace.getPosition();
 		String imageUrl = GoogleAPIs.getStreetViewImageUrl(pos); //TODO get more from google places and also streetview with different headings, choose best image somehow
 		String address = GoogleAPIs.getLocationName(pos);
-		String description = null; //TODO get from google places
+		String description = null; GoogleAPIs.getLocationName(pos); //TODO get from google places
 
 		Location location = new Location();
 		location.setPosition(pos);

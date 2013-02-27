@@ -21,8 +21,6 @@ import uk.frequency.glance.server.model.user.User;
 @Proxy(lazy=false)
 public class Event extends UserExpression {
 
-	public enum EventType {STAY, WORK, PUB, EXERCISE, SLEEP, WALK, CYCLING, COMUTE, TRAVEL, MEETING, MUSIC, MOVIE} //TODO this list is not definite
-	
 	EventType type;
 	
 	EventScore score;

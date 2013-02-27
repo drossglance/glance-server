@@ -1,11 +1,16 @@
 - set creation date at database level
 - tidy up NamingStrategy for db tables (workaround reserved words: user, like)
-
 - how to properly manage local and production versions of hibernate.properties 
+
 - avoid getters and setters on the entity classes? java 7?
 - setup Spring for injecting the DAOs and BLs in the BLs and SLs
 - log4j or commmons.logging? (both are being used currently: see jog4j.properties and HibernateSessionRequestFilter.java)
+- integrate github on the heroku projects
+
 - https on internal and external requests (hide user location, data, etc)
 - authentication for the REST api
-
 - return bad_request for json parsing errors (see the @Provider and ExceptionMapper thing in: http://stackoverflow.com/questions/583973/jax-rs-jersey-how-to-customize-error-handling)
+- generalize requests w/ queries on entity parameters (ex: "event/user-{id}")
+- use GSON on the server side (http://eclipsesource.com/blogs/2012/11/02/integrating-gson-into-a-jax-rs-based-application/)
+- specify json date conversion
+- hide full class names from json

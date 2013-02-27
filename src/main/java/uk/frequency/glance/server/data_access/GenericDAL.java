@@ -56,9 +56,6 @@ public class GenericDAL<T extends GenericEntity> {
     	getSession().delete(entity);
     }
  
-    /**
-     * Use this inside subclasses as a convenience method.
-     */
 	protected List<T> findByCriteria(Criterion... criterion) {
 		Criteria crit = getSession().createCriteria(entityClass);
 		for (Criterion c : criterion) {
@@ -70,7 +67,6 @@ public class GenericDAL<T extends GenericEntity> {
 	public void flush() throws RuntimeException{
 		try{
 			getSession().getTransaction().commit();
-//			getSession().flush();
 		} catch (RuntimeException ex) {
 			if (getSession().getTransaction().isActive()) {
 				getSession().getTransaction().rollback();

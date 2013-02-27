@@ -124,14 +124,14 @@ public class TestClient {
 
 	static Gson buildGson(){
 		GsonBuilder builder = new GsonBuilder();
-		builder.registerTypeAdapter(TraceDTO.class, new GsonTypeAdapter<TraceDTO>());
-		builder.registerTypeAdapter(PositionTraceDTO.class, new GsonTypeAdapter<TraceDTO>());
-		builder.registerTypeAdapter(ListenTraceDTO.class, new GsonTypeAdapter<TraceDTO>());
-		builder.registerTypeAdapter(EventDTO.class, new GsonTypeAdapter<EventDTO>());
-		builder.registerTypeAdapter(StayEventDTO.class, new GsonTypeAdapter<EventDTO>());
-		builder.registerTypeAdapter(MoveEventDTO.class, new GsonTypeAdapter<EventDTO>());
-		builder.registerTypeAdapter(TellEventDTO.class, new GsonTypeAdapter<EventDTO>());
-		builder.registerTypeAdapter(ListenEventDTO.class, new GsonTypeAdapter<EventDTO>());
+		builder.registerTypeAdapter(TraceDTO.class, GsonTypeAdapter.getTraceInstance());
+		builder.registerTypeAdapter(PositionTraceDTO.class, GsonTypeAdapter.getTraceInstance());
+		builder.registerTypeAdapter(ListenTraceDTO.class, GsonTypeAdapter.getTraceInstance());
+		builder.registerTypeAdapter(EventDTO.class, GsonTypeAdapter.getEventInstance());
+		builder.registerTypeAdapter(StayEventDTO.class, GsonTypeAdapter.getEventInstance());
+		builder.registerTypeAdapter(MoveEventDTO.class, GsonTypeAdapter.getEventInstance());
+		builder.registerTypeAdapter(TellEventDTO.class, GsonTypeAdapter.getEventInstance());
+		builder.registerTypeAdapter(ListenEventDTO.class, GsonTypeAdapter.getEventInstance());
 		return builder.create();
 	}
 	
