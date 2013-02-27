@@ -55,7 +55,7 @@ public class JsonHierarchyTypeAdapter<T> implements JsonSerializer<T>, JsonDeser
 		}
 		Class<? extends T> subclass = map.get(jsonElm.getAsString());
 		if(subclass == null){
-			throw new JsonParseException("Unable to parse JSON. @class property has an invalid value: " + jsonElm.getAsString() + ".");
+			throw new JsonParseException("Unable to parse JSON. @class property has an invalid value: " + jsonElm.getAsString() + ". Valid values are: " + map.keySet());
 		}
 		T obj = gson.fromJson(json, subclass);
 		return obj;
