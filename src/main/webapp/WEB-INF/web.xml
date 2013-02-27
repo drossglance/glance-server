@@ -8,12 +8,12 @@
     <!-- config Hibernate -->
 
 	<listener>
-		<listener-class>uk.frequency.glance.server.util.HibernateAutoInit</listener-class> <!-- development only -->
+		<listener-class>uk.frequency.glance.server.data_access.util.HibernateAutoInit</listener-class> <!-- development only -->
 	</listener>
 
 	<filter>
 		<filter-name>hibernate-filter</filter-name>
-		<filter-class>uk.frequency.glance.server.util.HibernateSessionRequestFilter</filter-class>
+		<filter-class>uk.frequency.glance.server.data_access.util.HibernateSessionRequestFilter</filter-class>
 	</filter>
 
 	<filter-mapping>

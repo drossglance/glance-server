@@ -41,4 +41,10 @@ public abstract class GenericBL<T extends GenericEntity> {
 		return entity;
 	}
 	
+	public void deleteById(long id) {
+		T entity = dal.findById(id);
+		dal.makeTransient(entity);
+		dal.flush();
+	}
+	
 }

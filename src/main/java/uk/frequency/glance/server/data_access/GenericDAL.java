@@ -8,8 +8,8 @@ import org.hibernate.Session;
 import org.hibernate.criterion.Criterion;
 import org.hibernate.criterion.Example;
 
+import uk.frequency.glance.server.data_access.util.HibernateUtil;
 import uk.frequency.glance.server.model.GenericEntity;
-import uk.frequency.glance.server.util.HibernateUtil;
 
 /**
  * @author Victor Basso

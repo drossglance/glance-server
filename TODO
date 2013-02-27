@@ -8,5 +8,4 @@
 - https on internal and external requests (hide user location, data, etc)
 - authentication for the REST api
 
-- delete methods
-- return bad_request for json parsing errors
+- return bad_request for json parsing errors (see the @Provider and ExceptionMapper thing in: http://stackoverflow.com/questions/583973/jax-rs-jersey-how-to-customize-error-handling)

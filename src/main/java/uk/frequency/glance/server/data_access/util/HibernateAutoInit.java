@@ -1,4 +1,4 @@
-package uk.frequency.glance.server.util;
+package uk.frequency.glance.server.data_access.util;
 
 import javax.servlet.ServletContextEvent;
 import javax.servlet.ServletContextListener;

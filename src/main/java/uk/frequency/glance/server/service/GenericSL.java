@@ -5,11 +5,13 @@ import java.util.ArrayList;
 import java.util.List;
 
 import javax.ws.rs.Consumes;
+import javax.ws.rs.DELETE;
 import javax.ws.rs.GET;
 import javax.ws.rs.POST;
 import javax.ws.rs.Path;
 import javax.ws.rs.PathParam;
 import javax.ws.rs.Produces;
+import javax.ws.rs.WebApplicationException;
 import javax.ws.rs.core.Context;
 import javax.ws.rs.core.MediaType;
 import javax.ws.rs.core.Request;
@@ -51,31 +53,40 @@ public abstract class GenericSL<T extends GenericEntity, U extends GenericDTO> {
 	@GET
 	@Path("/{id}")
 	@Produces(MediaType.APPLICATION_JSON)
-	public Response findById(@PathParam("id") long id) {
+	public U findById(@PathParam("id") long id) {
 		try{
 			T entity = business.findById(id);
-			return Response.status(Status.OK)
-					.entity(toDTO(entity)).build();
+			return toDTO(entity);
 		}catch(ObjectNotFoundException e){
-			return Response.status(Status.NOT_FOUND).build();
+			throw new WebApplicationException(Status.NOT_FOUND);
 		}
 	}
 	
 	@POST
 	@Consumes(MediaType.APPLICATION_JSON)
-	@Produces(MediaType.TEXT_PLAIN)
 	public Response create(U dto){
 		try{
 			T entity = fromDTO(dto);
-			business.create(entity); //TODO capture ConstraintViolationExceptions
+			business.create(entity);
 			URI uri = uriInfo.getAbsolutePathBuilder().path("{index}").build(entity.getId());
 			return Response.created(uri).build();
 		}catch(ConstraintViolationException e){
 			return Response.status(Status.CONFLICT)
-					.entity("Object contains an invalid reference.").build();
+					.entity("Resource contains an invalid reference.").build();
 		}catch(TransientObjectException e){
 			return Response.status(Status.CONFLICT)
-					.entity("Object lacks a required reference.").build();
+					.entity("Resource lacks a required reference.").build();
+		}
+	}
+	
+	@DELETE
+	@Path("/{id}")
+	public Response delete(@PathParam("id") long id){
+		try{
+			business.deleteById(id);
+			return Response.status(Status.NO_CONTENT).build();
+		}catch(ObjectNotFoundException e){
+			throw new WebApplicationException(Status.NOT_FOUND);
 		}
 	}
 	

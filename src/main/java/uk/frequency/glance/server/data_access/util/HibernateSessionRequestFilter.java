@@ -1,4 +1,4 @@
-package uk.frequency.glance.server.util;
+package uk.frequency.glance.server.data_access.util;
 
 import java.io.IOException;
 
@@ -13,6 +13,7 @@ import org.apache.commons.logging.Log;
 import org.apache.commons.logging.LogFactory;
 import org.hibernate.SessionFactory;
 import org.hibernate.StaleObjectStateException;
+
 
 
 /**

@@ -5,6 +5,7 @@ import java.util.List;
 
 import org.hibernate.ObjectNotFoundException;
 
+import uk.frequency.glance.server.business.util.GoogleAPIs;
 import uk.frequency.glance.server.data_access.EventDAL;
 import uk.frequency.glance.server.data_access.UserDAL;
 import uk.frequency.glance.server.model.component.Location;
@@ -17,7 +18,6 @@ import uk.frequency.glance.server.model.event.EventScore;
 import uk.frequency.glance.server.model.event.StayEvent;
 import uk.frequency.glance.server.model.trace.PositionTrace;
 import uk.frequency.glance.server.model.user.User;
-import uk.frequency.glance.server.util.GoogleAPIs;
 
 public class EventBL extends GenericBL<Event>{
 

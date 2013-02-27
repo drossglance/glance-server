@@ -6,6 +6,8 @@ import java.util.List;
 import javax.ws.rs.GET;
 import javax.ws.rs.Path;
 import javax.ws.rs.PathParam;
+import javax.ws.rs.Produces;
+import javax.ws.rs.core.MediaType;
 
 import uk.frequency.glance.server.business.TraceBL;
 import uk.frequency.glance.server.model.trace.ListenTrace;
@@ -29,6 +31,7 @@ public class TraceSL extends GenericSL<Trace, TraceDTO>{
 	
 	@GET
 	@Path("/user-{id}")
+	@Produces(MediaType.APPLICATION_JSON)
 	public List<TraceDTO> findByAuthor(@PathParam("id") long userId) {
 		List<Trace> list = traceBl.findByUser(userId);
 		return toDTO(list);
