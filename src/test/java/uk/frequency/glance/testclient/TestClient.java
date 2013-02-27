@@ -13,19 +13,13 @@ import uk.frequency.glance.server.model.component.Media.MediaType;
 import uk.frequency.glance.server.model.component.Position;
 import uk.frequency.glance.server.model.event.EventScore;
 import uk.frequency.glance.server.model.user.UserProfile;
+import uk.frequency.glance.server.service.util.JsonMessageBodyHandler;
 import uk.frequency.glance.server.transfer.GenericDTO;
 import uk.frequency.glance.server.transfer.UserDTO;
-import uk.frequency.glance.server.transfer.event.EventDTO;
-import uk.frequency.glance.server.transfer.event.ListenEventDTO;
-import uk.frequency.glance.server.transfer.event.MoveEventDTO;
-import uk.frequency.glance.server.transfer.event.StayEventDTO;
 import uk.frequency.glance.server.transfer.event.TellEventDTO;
-import uk.frequency.glance.server.transfer.trace.ListenTraceDTO;
 import uk.frequency.glance.server.transfer.trace.PositionTraceDTO;
-import uk.frequency.glance.server.transfer.trace.TraceDTO;
 
 import com.google.gson.Gson;
-import com.google.gson.GsonBuilder;
 import com.sun.jersey.api.client.Client;
 import com.sun.jersey.api.client.ClientResponse;
 import com.sun.jersey.api.client.WebResource;
@@ -35,7 +29,7 @@ public class TestClient {
 	static Client client = Client.create();
 	static String host = "localhost:8080";
 //	static String host = "glance-server.herokuapp.com";
-	static Gson gson = buildGson();
+	static Gson gson = JsonMessageBodyHandler.buildGson();
 
 	public static void main(String[] args) {
 //		putDummyTraces(1);
@@ -122,17 +116,4 @@ public class TestClient {
 		return obj;
 	}
 
-	static Gson buildGson(){
-		GsonBuilder builder = new GsonBuilder();
-		builder.registerTypeAdapter(TraceDTO.class, GsonTypeAdapter.getTraceInstance());
-		builder.registerTypeAdapter(PositionTraceDTO.class, GsonTypeAdapter.getTraceInstance());
-		builder.registerTypeAdapter(ListenTraceDTO.class, GsonTypeAdapter.getTraceInstance());
-		builder.registerTypeAdapter(EventDTO.class, GsonTypeAdapter.getEventInstance());
-		builder.registerTypeAdapter(StayEventDTO.class, GsonTypeAdapter.getEventInstance());
-		builder.registerTypeAdapter(MoveEventDTO.class, GsonTypeAdapter.getEventInstance());
-		builder.registerTypeAdapter(TellEventDTO.class, GsonTypeAdapter.getEventInstance());
-		builder.registerTypeAdapter(ListenEventDTO.class, GsonTypeAdapter.getEventInstance());
-		return builder.create();
-	}
-	
 }
