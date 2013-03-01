@@ -34,7 +34,9 @@ public class TraceSL extends GenericSL<Trace, TraceDTO>{
 	@Produces(MediaType.APPLICATION_JSON)
 	public List<TraceDTO> findByAuthor(@PathParam("id") long userId) {
 		List<Trace> list = traceBl.findByUser(userId);
-		return toDTO(list);
+		List<TraceDTO> dto = toDTO(list);
+		traceBl.flush();
+		return dto;
 	}
 	
 	@Override
@@ -57,7 +59,7 @@ public class TraceSL extends GenericSL<Trace, TraceDTO>{
 			throw new AssertionError();
 		}
 		
-		dto.setId(trace.getId());
+		initToDTO(trace, dto);
 		dto.setUserId(trace.getUser().getId());
 		dto.setTime(trace.getTime().getTime());
 		return dto;
@@ -85,6 +87,7 @@ public class TraceSL extends GenericSL<Trace, TraceDTO>{
 			throw new AssertionError();
 		}
 
+		initFromDTO(dto, trace);
 		trace.setUser(user);
 		trace.setTime(new Date(dto.getTime()));
 		

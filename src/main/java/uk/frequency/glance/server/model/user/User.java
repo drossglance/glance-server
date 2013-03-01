@@ -8,6 +8,7 @@ import javax.persistence.ElementCollection;
 import javax.persistence.Entity;
 import javax.persistence.JoinColumn;
 import javax.persistence.OneToMany;
+import javax.persistence.OneToOne;
 import javax.persistence.Table;
 
 import uk.frequency.glance.server.model.GenericEntity;
@@ -32,6 +33,9 @@ public class User extends GenericEntity{
 	
 	@OneToMany(mappedBy="user")
 	List<Trace> traces;
+	
+	@OneToOne(mappedBy="user")
+	EventGenerationInfo eventGenerationInfo;
 	
 	public List<User> getFriends() {
 		return friends;
@@ -68,6 +72,22 @@ public class User extends GenericEntity{
 
 	public void setEvents(List<Event> events) {
 		this.events = events;
+	}
+
+	public List<Trace> getTraces() {
+		return traces;
+	}
+
+	public void setTraces(List<Trace> traces) {
+		this.traces = traces;
+	}
+
+	public EventGenerationInfo getEventGenerationInfo() {
+		return eventGenerationInfo;
+	}
+
+	public void setEventGenerationInfo(EventGenerationInfo eventGenerationInfo) {
+		this.eventGenerationInfo = eventGenerationInfo;
 	}
 
 	@Override

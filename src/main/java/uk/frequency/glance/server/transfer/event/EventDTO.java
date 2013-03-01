@@ -19,6 +19,10 @@ public abstract class EventDTO extends GenericDTO{
 	
 	EventType type;
 	
+	long startTime;
+	
+	long endTime;
+	
 	EventScore score;
 	
 	List<Media> media;
@@ -41,6 +45,22 @@ public abstract class EventDTO extends GenericDTO{
 
 	public void setType(EventType type) {
 		this.type = type;
+	}
+
+	public long getStartTime() {
+		return startTime;
+	}
+
+	public void setStartTime(long startTime) {
+		this.startTime = startTime;
+	}
+
+	public long getEndTime() {
+		return endTime;
+	}
+
+	public void setEndTime(long endTime) {
+		this.endTime = endTime;
 	}
 
 	public EventScore getScore() {

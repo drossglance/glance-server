@@ -27,13 +27,15 @@ public class CommentSL extends GenericSL<Comment, CommentDTO>{
 	@Path("/user-{id}")
 	public List<CommentDTO> findByAuthor(@PathParam("id") long userId) {
 		List<Comment> list = commentBl.findByAuthor(userId);
-		return toDTO(list);
+		List<CommentDTO> dto = toDTO(list);
+		commentBl.flush();
+		return dto;
 	}
 
 	@Override
 	protected CommentDTO toDTO(Comment comment) {
 		CommentDTO dto = new CommentDTO();
-		dto.setId(comment.getId());
+		initToDTO(comment, dto);
 		dto.setAuthorId(comment.getUser().getId());
 		dto.setSubjectId(comment.getSubject().getId());
 		dto.setLocation(comment.getLocation());
@@ -50,12 +52,12 @@ public class CommentSL extends GenericSL<Comment, CommentDTO>{
 		Event event = new Event();
 		event.setId(dto.getSubjectId());
 		Comment comment = new Comment();
+		initFromDTO(dto, comment);
 		comment.setUser(user);
 		comment.setSubject(event);
 		comment.setLocation(dto.getLocation());
 		comment.setMedia(dto.getMedia());
 		comment.setText(dto.getText());
-		
 		return comment;
 	}
 	

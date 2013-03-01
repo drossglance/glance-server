@@ -10,7 +10,7 @@ import uk.frequency.glance.server.model.user.User;
 public abstract class UserExpression extends GenericEntity{
 
 	@ManyToOne
-	@JoinColumn(name="ref_user")
+	@JoinColumn(name="user_id")
 	User user;
 
 	public User getUser() {

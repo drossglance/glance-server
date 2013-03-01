@@ -25,28 +25,33 @@ public class UserSL extends GenericSL<User, UserDTO>{
 	@Override
 	protected UserDTO toDTO(User user){
 		UserDTO dto = new UserDTO();
-		dto.setId(user.getId());
+		initToDTO(user, dto);
 		dto.setProfile(user.getProfileHistory().get(0)); //TODO get most recent profile
 		
 		List<Long> friendIds = new ArrayList<Long>();
-		for(User friend : user.getFriends()){
-			friendIds.add(friend.getId());
+		if(user.getFriends() != null){
+			for(User friend : user.getFriends()){
+				friendIds.add(friend.getId());
+			}
+			dto.setFriendsIds(friendIds);
 		}
-		dto.setFriendsIds(friendIds);
 		
-		List<Long> eventIds = new ArrayList<Long>();
-		for(Event event : user.getEvents()){
-			eventIds.add(event.getId());
+		if(user.getEvents() != null){
+			List<Long> eventIds = new ArrayList<Long>();
+			for(Event event : user.getEvents()){
+				eventIds.add(event.getId());
+			}
+			dto.setEventsIds(eventIds);
 		}
-		dto.setEventsIds(eventIds);
 		
 		return dto;
 	}
 
 	@Override
 	protected User fromDTO(UserDTO dto) {
-
 		User user = new User();
+		initFromDTO(dto, user);
+		
 		List<UserProfile> profiles = new ArrayList<UserProfile>();
 		profiles.add(dto.getProfile());
 		user.setProfileHistory(profiles);

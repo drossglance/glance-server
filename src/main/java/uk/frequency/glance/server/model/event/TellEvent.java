@@ -1,7 +1,5 @@
 package uk.frequency.glance.server.model.event;
 
-import java.util.Date;
-
 import javax.persistence.AttributeOverride;
 import javax.persistence.AttributeOverrides;
 import javax.persistence.Column;
@@ -12,8 +10,6 @@ import uk.frequency.glance.server.model.component.Location;
 @Entity
 public class TellEvent extends Event {
 
-	Date time;
-	
 	@AttributeOverrides({
 		@AttributeOverride(name="name", column=@Column(name="loc_name")),
 		@AttributeOverride(name="address", column=@Column(name="loc_address")),
@@ -23,14 +19,6 @@ public class TellEvent extends Event {
 	Location location;
 	
 	String text;
-
-	public Date getTime() {
-		return time;
-	}
-
-	public void setTime(Date time) {
-		this.time = time;
-	}
 
 	public Location getLocation() {
 		return location;
@@ -51,7 +39,6 @@ public class TellEvent extends Event {
 	@Override
 	public String toString() {
 		return super.toString()
-				+ " | " + time
 				+ " | " + location.getName()
 				+ " | " + text;
 	}

@@ -27,7 +27,6 @@ public abstract class GenericBL<T extends GenericEntity> {
 
 	public T findById(long id) throws ObjectNotFoundException {
 		T entity = dal.findById(id);
-		dal.flush();
 		return entity; 
 	}
 
@@ -37,13 +36,15 @@ public abstract class GenericBL<T extends GenericEntity> {
 
 	public T create(T entity) throws ConstraintViolationException, TransientObjectException{
 		dal.makePersistent(entity);
-		dal.flush();
 		return entity;
 	}
 	
 	public void deleteById(long id) throws ConstraintViolationException, TransientObjectException{
 		T entity = dal.findById(id);
 		dal.makeTransient(entity);
+	}
+	
+	public void flush(){
 		dal.flush();
 	}
 	

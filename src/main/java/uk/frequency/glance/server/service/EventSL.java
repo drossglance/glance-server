@@ -44,7 +44,9 @@ public class EventSL extends GenericSL<Event, EventDTO>{
 	public Response findByAuthor(@PathParam("id") long userId) {
 		try {
 			List<Event> list = eventBl.findByUser(userId);
-			return Response.ok(toDTO(list)).build();
+			List<EventDTO> dto = toDTO(list);
+			eventBl.flush();
+			return Response.ok(dto).build();
 		} catch (ObjectNotFoundException e) {
 			return Response.status(Status.NOT_FOUND).build();
 		}
@@ -58,7 +60,9 @@ public class EventSL extends GenericSL<Event, EventDTO>{
 			@PathParam("start") long start,
 			@PathParam("start") long end) {
 		List<Event> list = eventBl.findByTimeRange(new Date(start), new Date(end)); 
-		return toDTO(list);
+		List<EventDTO> dto = toDTO(list);
+		eventBl.flush();
+		return dto;
 	}
 	
 	@Override
@@ -68,15 +72,11 @@ public class EventSL extends GenericSL<Event, EventDTO>{
 		if(event instanceof StayEvent){
 			StayEvent stay = (StayEvent)event;
 			StayEventDTO stayDto = new StayEventDTO();
-			stayDto.setStartTime(stay.getStartTime().getTime());
-			stayDto.setEndTime(stay.getEndTime().getTime());
 			stayDto.setLocation(stay.getLocation());
 			dto = stayDto;
 		}else if(event instanceof MoveEvent){
 			MoveEvent move = (MoveEvent)event;
 			MoveEventDTO moveDto = new MoveEventDTO();
-			moveDto.setStartTime(move.getStartTime().getTime());
-			moveDto.setEndTime(move.getEndTime().getTime());
 			moveDto.setStartLocation(move.getStartLocation());
 			moveDto.setEndLocation(move.getEndLocation());
 			moveDto.setTrail(move.getTrail());
@@ -84,38 +84,41 @@ public class EventSL extends GenericSL<Event, EventDTO>{
 		}else if(event instanceof TellEvent){
 			TellEvent tell = (TellEvent)event;
 			TellEventDTO tellDto = new TellEventDTO();
-			tellDto.setTime(tell.getTime().getTime());
 			tellDto.setLocation(tell.getLocation());
 			tellDto.setText(tell.getText());
 			dto = tellDto;
 		}else if(event instanceof ListenEvent){
 			ListenEvent listen = (ListenEvent)event;
 			ListenEventDTO listenDto = new ListenEventDTO();
-			listenDto.setStartTime(listen.getStartTime().getTime());
-			listenDto.setEndTime(listen.getEndTime().getTime());
 			listenDto.setSongMetadata(listen.getSongMetadata());
 			dto = listenDto;
 		}else{
 			throw new AssertionError();
 		}
 		
-		dto.setId(event.getId());
+		initToDTO(event, dto);
 		dto.setAuthorId(event.getUser().getId());
 		dto.setType(event.getType());
+		dto.setStartTime(event.getStartTime().getTime());
+		dto.setEndTime(event.getEndTime().getTime());
 		dto.setScore(event.getScore());
 		dto.setMedia(event.getMedia());
 		
-		List<Long> participantIds = new ArrayList<Long>();
-		for(User participant : event.getParticipants()){
-			participantIds.add(participant.getId());
+		if(event.getParticipants() != null){
+			List<Long> participantIds = new ArrayList<Long>();
+			for(User participant : event.getParticipants()){
+				participantIds.add(participant.getId());
+			}
+			dto.setParticipantIds(participantIds);
 		}
-		dto.setParticipantIds(participantIds);
 		
-		List<Long> commentIds = new ArrayList<Long>();
-		for(Comment comment : event.getComments()){
-			commentIds.add(comment.getId());
+		if(event.getComments() != null){
+			List<Long> commentIds = new ArrayList<Long>();
+			for(Comment comment : event.getComments()){
+				commentIds.add(comment.getId());
+			}
+			dto.setCommentIds(commentIds);
 		}
-		dto.setCommentIds(commentIds);
 		
 		return dto;
 	}
@@ -130,15 +133,11 @@ public class EventSL extends GenericSL<Event, EventDTO>{
 		if(dto instanceof StayEventDTO){
 			StayEventDTO stayDto = (StayEventDTO)dto;
 			StayEvent stay = new StayEvent();
-			stay.setStartTime(new Date(stayDto.getStartTime()));
-			stay.setEndTime(new Date(stayDto.getEndTime()));
 			stay.setLocation(stayDto.getLocation());
 			event = stay;
 		}else if(dto instanceof MoveEventDTO){
 			MoveEventDTO moveDto = (MoveEventDTO)dto;
 			MoveEvent move = new MoveEvent();
-			move.setStartTime(new Date(moveDto.getStartTime()));
-			move.setEndTime(new Date(moveDto.getEndTime()));
 			move.setStartLocation(moveDto.getStartLocation());
 			move.setEndLocation(moveDto.getEndLocation());
 			move.setTrail(moveDto.getTrail());
@@ -146,27 +145,25 @@ public class EventSL extends GenericSL<Event, EventDTO>{
 		}else if(dto instanceof TellEventDTO){
 			TellEventDTO tellDto = (TellEventDTO)dto;
 			TellEvent tell = new TellEvent();
-			tell.setTime(new Date(tellDto.getTime()));
 			tell.setLocation(tellDto.getLocation());
 			tell.setText(tellDto.getText());
 			event = tell;
 		}else if(dto instanceof ListenEventDTO){
 			ListenEventDTO listenDto = (ListenEventDTO)dto;
 			ListenEvent listen = new ListenEvent();
-			listen.setStartTime(new Date(listenDto.getStartTime()));
-			listen.setEndTime(new Date(listenDto.getEndTime()));
 			listen.setSongMetadata(listenDto.getSongMetadata());
 			event = listen;
 		}else{
 			throw new AssertionError();
 		}
 		
-		event.setId(dto.getId());
+		initFromDTO(dto, event);
 		event.setUser(user);
-		event.setMedia(dto.getMedia());
 		event.setType(dto.getType());
-		event.setScore(dto.getScore());
+		event.setStartTime(new Date(dto.getStartTime()));
+		event.setEndTime(new Date(dto.getEndTime()));
 		event.setMedia(dto.getMedia());
+		event.setScore(dto.getScore());
 		
 		if(dto.getParticipantIds() != null){
 			List<User> participants = new ArrayList<User>();

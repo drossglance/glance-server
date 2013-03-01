@@ -3,20 +3,39 @@ package uk.frequency.glance.server.model;
 import java.util.Date;
 
 import javax.persistence.GeneratedValue;
+import javax.persistence.GenerationType;
 import javax.persistence.Id;
 import javax.persistence.MappedSuperclass;
+import javax.persistence.PrePersist;
+import javax.persistence.PreUpdate;
 
 @MappedSuperclass
 public abstract class GenericEntity {
 
 	@Id
-	@GeneratedValue //TODO create different generators for each hierarchy
+	@GeneratedValue(strategy=GenerationType.TABLE) //TODO create different generators for each hierarchy
 	protected long id;
 	
+//	@Column(insertable=false, updatable=false, nullable=false)
 	protected Date creationTime;
 	
+//	@Column(insertable=false, updatable=false, nullable=false)
+	protected Date updateTime;
+	
+//	@Column(insertable=false, updatable=false, nullable=false)
 	protected boolean deleted;
 
+	
+	@PrePersist
+	public void prePersist(){
+		updateTime = creationTime = new Date(); //TODO use hibernate "Entity Manager" to make this work
+	}
+	
+	@PreUpdate
+	public void preUpdate(){
+		updateTime = new Date();  //TODO use hibernate "Entity Manager" to make this work
+	}
+	
 	public long getId() {
 		return id;
 	}
@@ -31,6 +50,14 @@ public abstract class GenericEntity {
 
 	public void setCreationTime(Date creationTime) {
 		this.creationTime = creationTime;
+	}
+
+	public Date getUpdateTime() {
+		return updateTime;
+	}
+
+	public void setUpdateTime(Date updateTime) {
+		this.updateTime = updateTime;
 	}
 
 	public boolean isDeleted() {

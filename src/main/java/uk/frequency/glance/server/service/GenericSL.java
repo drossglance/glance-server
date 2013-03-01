@@ -47,7 +47,9 @@ public abstract class GenericSL<T extends GenericEntity, U extends GenericDTO> {
 	@Produces(MediaType.APPLICATION_JSON)
 	public List<U> findAll(){
 		List<T> list = business.findAll();
-		return toDTO(list);
+		List<U> dto = toDTO(list);
+		business.flush();
+		return dto;
 	}
 	
 	@GET
@@ -56,7 +58,9 @@ public abstract class GenericSL<T extends GenericEntity, U extends GenericDTO> {
 	public U findById(@PathParam("id") long id) {
 		try{
 			T entity = business.findById(id);
-			return toDTO(entity);
+			U dto = toDTO(entity);
+			business.flush();
+			return dto;
 		}catch(ObjectNotFoundException e){
 			throw new WebApplicationException(Status.NOT_FOUND);
 		}
@@ -68,15 +72,16 @@ public abstract class GenericSL<T extends GenericEntity, U extends GenericDTO> {
 		try{
 			T entity = fromDTO(dto);
 			business.create(entity);
+			U newDto = toDTO(entity); //needed to capture data created on the server side (like id)
 			URI uri = uriInfo.getAbsolutePathBuilder().path("{index}").build(entity.getId());
-			return Response.created(uri).build();
+			business.flush();
+			return Response.created(uri).
+					entity(newDto).build();
 		}catch(ConstraintViolationException e){
 			return Response.status(Status.CONFLICT)
-//					.entity("Object contains a reference to an inexistent resource.").build();
 					.entity(e.getMessage()).build();
 		}catch(TransientObjectException e){
 			return Response.status(Status.CONFLICT)
-//					.entity("Object lacks a required reference.").build();
 					.entity(e.getMessage()).build();
 		}
 	}
@@ -86,12 +91,12 @@ public abstract class GenericSL<T extends GenericEntity, U extends GenericDTO> {
 	public Response delete(@PathParam("id") long id){
 		try{
 			business.deleteById(id);
+			business.flush();
 			return Response.status(Status.NO_CONTENT).build();
 		}catch(ObjectNotFoundException e){
 			throw new WebApplicationException(Status.NOT_FOUND);
 		}catch(ConstraintViolationException e){
 			return Response.status(Status.CONFLICT)
-//					.entity("Unable to delete. Resource is referenced by another resource.").build();
 					.entity(e.getMessage()).build();
 		}
 	}
@@ -107,5 +112,17 @@ public abstract class GenericSL<T extends GenericEntity, U extends GenericDTO> {
 	protected abstract U toDTO(T entity);
 	
 	protected abstract T fromDTO(U dto);
+	
+	protected void initToDTO(T entity, U dto){
+		dto.setId(entity.getId());
+		dto.setCreationTime(entity.getCreationTime());
+		dto.setUpdateTime(entity.getUpdateTime());
+	}
+	
+	protected void initFromDTO(U dto, T entity){
+		entity.setId(dto.getId());
+		entity.setCreationTime(dto.getCreationTime());
+		entity.setUpdateTime(dto.getUpdateTime());
+	}
 	
 }

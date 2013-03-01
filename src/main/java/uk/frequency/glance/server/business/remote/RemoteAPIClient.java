@@ -1,4 +1,4 @@
-package uk.frequency.glance.server.business.util;
+package uk.frequency.glance.server.business.remote;
 
 import java.awt.Image;
 

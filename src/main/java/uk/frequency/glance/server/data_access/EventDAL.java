@@ -28,4 +28,15 @@ public class EventDAL extends GenericDAL<Event>{
 		return q.list();
 	}
 	
+	public List<Event> findByUser(long authorId, int startPage, int endPage){
+//		Query q = getSession().createQuery("from Event where user.id = :userId")
+//			.setParameter("userId", authorId);
+//		return q.list();
+//		
+//		Criteria c = getSession().createCriteria(Event.class)
+//				.add()
+		//TODO pagination
+		throw new UnsupportedOperationException();
+	}
+	
 }

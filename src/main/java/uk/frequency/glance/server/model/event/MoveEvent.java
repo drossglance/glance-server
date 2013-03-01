@@ -1,6 +1,5 @@
 package uk.frequency.glance.server.model.event;
 
-import java.util.Date;
 import java.util.List;
 
 import javax.persistence.AttributeOverride;
@@ -16,10 +15,6 @@ import uk.frequency.glance.server.model.component.Position;
 @Entity
 public class MoveEvent extends Event {
 
-	Date startTime;
-	
-	Date endTime;
-	
 	@AttributeOverrides({
 		@AttributeOverride(name="name", column=@Column(name="start_loc_name")),
 		@AttributeOverride(name="address", column=@Column(name="start_loc_address")),
@@ -40,22 +35,6 @@ public class MoveEvent extends Event {
 	@OrderColumn
 	List<Position> trail;
 	
-	public Date getStartTime() {
-		return startTime;
-	}
-
-	public void setStartTime(Date startTime) {
-		this.startTime = startTime;
-	}
-
-	public Date getEndTime() {
-		return endTime;
-	}
-
-	public void setEndTime(Date endTime) {
-		this.endTime = endTime;
-	}
-
 	public Location getStartLocation() {
 		return startLocation;
 	}

@@ -20,12 +20,10 @@ import uk.frequency.glance.server.model.GenericEntity;
 @SuppressWarnings("unchecked")
 public class GenericDAL<T extends GenericEntity> {
 
-	Class<T> entityClass;
-	Session session;
+	final Class<T> entityClass;
  
 	public GenericDAL() {
 		this.entityClass = (Class<T>) ((ParameterizedType) getClass().getGenericSuperclass()).getActualTypeArguments()[0];
-		this.session = HibernateUtil.getSessionFactory().getCurrentSession();
 	}
  
     public T findById(long id) {
@@ -36,7 +34,7 @@ public class GenericDAL<T extends GenericEntity> {
     public List<T> findAll() {
         return findByCriteria();
     }
- 
+    
     public List<T> findByExample(T exampleInstance, String[] excludeProperty) {
         Criteria crit = getSession().createCriteria(entityClass);
         Example example =  Example.create(exampleInstance);
@@ -51,7 +49,7 @@ public class GenericDAL<T extends GenericEntity> {
     	getSession().saveOrUpdate(entity);
         return entity;
     }
- 
+    
     public void makeTransient(T entity) {
     	getSession().delete(entity);
     }
@@ -79,7 +77,6 @@ public class GenericDAL<T extends GenericEntity> {
 	
 	protected Session getSession(){
 		return HibernateUtil.getSessionFactory().getCurrentSession();
-//		return session;
 	}
 	
 }

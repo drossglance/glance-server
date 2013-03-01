@@ -1,6 +1,7 @@
 package uk.frequency.glance.server.model.event;
 
 import java.util.Arrays;
+import java.util.Date;
 import java.util.List;
 
 import javax.persistence.ElementCollection;
@@ -23,6 +24,10 @@ public class Event extends UserExpression {
 
 	EventType type;
 	
+	Date startTime;
+	
+	Date endTime;
+	
 	EventScore score;
 	
 	@ElementCollection
@@ -40,6 +45,22 @@ public class Event extends UserExpression {
 
 	public void setType(EventType type) {
 		this.type = type;
+	}
+
+	public Date getStartTime() {
+		return startTime;
+	}
+
+	public void setStartTime(Date startTime) {
+		this.startTime = startTime;
+	}
+
+	public Date getEndTime() {
+		return endTime;
+	}
+
+	public void setEndTime(Date endTime) {
+		this.endTime = endTime;
 	}
 
 	public EventScore getScore() {
@@ -81,7 +102,8 @@ public class Event extends UserExpression {
 	@Override
 	public String toString() {
 		return super.toString()
-				+ " | " + type;
+				+ " | " + type
+				+ " | " + startTime;
 	}
 
 }

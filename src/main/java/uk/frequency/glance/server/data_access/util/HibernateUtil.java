@@ -24,6 +24,7 @@ import uk.frequency.glance.server.model.event.TellEvent;
 import uk.frequency.glance.server.model.trace.ListenTrace;
 import uk.frequency.glance.server.model.trace.PositionTrace;
 import uk.frequency.glance.server.model.trace.Trace;
+import uk.frequency.glance.server.model.user.EventGenerationInfo;
 import uk.frequency.glance.server.model.user.User;
 import uk.frequency.glance.server.model.user.UserProfile;
 import uk.frequency.glance.server.model.user.UserSettings;
@@ -36,11 +37,11 @@ public class HibernateUtil {
 		try {
 			Configuration config = new Configuration()
 				.setNamingStrategy(new ImprovedNamingStrategy())
-				.addPackage("uk.frequencymobile.flow.server.model")
 				.addAnnotatedClass(GenericEntity.class)
 				.addAnnotatedClass(User.class)
 				.addAnnotatedClass(UserProfile.class)
 				.addAnnotatedClass(UserSettings.class)
+				.addAnnotatedClass(EventGenerationInfo.class)
 				.addAnnotatedClass(Location.class)
 				.addAnnotatedClass(Position.class)
 				.addAnnotatedClass(Trace.class)
