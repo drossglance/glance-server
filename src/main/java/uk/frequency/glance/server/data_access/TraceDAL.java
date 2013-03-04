@@ -35,10 +35,10 @@ public class TraceDAL extends GenericDAL<Trace>{
 	}
 	
 	public List<PositionTrace> findAfter(User user, Date time){
-		Query q = getSession().createQuery("from Trace where " +
-				"trace.class = PositionTrace " +
-				"and user.id = :user " +
-				"and time > :time")
+		Query q = getSession().createQuery("from Trace t where " +
+				"t.class = PositionTrace " +
+				"and t.user = :user " +
+				"and t.time > :time")
 			.setParameter("user", user)
 			.setParameter("time", time);
 		return q.list();
@@ -46,10 +46,10 @@ public class TraceDAL extends GenericDAL<Trace>{
 	
 	public PositionTrace findRightBefore(User user, Date time){
 		Query q = getSession().createQuery("from Trace where " +
-				"time = (select max(time) from Trace where " +
-				"trace.class = PositionTrace " +
-				"and user.id = :user " +
-				"and time < :time)")
+				"time = (select max(time) from Trace t where " +
+				"t.class = PositionTrace " +
+				"and t.user = :user " +
+				"and t.time < :time)")
 			.setParameter("user", user)
 			.setParameter("time", time);
 		return (PositionTrace)q.uniqueResult();

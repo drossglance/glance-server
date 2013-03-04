@@ -110,10 +110,12 @@ public class EventSL extends GenericSL<Event, EventDTO>{
 		}
 		
 		initToDTO(event, dto);
-		dto.setAuthorId(event.getUser().getId());
+		dto.setUserId(event.getUser().getId());
 		dto.setType(event.getType());
 		dto.setStartTime(event.getStartTime().getTime());
-		dto.setEndTime(event.getEndTime().getTime());
+		if(event.getEndTime() != null){
+			dto.setEndTime(event.getEndTime().getTime());
+		}
 		dto.setScore(event.getScore());
 		dto.setMedia(event.getMedia());
 		
@@ -140,7 +142,7 @@ public class EventSL extends GenericSL<Event, EventDTO>{
 	protected Event fromDTO(EventDTO dto) {
 
 		User user = new User();
-		user.setId(dto.getAuthorId());
+		user.setId(dto.getUserId());
 		
 		Event event;
 		if(dto instanceof StayEventDTO){
@@ -174,7 +176,9 @@ public class EventSL extends GenericSL<Event, EventDTO>{
 		event.setUser(user);
 		event.setType(dto.getType());
 		event.setStartTime(new Date(dto.getStartTime()));
-		event.setEndTime(new Date(dto.getEndTime()));
+		if(dto.getEndTime() != 0){
+			event.setEndTime(new Date(dto.getEndTime()));
+		}
 		event.setMedia(dto.getMedia());
 		event.setScore(dto.getScore());
 		

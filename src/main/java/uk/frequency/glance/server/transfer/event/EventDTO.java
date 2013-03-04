@@ -15,7 +15,7 @@ import uk.frequency.glance.server.transfer.GenericDTO;
 @SuppressWarnings("serial")
 public abstract class EventDTO extends GenericDTO{
 
-	long authorId;
+	long userId;
 	
 	EventType type;
 	
@@ -31,12 +31,12 @@ public abstract class EventDTO extends GenericDTO{
 	
 	List<Long> commentIds;
 	
-	public long getAuthorId() {
-		return authorId;
+	public long getUserId() {
+		return userId;
 	}
 
-	public void setAuthorId(long authorId) {
-		this.authorId = authorId;
+	public void setUserId(long userId) {
+		this.userId = userId;
 	}
 
 	public EventType getType() {

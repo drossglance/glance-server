@@ -12,7 +12,7 @@ import uk.frequency.glance.server.model.component.Media.MediaType;
 @SuppressWarnings("serial")
 public class CommentDTO extends GenericDTO{
 
-	long authorId;
+	long userId;
 	
 	long subjectId;
 	
@@ -25,12 +25,12 @@ public class CommentDTO extends GenericDTO{
 	List<Media> media;
 
 
-	public long getAuthorId() {
-		return authorId;
+	public long getUserId() {
+		return userId;
 	}
 
-	public void setAuthorId(long userId) {
-		this.authorId = userId;
+	public void setUserId(long userId) {
+		this.userId = userId;
 	}
 
 	public long getSubjectId() {

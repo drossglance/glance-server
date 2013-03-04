@@ -11,4 +11,10 @@ public class UserDAL extends GenericDAL<User>{
         return entity;
     }
 	
+	//FIXME temporary workaround
+	public EventGenerationInfo merge(EventGenerationInfo entity) {
+    	getSession().merge(entity);
+        return entity;
+    }
+	
 }

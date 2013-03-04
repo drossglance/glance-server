@@ -25,7 +25,7 @@ public class GenericDAL<T extends GenericEntity> {
 	public GenericDAL() {
 		this.entityClass = (Class<T>) ((ParameterizedType) getClass().getGenericSuperclass()).getActualTypeArguments()[0];
 	}
- 
+	
     public T findById(long id) {
         T entity = (T) getSession().load(entityClass, id);
         return entity;
@@ -46,7 +46,7 @@ public class GenericDAL<T extends GenericEntity> {
     }
  
     public T makePersistent(T entity) {
-    	getSession().saveOrUpdate(entity);
+    	getSession().save(entity);
         return entity;
     }
     
@@ -76,7 +76,7 @@ public class GenericDAL<T extends GenericEntity> {
 	}
 	
 	protected Session getSession(){
-		return HibernateUtil.getSessionFactory().getCurrentSession();
+		return HibernateUtil.getSessionFactory().getCurrentSession(); //internally creates a session per thread
 	}
 	
 }

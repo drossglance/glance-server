@@ -8,6 +8,8 @@ import javax.persistence.OneToOne;
 import javax.persistence.PrimaryKeyJoinColumn;
 
 import org.hibernate.annotations.GenericGenerator;
+import org.hibernate.annotations.LazyToOne;
+import org.hibernate.annotations.LazyToOneOption;
 
 import uk.frequency.glance.server.model.event.Event;
 import uk.frequency.glance.server.model.trace.Trace;
@@ -28,12 +30,15 @@ public class EventGenerationInfo {
 	@PrimaryKeyJoinColumn(name="user_id")
 	User user;
 	
+	@LazyToOne(LazyToOneOption.FALSE)
 	@OneToOne
 	Event lastEvent;
 	
+	@LazyToOne(LazyToOneOption.FALSE)
 	@OneToOne
 	Event currentEvent;
 	
+	@LazyToOne(LazyToOneOption.FALSE)
 	@OneToOne
 	Trace lastUsedTrace;
 
@@ -67,6 +72,11 @@ public class EventGenerationInfo {
 
 	public void setLastUsedTrace(Trace lastUsedTrace) {
 		this.lastUsedTrace = lastUsedTrace;
+	}
+	
+	@Override
+	public String toString() {
+		return user.getId() +  "";
 	}
 	
 }

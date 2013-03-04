@@ -83,7 +83,7 @@ public class TestClient {
 			medias.add(media);
 			EventScore score = new EventScore();
 			TellEventDTO event = new TellEventDTO();
-			event.setAuthorId(1);
+			event.setUserId(1);
 			event.setLocation(location);
 			event.setText("bla bla bla bla bla..");
 			event.setMedia(medias);
