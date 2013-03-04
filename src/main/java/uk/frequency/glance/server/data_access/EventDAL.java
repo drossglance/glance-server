@@ -19,10 +19,17 @@ public class EventDAL extends GenericDAL<Event>{
 	
 	public List<Event> findByTimeRange(Date start, Date end){
 		Query q = getSession().createQuery("from Event e where " +
-				"(e.class = TellEvent  " +
-					"and (e.startTime > :start or e.startTime < :end ))" +
-				"or ((e.class = StayEvent or e.class = MoveEvent or e.class = ListenEvent) " +
-					"and (e.endTime > :start or e.startTime < :end ))")
+				"and e.startTime > :start or e.startTime < :end")
+			.setParameter("start", start)
+			.setParameter("end", end);
+		return q.list();
+	}
+	
+	public List<Event> findByTimeRange(long userId, Date start, Date end){
+		Query q = getSession().createQuery("from Event e where " +
+				"e.user.id = :userId " + 
+				"and (e.startTime > :start or e.startTime < :end)")
+			.setParameter("userId", userId)
 			.setParameter("start", start)
 			.setParameter("end", end);
 		return q.list();

@@ -7,6 +7,8 @@ import org.hibernate.ObjectNotFoundException;
 
 import uk.frequency.glance.server.business.remote.GoogleAPIs;
 import uk.frequency.glance.server.data_access.EventDAL;
+import uk.frequency.glance.server.data_access.TraceDAL;
+import uk.frequency.glance.server.data_access.UserDAL;
 import uk.frequency.glance.server.model.component.Location;
 import uk.frequency.glance.server.model.component.Media;
 import uk.frequency.glance.server.model.component.Media.MediaType;
@@ -22,10 +24,14 @@ import uk.frequency.glance.server.model.user.User;
 public class EventBL extends GenericBL<Event>{
 
 	private final EventDAL eventDal;
+	private final TraceDAL traceDal;
+	private final UserDAL userDal;
 
 	public EventBL() {
 		super(new EventDAL());
 		eventDal = (EventDAL)dal;
+		traceDal = new TraceDAL();
+		userDal = new UserDAL();
 	}
 	
 	public List<Event> findByUser(long userId) throws ObjectNotFoundException {
@@ -37,8 +43,14 @@ public class EventBL extends GenericBL<Event>{
 		return eventDal.findByTimeRange(start, end);
 	}
 	
+	public List<Event> findByTimeRange(long userId, Date start, Date end){
+		return eventDal.findByTimeRange(userId, start, end);
+	}
+	
 	public void onTraceReceived(Trace trace){
 //		new EventGeneration(trace, eventDal, traceDal, userDal).start();
+		
+		/*PROVISORY*/
 		if(trace instanceof PositionTrace){
 			createStayEvent(trace.getUser(), ((PositionTrace) trace).getPosition(), trace.getTime(), trace.getTime());
 		}
