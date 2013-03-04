@@ -20,18 +20,18 @@ import uk.frequency.glance.server.model.trace.Trace;
 import uk.frequency.glance.server.model.user.EventGenerationInfo;
 import uk.frequency.glance.server.model.user.User;
 
-public class EventGeneration extends Thread{
+public class EventGeneration extends Thread {
 
 	Trace currentTrace;
 	EventGenerationInfo genInfo;
-	
+
 	EventDAL eventDal;
 	TraceDAL traceDal;
 	UserDAL userDal;
-	
-	private final int MIN_STAY_TIME = 10*60*1000;
-	private final int MAX_STAY_RADIUS = 60;
-	
+
+	private final int MIN_STAY_TIME = 10 * 60 * 1000; //in miliseconds
+	private final double MAX_STAY_RADIUS = Geometry.kmToDegrees(0.06); //in degrees
+
 	public EventGeneration(Trace currentTrace, EventDAL eventDal, TraceDAL traceDal, UserDAL userDal) {
 		this.currentTrace = currentTrace;
 		this.genInfo = currentTrace.getUser().getEventGenerationInfo();
@@ -42,54 +42,92 @@ public class EventGeneration extends Thread{
 
 	@Override
 	public void run() {
-		if(currentTrace instanceof PositionTrace){
-			examineTraces();
+		if (currentTrace instanceof PositionTrace) {
+			handleTrace();
 		}
 	}
 	
-	private void examineTraces(){
-		
+	private void handleTrace(){
+		if (currentTrace instanceof PositionTrace) {
+			handlePositionTrace((PositionTrace) currentTrace);
+		} else if (currentTrace instanceof PositionTrace) {
+			//TODO handle ListenTrace
+		} else {
+			throw new AssertionError();
+		}
+	}
+
+	private void handlePositionTrace(PositionTrace currentTrace) {
+
 		User user = genInfo.getUser();
 		Event currentEvent = genInfo.getCurrentEvent();
-		if(currentEvent == null){
+		
+		if (currentEvent == null) {
+			//create a new event
+			
+			//get all traces on a given time window before the current trace
 			Date timeWindowStart = TimeUtil.add(currentTrace.getTime(), -MIN_STAY_TIME);
 			List<PositionTrace> traces = traceDal.findAfter(user, timeWindowStart);
 			PositionTrace previous = traceDal.findRightBefore(user, timeWindowStart);
 			traces.add(0, previous);
-			
+
+			//find the bounding box of these traces
 			double minLat = Double.MAX_VALUE;
 			double minLng = Double.MAX_VALUE;
 			double maxLat = Double.MIN_VALUE;
 			double maxLng = Double.MIN_VALUE;
-			for(PositionTrace trace : traces){
+			for (PositionTrace trace : traces) {
 				minLat = Math.min(minLat, trace.getPosition().getLat());
 				maxLat = Math.min(maxLat, trace.getPosition().getLng());
 				minLng = Math.min(minLng, trace.getPosition().getLat());
 				maxLng = Math.min(maxLng, trace.getPosition().getLng());
 			}
-			if(maxLat-minLat < 2*MAX_STAY_RADIUS && maxLng-minLng < 2*MAX_STAY_RADIUS){
-				double avgLat = (minLat+maxLat)/2;
-				double avgLng = (minLng+maxLng)/2;
+			
+			//check the bounding box against the max radius
+			if (maxLat - minLat < 2 * MAX_STAY_RADIUS && maxLng - minLng < 2 * MAX_STAY_RADIUS) {
+				
+				//find the center of the bounding box
+				double avgLat = (minLat + maxLat) / 2;
+				double avgLng = (minLng + maxLng) / 2;
 				Position pos = new Position();
 				pos.setLat(avgLat);
 				pos.setLng(avgLng);
-				Date start = previous.getTime();
-				Event event = createStayEvent(user, pos, start, null);
 				
-				genInfo.setCurrentEvent(event);
-				genInfo.setLastUsedTrace(currentTrace);
-				userDal.makePersistent(genInfo);
+				//create a new event
+				Date start = previous.getTime();
+				Event newEvent = createStayEvent(user, pos, start, null);
+				genInfo.setCurrentEvent(newEvent);
+				eventDal.makePersistent(newEvent);
+				
 			}
-		}else{
-			//TODO update current event
+		} else {
+			//update current event 
+			
+			if (currentEvent instanceof StayEvent) {
+				StayEvent stay = ((StayEvent) currentEvent);
+				double distance = Geometry.distance(stay.getLocation().getPosition(), currentTrace.getPosition());
+				if(distance > 2*MAX_STAY_RADIUS){
+					//close current event
+					stay.setEndTime(new Date());
+					genInfo.setCurrentEvent(null);
+					eventDal.makePersistent(stay);
+				}
+				
+			} else {
+				// TODO handle other types of events
+			}
 		}
+
+		//update event generation data and persist
+		genInfo.setLastUsedTrace(currentTrace);
+		userDal.makePersistent(genInfo);
 		
-		//TODO notify
+		// TODO notify client device
 	}
-	
-	private Event createStayEvent(User user, Position pos, Date start, Date end){
-		String imageUrl = GoogleAPIs.getStreetViewImageUrl(pos); //TODO get more from google places and also streetview with different headings, choose best image somehow
-		String name = GoogleAPIs.getLocationName(pos); //TODO get from google places
+
+	private Event createStayEvent(User user, Position pos, Date start, Date end) {
+		String imageUrl = GoogleAPIs.getStreetViewImageUrl(pos); // TODO get more from google places and also streetview with different headings, choose best image somehow
+		String name = GoogleAPIs.getLocationName(pos); // TODO get from google places
 		String address = GoogleAPIs.getLocationName(pos);
 
 		Location location = new Location();
@@ -107,8 +145,8 @@ public class EventGeneration extends Thread{
 		event.setLocation(location);
 		event.setMedia(media);
 		event.setScore(new EventScore());
-		
+
 		return eventDal.makePersistent(event);
 	}
-	
+
 }

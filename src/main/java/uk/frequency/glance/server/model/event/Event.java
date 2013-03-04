@@ -10,6 +10,8 @@ import javax.persistence.Inheritance;
 import javax.persistence.InheritanceType;
 import javax.persistence.OneToMany;
 
+import org.hibernate.annotations.LazyCollection;
+import org.hibernate.annotations.LazyCollectionOption;
 import org.hibernate.annotations.Proxy;
 
 import uk.frequency.glance.server.model.Comment;
@@ -27,12 +29,14 @@ public class Event extends UserExpression {
 	Date startTime;
 	
 	Date endTime;
-	
+
 	EventScore score;
 	
+	@LazyCollection(LazyCollectionOption.FALSE)
 	@ElementCollection
 	List<Media> media;
 	
+	@LazyCollection(LazyCollectionOption.FALSE)
 	@OneToMany
 	List<User> participants;
 

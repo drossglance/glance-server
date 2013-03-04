@@ -24,6 +24,7 @@ public class TraceBL extends GenericBL<Trace>{
 	@Override
 	public Trace create(Trace entity) {
 		Trace trace = super.create(entity);
+		dal.flush();
 		eventBl.onTraceReceived(trace);
 		return trace;
 	}
