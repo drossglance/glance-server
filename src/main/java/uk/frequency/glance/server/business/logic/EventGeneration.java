@@ -91,15 +91,15 @@ public class EventGeneration extends Thread {
 				traces.add(0, previous);
 	
 				//find the bounding box of these traces
-				double minLat = Double.MAX_VALUE;
-				double minLng = Double.MAX_VALUE;
-				double maxLat = Double.MIN_VALUE;
-				double maxLng = Double.MIN_VALUE;
+				double minLat = Double.POSITIVE_INFINITY;
+				double minLng = Double.POSITIVE_INFINITY;
+				double maxLat = Double.NEGATIVE_INFINITY;
+				double maxLng = Double.NEGATIVE_INFINITY;
 				for (PositionTrace trace : traces) {
 					minLat = Math.min(minLat, trace.getPosition().getLat());
-					maxLat = Math.min(maxLat, trace.getPosition().getLng());
-					minLng = Math.min(minLng, trace.getPosition().getLat());
-					maxLng = Math.min(maxLng, trace.getPosition().getLng());
+					maxLat = Math.max(maxLat, trace.getPosition().getLat());
+					minLng = Math.min(minLng, trace.getPosition().getLng());
+					maxLng = Math.max(maxLng, trace.getPosition().getLng());
 				}
 				
 				//check bounding box against the max radius
