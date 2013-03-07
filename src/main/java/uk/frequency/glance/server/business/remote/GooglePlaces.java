@@ -13,30 +13,40 @@ public class GooglePlaces {
 	
 	private RemoteAPIClient client = new RemoteAPIClient(placesUrl);
 	
+	private List<Place> results;
+	
 	public static void main(String[] args) {
 		GooglePlaces gp = new GooglePlaces();
 		Position pos = new Position();
 		pos.setLat(51.524666);
 		pos.setLng(-0.086839);
-		gp.getPlaceInfo(pos, 20);
+		gp.requestPlaceInfo(pos, 20);
 	}
 	
-	public void getPlaceInfo(Position pos, int radius){
+	public void requestPlaceInfo(Position pos, int radius){
 		String searchPath = "nearbysearch/json?" +
 				"location=" + pos.getLat() + "," + pos.getLng() +
 				"&radius=" + radius +
 				"&sensor=true" +
 				"&key=" + key;
-		PlaceSearch search = client.getJson(searchPath, PlaceSearch.class);
-		Place place = search.results.get(0);
-		
+		PlaceSearch results = client.getJson(searchPath, PlaceSearch.class);
+		//TODO check status
+	}
+	
+	public void requestPlaceDetails(int index){
+		String ref = results.get(index).reference;
 		String detailsPath = "details/json?" +
-				"reference=" + place.reference +
+				"reference=" + ref +
 				"&sensor=true" +
 				"&key=" + key;
 		PlaceDetails details = client.getJson(detailsPath, PlaceDetails.class);
-		
-		System.out.println();
+		//TODO check status
+		results.set(index, details.result);
+	}
+	
+	public List<String> getResultNames(){
+		//TODO
+		return null;
 	}
 	
 	private static abstract class Results{
