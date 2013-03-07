@@ -6,6 +6,7 @@ import java.util.List;
 import javax.ws.rs.Path;
 
 import uk.frequency.glance.server.business.UserBL;
+import uk.frequency.glance.server.business.exception.MissingFieldException;
 import uk.frequency.glance.server.model.event.Event;
 import uk.frequency.glance.server.model.user.User;
 import uk.frequency.glance.server.model.user.UserProfile;
@@ -51,11 +52,15 @@ public class UserSL extends GenericSL<User, UserDTO>{
 	protected User fromDTO(UserDTO dto) {
 		User user = new User();
 		initFromDTO(dto, user);
-		
-		List<UserProfile> profiles = new ArrayList<UserProfile>();
-		profiles.add(dto.getProfile());
-		user.setProfileHistory(profiles);
-		
+
+		if (dto.getProfile() != null) {
+			List<UserProfile> profiles = new ArrayList<UserProfile>();
+			profiles.add(dto.getProfile());
+			user.setProfileHistory(profiles);
+		} else {
+			throw new MissingFieldException("profile");
+		}
+
 		return user;
 	}
 	

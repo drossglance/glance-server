@@ -18,13 +18,14 @@ public class UserBL extends GenericBL<User>{
 	
 	@Override
 	public User create(User user) throws ConstraintViolationException, TransientObjectException {
+		user = super.create(user);
 		if(user.getEventGenerationInfo() == null){
 			EventGenerationInfo gen = new EventGenerationInfo();
 			gen.setUser(user);
 			userDal.makePersistent(gen);
 			user.setEventGenerationInfo(gen);
 		}
-		return super.create(user);
+		return user;
 	}
 	
 }

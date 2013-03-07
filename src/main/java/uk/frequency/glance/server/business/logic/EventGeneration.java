@@ -38,8 +38,6 @@ public class EventGeneration extends Thread {
 
 	public EventGeneration(Trace currentTrace, EventDAL eventDal, TraceDAL traceDal, UserDAL userDal) {
 		this.currentTrace = currentTrace;
-		User user = userDal.findById(currentTrace.getUser().getId()); //unproxy from hibernate TODO: better way to do this?
-		this.genInfo = user.getEventGenerationInfo();
 		this.eventDal = eventDal;
 		this.traceDal = traceDal;
 		this.userDal = userDal;
@@ -49,6 +47,7 @@ public class EventGeneration extends Thread {
 	public void run() {
 		Transaction tr = HibernateUtil.getSessionFactory().getCurrentSession().beginTransaction();
 		try{
+			init();
 			if (currentTrace instanceof PositionTrace) {
 				handleTrace();
 			}
@@ -63,6 +62,12 @@ public class EventGeneration extends Thread {
                 tr.rollback();
             }
 		}
+	}
+	
+	private void init(){
+		User user = userDal.findById(currentTrace.getUser().getId()); //unproxy from hibernate TODO: better way to do this?
+		this.genInfo = user.getEventGenerationInfo();
+		/*DEBUG*/System.out.println(genInfo.getUser().getId());
 	}
 	
 	private void handleTrace(){

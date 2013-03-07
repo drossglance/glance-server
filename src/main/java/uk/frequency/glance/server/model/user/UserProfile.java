@@ -169,8 +169,7 @@ public class UserProfile {
 
 	@Override
 	public String toString() {
-		return super.toString()
-				+ " | " + userName;
+		return userName;
 	}
 	
 }
