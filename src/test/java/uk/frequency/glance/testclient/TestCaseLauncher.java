@@ -24,7 +24,7 @@ public class TestCaseLauncher {
 	public static void main(String[] args) {
 		try {
 			runTestCase("case_1");
-		} catch (IOException | ParseException | InterruptedException e) {
+		} catch (Exception e) {
 			e.printStackTrace();
 		}
 	}
