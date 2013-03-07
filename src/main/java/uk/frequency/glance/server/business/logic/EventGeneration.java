@@ -33,7 +33,7 @@ public class EventGeneration extends Thread {
 	TraceDAL traceDal;
 	UserDAL userDal;
 
-	private final int MIN_STAY_TIME = 10 * 60 * 1000; //in miliseconds
+	private final int MIN_STAY_TIME = 5 * 60 * 1000; //in miliseconds
 	private final double MAX_STAY_RADIUS = Geometry.kmToDegrees(0.06); //in degrees
 
 	public EventGeneration(Trace currentTrace, EventDAL eventDal, TraceDAL traceDal, UserDAL userDal) {
@@ -64,10 +64,12 @@ public class EventGeneration extends Thread {
 		}
 	}
 	
+	/**
+	 * contructor code but run on the new thread.
+	 */
 	private void init(){
 		User user = userDal.findById(currentTrace.getUser().getId()); //unproxy from hibernate TODO: better way to do this?
 		this.genInfo = user.getEventGenerationInfo();
-		/*DEBUG*/System.out.println(genInfo.getUser().getId());
 	}
 	
 	private void handleTrace(){

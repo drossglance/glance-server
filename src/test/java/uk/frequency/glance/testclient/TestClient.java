@@ -2,6 +2,8 @@ package uk.frequency.glance.testclient;
 
 import static javax.ws.rs.core.MediaType.APPLICATION_JSON;
 
+import java.util.List;
+
 import org.codehaus.jettison.json.JSONObject;
 
 import uk.frequency.glance.server.service.util.JsonMessageBodyHandler;
@@ -11,6 +13,7 @@ import uk.frequency.glance.server.transfer.event.EventDTO;
 import uk.frequency.glance.server.transfer.trace.TraceDTO;
 
 import com.google.gson.Gson;
+import com.google.gson.reflect.TypeToken;
 import com.sun.jersey.api.client.Client;
 import com.sun.jersey.api.client.ClientResponse;
 import com.sun.jersey.api.client.WebResource;
@@ -63,6 +66,20 @@ public class TestClient {
 		}
 	}
 	
+	public static <T> List<T> getList(String path, TypeToken<List<T>> type){
+		WebResource resource = client.resource("http://" + host + "/services/" + path);
+		ClientResponse response = resource
+				.accept(APPLICATION_JSON)
+				.get(ClientResponse.class);
+		if (response.getStatus() != 200) {
+			throw new RuntimeException("Failed : " + response.getStatus() + "\n" + response.getEntity(String.class).toString());
+		}else{
+			String json = response.getEntity(String.class);
+			List<T> obj = gson.fromJson(json, type.getType());
+			return obj;
+		}
+	}
+	
 	public static GenericDTO postAndPrint(GenericDTO dto, String path) {
 		try{
 			GenericDTO resp = post(dto, path);
@@ -78,6 +95,19 @@ public class TestClient {
 		try{
 			T resp = get(path, type);
 			System.out.println(TestDTOFormatter.format(resp));
+			return resp;
+		}catch(RuntimeException e){
+			System.err.println(e.getMessage());
+			return null;
+		}
+	}
+	
+	public static <T extends GenericDTO> List<T> getListAndPrint(String path, TypeToken<List<T>> type){
+		try{
+			List<T> resp = getList(path, type);
+			for (GenericDTO dto : resp) {
+				System.out.println(TestDTOFormatter.format(dto));
+			}
 			return resp;
 		}catch(RuntimeException e){
 			System.err.println(e.getMessage());

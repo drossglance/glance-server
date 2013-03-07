@@ -9,6 +9,8 @@ import java.text.SimpleDateFormat;
 import java.util.ArrayList;
 import java.util.List;
 
+import com.google.gson.reflect.TypeToken;
+
 import uk.frequency.glance.server.model.component.Position;
 import uk.frequency.glance.server.model.user.UserProfile;
 import uk.frequency.glance.server.transfer.UserDTO;
@@ -29,7 +31,6 @@ public class TestCaseLauncher {
 		}
 	}
 	
-	@SuppressWarnings("unchecked")
 	static void runTestCase(String fileName) throws IOException, ParseException, InterruptedException{
 		UserDTO user = createTestUser();
 		user = (UserDTO) TestClient.postAndPrint(user, "user");
@@ -38,19 +39,14 @@ public class TestCaseLauncher {
 		for(PositionTraceDTO trace : traces){
 			TestClient.postAndPrint(trace, "trace");
 			Thread.sleep(TIME_BETWEEN_REQUESTS);
-			List<EventDTO> events = (List<EventDTO>) TestClient.get("event/user-" + user.getId(), List.class);
+			List<EventDTO> events = (List<EventDTO>) TestClient.getListAndPrint("event/user-" + user.getId(), new TypeToken<List<EventDTO>>(){});
 			verifyEvents(events);
 		}
 	}
 	
-	static void verifyEvents(List<EventDTO> events){
-		if(events.isEmpty()){
-			System.out.println("No events.");
-		}else{
-			for(EventDTO event : events){
-				System.out.println(TestDTOFormatter.format(event));
-			}
-		}
+	static boolean verifyEvents(List<EventDTO> events){
+		//TODO
+		return true;
 	}
 	
 	static UserDTO createTestUser(){

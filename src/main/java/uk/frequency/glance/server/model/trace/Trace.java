@@ -20,7 +20,6 @@ import uk.frequency.glance.server.model.UserExpression;
 })
 public abstract class Trace extends UserExpression {
 
-//	@Column(unique=true) //FIXME include user id for the uniqueness
 	Date time;
 
 	public Date getTime() {
