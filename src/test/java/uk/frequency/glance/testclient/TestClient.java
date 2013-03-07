@@ -26,10 +26,6 @@ public class TestClient {
 	static Client client = Client.create();
 	static Gson gson = JsonMessageBodyHandler.buildGson();
 
-	public static void main(String[] args) {
-
-	}
-
 	public static GenericDTO post(GenericDTO dto, String path) {
 		String json = gson.toJson(dto);
 		WebResource resource = client.resource("http://" + host + "/services/" + path);

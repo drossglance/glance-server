@@ -33,8 +33,8 @@ public class EventGeneration extends Thread {
 	TraceDAL traceDal;
 	UserDAL userDal;
 
-	private final int MIN_STAY_TIME = 5 * 60 * 1000; //in miliseconds
-	private final double MAX_STAY_RADIUS = Geometry.kmToDegrees(0.06); //in degrees
+	private final int MIN_STAY_TIME = 2 * 60 * 1000; //in miliseconds
+	private final double MAX_STAY_RADIUS = Geometry.kmToDegrees(0.02); //in degrees
 
 	public EventGeneration(Trace currentTrace, EventDAL eventDal, TraceDAL traceDal, UserDAL userDal) {
 		this.currentTrace = currentTrace;

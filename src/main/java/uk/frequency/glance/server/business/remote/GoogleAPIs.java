@@ -15,13 +15,11 @@ import com.google.code.geocoder.model.LatLng;
 
 public class GoogleAPIs {
 
-	static String streetViewUrl = "http://maps.googleapis.com/maps/api/streetview";
-	static String geocodingUrl = "http://maps.googleapis.com/maps/api/geocode/json";
-	static String placesUrl = "https://maps.googleapis.com/maps/api/place/";
+	static final String streetViewUrl = "http://maps.googleapis.com/maps/api/streetview";
+	static final String geocodingUrl = "http://maps.googleapis.com/maps/api/geocode/json";
 	
-	static String key = "AIzaSyByhzaP3j5iMrMSw_hnMQUTugiVH0cTldc"; //TODO get from properties
-	
-	static String imageSize = "200x200"; 
+	static final String key = "AIzaSyByhzaP3j5iMrMSw_hnMQUTugiVH0cTldc"; //TODO get from properties
+	static final String imageSize = "200x200"; //TODO find better place to define it
 	
 	public static String getStreetViewImageUrl(double lat, double lng, int heading){
 		String url = streetViewUrl + 
@@ -41,15 +39,6 @@ public class GoogleAPIs {
 				"&key="+ key;
 		return url;
 	}
-	
-//	public static String inverseGeocode(double lat, double lng){
-//		String url = geocodingUrl + 
-//				"?size=" + imageSize + 
-//				"&latlng=" + lat + ",%20" + lng +
-//				"&sensor=true" +
-//				"&key="+ key;
-//		return url;
-//	}
 	
 	public static String getAddress(Position pos){
 		Geocoder geo = new Geocoder(); //TODO create clientId? https://developers.google.com/maps/documentation/business/guide
@@ -94,5 +83,7 @@ public class GoogleAPIs {
 		
 		return res.getResults().get(0).getFormattedAddress();
 	}
+	
+	
 
 }
