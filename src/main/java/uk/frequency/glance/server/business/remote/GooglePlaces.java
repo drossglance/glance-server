@@ -1,105 +1,102 @@
 package uk.frequency.glance.server.business.remote;
 
+import java.util.ArrayList;
 import java.util.List;
 
+import uk.frequency.glance.server.model.component.Location;
 import uk.frequency.glance.server.model.component.Position;
+import static uk.frequency.glance.server.business.remote.GooglePlacesModel.*;
+import static uk.frequency.glance.server.business.remote.GooglePlacesModel.Results.Status.*;
 
 @SuppressWarnings("unused")
 public class GooglePlaces {
 
-	static final String placesUrl = "https://maps.googleapis.com/maps/api/place/";
-	static final String key = GoogleAPIs.key; //TODO get from properties
-	static final String imageSize = GoogleAPIs.imageSize; //TODO find better place to define it
+	static final String rootUrl = "https://maps.googleapis.com/maps/api/place/";
 	
-	private RemoteAPIClient client = new RemoteAPIClient(placesUrl);
+	static final String imageSize = EventDataFetcher.imageSize;
+	static final String key = EventDataFetcher.googleAPIsKey;
 	
+	private RemoteAPIClient client = new RemoteAPIClient(rootUrl);
+	
+	private Position position;
 	private List<Place> results;
 	
-	public static void main(String[] args) {
-		GooglePlaces gp = new GooglePlaces();
-		Position pos = new Position();
-		pos.setLat(51.524666);
-		pos.setLng(-0.086839);
-		gp.requestPlaceInfo(pos, 20);
+	public GooglePlaces(Position position, int radius) {
+		this.position = position;
+		requestPlaceSearch(position, radius);
 	}
-	
-	public void requestPlaceInfo(Position pos, int radius){
+
+	private void requestPlaceSearch(Position pos, int radius){
 		String searchPath = "nearbysearch/json?" +
 				"location=" + pos.getLat() + "," + pos.getLng() +
 				"&radius=" + radius +
 				"&sensor=true" +
 				"&key=" + key;
-		PlaceSearch results = client.getJson(searchPath, PlaceSearch.class);
-		//TODO check status
+		PlaceSearch search = client.getJson(searchPath, PlaceSearch.class);
+
+		if(search.status == OK){
+			this.results = search.results;
+		}else{
+			throw new RuntimeException("GooglePlaces returned an error: " + search.status);
+		}
 	}
 	
-	public void requestPlaceDetails(int index){
+	private void requestPlaceDetails(int index){
 		String ref = results.get(index).reference;
 		String detailsPath = "details/json?" +
 				"reference=" + ref +
 				"&sensor=true" +
 				"&key=" + key;
 		PlaceDetails details = client.getJson(detailsPath, PlaceDetails.class);
-		//TODO check status
-		results.set(index, details.result);
-	}
-	
-	public List<String> getResultNames(){
-		//TODO
-		return null;
-	}
-	
-	private static abstract class Results{
-		String status;
-		String next_page_token;
-		static enum Status {OK, ZERO_RESULTS, OVER_QUERY_LIMIT, REQUEST_DENIED, INVALID_REQUEST, UNKNOWN_ERROR, NOT_FOUND}
-	}
-	
-	private static class PlaceSearch extends Results{
-		List<Place> results;
-	}
-	
-	private static class PlaceDetails extends Results{
-		DetailedPlace result;
-	}
-	
-	private static class Place{
-		String formatted_address;
-		Geometry geometry;
-		String name;
-		String reference;
-		List<String> types;
-		String vicinity;
-		String icon;
-		List<Photo> photos;
-	}
-	
-	private static class DetailedPlace extends Place{
-		List<AddressComponent> address_components;
-		double rating;
-		String url;
-		String website;
-	}
-	
-	private static class Photo{
-		int height;
-		int width;
-		List<String> html_attributions;
-		String photo_reference;
-		static class HtmlAttributions{
-			String USER = "From a Google User";
+		
+		if(details.status == OK){
+			results.set(index, details.result);
+		}else{
+			throw new RuntimeException("GooglePlaces returned an error: " + details.status);
 		}
 	}
 	
-	private static class Geometry{
-		Position location;
-	}
-
-	private static class AddressComponent{
-		String long_name;
-		String short_name;
-		List<String> types;
+	private String buildImageUrl(String reference, int maxHeight){
+		String url = rootUrl + "photo?" +
+				"photoreference=" + reference +
+				"&sensor=true" +
+				"&maxheight=" + maxHeight +
+				"&key=" + key;
+		return url;
 	}
 	
+	public List<Position> getResultPositions(){
+		List<Position> positions = new ArrayList<Position>();
+		for(Place place : results){
+			positions.add(place.geometry.location);
+		}
+		return positions;
+	}
+	
+	public Location getLocation(int index){
+		Place place = getDetailedPlace(index);
+		Location location = new Location();
+		location.setName(place.name);
+		location.setAddress(place.vicinity);
+		location.setPosition(place.geometry.location);
+		return location;
+	}
+	
+	public String getImageUrl(int index, int maxHeight){
+		Place place = getDetailedPlace(index);
+		if(place.photos != null && !place.photos.isEmpty()){
+			String ref = place.photos.get(0).photo_reference;
+			return buildImageUrl(ref, maxHeight);
+		}else{
+			return null;
+		}
+	}
+	
+	private DetailedPlace getDetailedPlace(int index){
+		if(!(results.get(index) instanceof DetailedPlace)){
+			requestPlaceDetails(index);
+		}
+		return (DetailedPlace)results.get(index);
+	}
 	
 }

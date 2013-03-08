@@ -13,32 +13,12 @@ import com.google.code.geocoder.model.GeocoderResult;
 import com.google.code.geocoder.model.GeocoderStatus;
 import com.google.code.geocoder.model.LatLng;
 
-public class GoogleAPIs {
+public class GoogleGeocoding {
 
-	static final String streetViewUrl = "http://maps.googleapis.com/maps/api/streetview";
-	static final String geocodingUrl = "http://maps.googleapis.com/maps/api/geocode/json";
+	static final String rootUrl = "http://maps.googleapis.com/maps/api/geocode/json";
 	
-	static final String key = "AIzaSyByhzaP3j5iMrMSw_hnMQUTugiVH0cTldc"; //TODO get from properties
-	static final String imageSize = "200x200"; //TODO find better place to define it
-	
-	public static String getStreetViewImageUrl(double lat, double lng, int heading){
-		String url = streetViewUrl + 
-				"?size=" + imageSize + 
-				"&location=" + lat + ",%20" + lng +
-				"&heading=" + heading + 
-				"&sensor=true" +
-				"&key="+ key;
-		return url;
-	}
-	
-	public static String getStreetViewImageUrl(Position pos){
-		String url = streetViewUrl + 
-				"?size=" + imageSize + 
-				"&location=" + pos.getLat() + ",%20" + pos.getLng() +
-				"&sensor=true" +
-				"&key="+ key;
-		return url;
-	}
+	static final String imageSize = EventDataFetcher.imageSize;
+	static final String key = EventDataFetcher.googleAPIsKey;
 	
 	public static String getAddress(Position pos){
 		Geocoder geo = new Geocoder(); //TODO create clientId? https://developers.google.com/maps/documentation/business/guide

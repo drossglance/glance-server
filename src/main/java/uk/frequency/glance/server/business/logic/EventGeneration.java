@@ -6,7 +6,7 @@ import java.util.List;
 import org.hibernate.ObjectNotFoundException;
 import org.hibernate.Transaction;
 
-import uk.frequency.glance.server.business.remote.GoogleAPIs;
+import uk.frequency.glance.server.business.remote.EventDataFetcher;
 import uk.frequency.glance.server.data_access.EventDAL;
 import uk.frequency.glance.server.data_access.TraceDAL;
 import uk.frequency.glance.server.data_access.UserDAL;
@@ -34,7 +34,7 @@ public class EventGeneration extends Thread {
 	UserDAL userDal;
 
 	private final int MIN_STAY_TIME = 2 * 60 * 1000; //in miliseconds
-	private final double MAX_STAY_RADIUS = Geometry.kmToDegrees(0.02); //in degrees
+	private final double MAX_STAY_RADIUS = GeometryUtil.kmToDegrees(0.02); //in degrees
 
 	public EventGeneration(Trace currentTrace, EventDAL eventDal, TraceDAL traceDal, UserDAL userDal) {
 		this.currentTrace = currentTrace;
@@ -136,7 +136,7 @@ public class EventGeneration extends Thread {
 			
 			if (currentEvent instanceof StayEvent) {
 				StayEvent stay = ((StayEvent) currentEvent);
-				double distance = Geometry.distance(stay.getLocation().getPosition(), currentTrace.getPosition());
+				double distance = GeometryUtil.distance(stay.getLocation().getPosition(), currentTrace.getPosition());
 				if(distance > 2*MAX_STAY_RADIUS){
 					//close current event
 					stay.setEndTime(currentTrace.getTime());
@@ -159,14 +159,10 @@ public class EventGeneration extends Thread {
 	}
 
 	private Event createStayEvent(User user, Position pos, Date start, Date end) {
-		String imageUrl = GoogleAPIs.getStreetViewImageUrl(pos); // TODO get more from google places and also streetview with different headings, choose best image somehow
-		String name = GoogleAPIs.getLocationName(pos); // TODO get from google places
-		String address = GoogleAPIs.getLocationName(pos);
+		EventDataFetcher fetcher = new EventDataFetcher(pos);
+		Location location = fetcher.getLocation();
+		String imageUrl = fetcher.getImageUrl();
 
-		Location location = new Location();
-		location.setPosition(pos);
-		location.setAddress(address);
-		location.setName(name);
 		Media media = new Media();
 		media.setType(MediaType.IMAGE);
 		media.setUrl(imageUrl);

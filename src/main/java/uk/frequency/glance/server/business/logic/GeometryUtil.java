@@ -1,10 +1,11 @@
 package uk.frequency.glance.server.business.logic;
 
 import java.awt.Point;
+import java.util.List;
 
 import uk.frequency.glance.server.model.component.Position;
 
-public class Geometry {
+public class GeometryUtil {
 
 	final static double ROUGH_KM_DEGREE_RATIO = 111.111;
 	//http://gis.stackexchange.com/questions/2951/algorithm-for-offsetting-a-latitude-longitude-by-some-amount-of-meters
@@ -20,6 +21,20 @@ public class Geometry {
 	
 	public static double kmToDegrees(double km){
 		return km/ROUGH_KM_DEGREE_RATIO;
+	}
+	
+	public static int findCloser(Position pos, List<Position> list){
+		int closer = -1;
+		double minDist = Double.POSITIVE_INFINITY;
+		for(int i=0; i<list.size(); i++){
+			Position p = list.get(i);
+			double dist = GeometryUtil.distance(pos, p);
+			if(dist < minDist){
+				minDist = dist;
+				closer = i;
+			}
+		}
+		return closer;
 	}
 	
 }
