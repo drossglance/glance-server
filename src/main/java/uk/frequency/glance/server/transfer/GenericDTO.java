@@ -10,7 +10,7 @@ public abstract class GenericDTO implements Serializable {
 	protected long creationTime;
 
 	protected long updateTime;
-
+	
 	public long getId() {
 		return id;
 	}

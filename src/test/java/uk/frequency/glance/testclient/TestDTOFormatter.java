@@ -1,12 +1,12 @@
 package uk.frequency.glance.testclient;
 
 import uk.frequency.glance.server.transfer.GenericDTO;
-import uk.frequency.glance.server.transfer.UserDTO;
 import uk.frequency.glance.server.transfer.event.EventDTO;
 import uk.frequency.glance.server.transfer.event.MoveEventDTO;
 import uk.frequency.glance.server.transfer.event.StayEventDTO;
 import uk.frequency.glance.server.transfer.trace.PositionTraceDTO;
 import uk.frequency.glance.server.transfer.trace.TraceDTO;
+import uk.frequency.glance.server.transfer.user.UserDTO;
 
 public class TestDTOFormatter {
 
@@ -70,7 +70,7 @@ public class TestDTOFormatter {
 	public static String format(UserDTO trace){
 		String str = "USER"
 				+ "\t" + trace.getId()
-				+ "\t" + trace.getProfile().getUserName();
+				+ "\t" + trace.getUsername();
 		return str;
 	}
 	

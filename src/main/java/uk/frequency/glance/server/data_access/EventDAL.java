@@ -13,14 +13,18 @@ public class EventDAL extends GenericDAL<Event>{
 
 	//TODO order by time
 	public List<Event> findByUser(long authorId){
-		Query q = getSession().createQuery("from Event where user.id = :userId")
+		Query q = getSession().createQuery("from Event where " +
+				"user.id = :userId " +
+				"order by startTime")
 			.setParameter("userId", authorId);
 		return q.list();
 	}
 	
 	public List<Event> findByTimeRange(Date start, Date end){
 		Query q = getSession().createQuery("from Event e where " +
-				"and e.startTime > :start or e.startTime < :end")
+				"(e.startTime >= :start and e.startTime < :end) " +
+					"or (e.endTime >= :start and e.endTime < :end)" +
+					"order by startTime")
 			.setParameter("start", start)
 			.setParameter("end", end);
 		return q.list();
@@ -29,7 +33,9 @@ public class EventDAL extends GenericDAL<Event>{
 	public List<Event> findByTimeRange(long userId, Date start, Date end){
 		Query q = getSession().createQuery("from Event e where " +
 				"e.user.id = :userId " + 
-				"and (e.startTime > :start or e.startTime < :end)")
+				"and ((e.startTime >= :start and e.startTime < :end) " +
+					"or (e.endTime >= :start and e.endTime < :end))" +
+					"order by startTime")
 			.setParameter("userId", userId)
 			.setParameter("start", start)
 			.setParameter("end", end);

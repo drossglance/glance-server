@@ -8,9 +8,9 @@ import org.codehaus.jettison.json.JSONObject;
 
 import uk.frequency.glance.server.service.util.JsonMessageBodyHandler;
 import uk.frequency.glance.server.transfer.GenericDTO;
-import uk.frequency.glance.server.transfer.UserDTO;
 import uk.frequency.glance.server.transfer.event.EventDTO;
 import uk.frequency.glance.server.transfer.trace.TraceDTO;
+import uk.frequency.glance.server.transfer.user.UserDTO;
 
 import com.google.gson.Gson;
 import com.google.gson.reflect.TypeToken;

@@ -19,14 +19,15 @@ import uk.frequency.glance.server.model.trace.Trace;
 @Table(name="tb_user") //for PostgreSQL compatibility, TODO:do this for all tables as a NamingStrategy
 public class User extends GenericEntity{
 
+	String username;
+	
+	String facebookId;
+	
 	@ElementCollection
 	@CollectionTable(joinColumns=@JoinColumn(name="user_id")) //for PostgreSQL compatibility, TODO:do this for all fks as a NamingStrategy
 	List<UserProfile> profileHistory;
 	
 	UserSettings settings;
-	
-	@OneToMany
-	List<User> friends;
 	
 	@OneToMany(mappedBy="user")
 	List<Event> events;
@@ -37,12 +38,20 @@ public class User extends GenericEntity{
 	@OneToOne(mappedBy="user")
 	EventGenerationInfo eventGenerationInfo;
 	
-	public List<User> getFriends() {
-		return friends;
+	public String getUsername() {
+		return username;
 	}
 
-	public void setFriends(List<User> friends) {
-		this.friends = friends;
+	public void setUsername(String username) {
+		this.username = username;
+	}
+
+	public String getFacebookId() {
+		return facebookId;
+	}
+
+	public void setFacebookId(String facebookId) {
+		this.facebookId = facebookId;
 	}
 
 	public UserSettings getSettings() {

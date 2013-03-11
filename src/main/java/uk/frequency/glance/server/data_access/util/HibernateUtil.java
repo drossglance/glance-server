@@ -25,6 +25,7 @@ import uk.frequency.glance.server.model.trace.ListenTrace;
 import uk.frequency.glance.server.model.trace.PositionTrace;
 import uk.frequency.glance.server.model.trace.Trace;
 import uk.frequency.glance.server.model.user.EventGenerationInfo;
+import uk.frequency.glance.server.model.user.Friendship;
 import uk.frequency.glance.server.model.user.User;
 import uk.frequency.glance.server.model.user.UserProfile;
 import uk.frequency.glance.server.model.user.UserSettings;
@@ -40,6 +41,7 @@ public class HibernateUtil {
 				.addAnnotatedClass(GenericEntity.class)
 				.addAnnotatedClass(User.class)
 				.addAnnotatedClass(UserProfile.class)
+				.addAnnotatedClass(Friendship.class)
 				.addAnnotatedClass(UserSettings.class)
 				.addAnnotatedClass(EventGenerationInfo.class)
 				.addAnnotatedClass(Location.class)

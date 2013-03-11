@@ -12,9 +12,9 @@ import java.util.List;
 
 import uk.frequency.glance.server.model.component.Position;
 import uk.frequency.glance.server.model.user.UserProfile;
-import uk.frequency.glance.server.transfer.UserDTO;
 import uk.frequency.glance.server.transfer.event.EventDTO;
 import uk.frequency.glance.server.transfer.trace.PositionTraceDTO;
+import uk.frequency.glance.server.transfer.user.UserDTO;
 
 import com.google.gson.reflect.TypeToken;
 
@@ -53,8 +53,9 @@ public class TestCaseLauncher {
 	
 	static UserDTO createTestUser(){
 		UserProfile profile = new UserProfile();
-		profile.setUserName("test user");
+		profile.setFullName("Test");
 		UserDTO user = new UserDTO();
+		user.setUsername("testuser");
 		user.setProfile(profile);
 		return user;
 	}

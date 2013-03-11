@@ -5,9 +5,6 @@ import javax.persistence.Embeddable;
 @Embeddable
 public class UserProfile {
 
-	String userName;
-	String password;
-	
 	String firstName;
 	String middleName;
 	String fullName;
@@ -27,26 +24,6 @@ public class UserProfile {
 	String bgImageUrl;
 	
 		
-	public String getUserName() {
-		return userName;
-	}
-
-
-	public void setUserName(String userName) {
-		this.userName = userName;
-	}
-
-
-	public String getPassword() {
-		return password;
-	}
-
-
-	public void setPassword(String password) {
-		this.password = password;
-	}
-
-
 	public String getFirstName() {
 		return firstName;
 	}
@@ -169,7 +146,7 @@ public class UserProfile {
 
 	@Override
 	public String toString() {
-		return userName;
+		return fullName;
 	}
 	
 }

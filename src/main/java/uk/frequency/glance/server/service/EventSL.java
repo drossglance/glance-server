@@ -42,6 +42,7 @@ public class EventSL extends GenericSL<Event, EventDTO>{
 	}
 	
 	@GET
+	@Produces(MediaType.APPLICATION_JSON)
 	@Path("/user-{id}")
 	public Response findByAuthor(@PathParam("id") long userId) {
 		try {
