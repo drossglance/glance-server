@@ -12,7 +12,7 @@ import org.hibernate.annotations.LazyToOne;
 import org.hibernate.annotations.LazyToOneOption;
 
 import uk.frequency.glance.server.model.event.Event;
-import uk.frequency.glance.server.model.trace.Trace;
+import uk.frequency.glance.server.model.trace.PositionTrace;
 
 @Entity
 public class EventGenerationInfo {
@@ -40,7 +40,7 @@ public class EventGenerationInfo {
 	
 	@LazyToOne(LazyToOneOption.FALSE)
 	@OneToOne
-	Trace lastUsedTrace;
+	PositionTrace lastPositionTrace;
 
 	public User getUser() {
 		return user;
@@ -66,14 +66,14 @@ public class EventGenerationInfo {
 		this.currentEvent = currentEvent;
 	}
 
-	public Trace getLastUsedTrace() {
-		return lastUsedTrace;
+	public PositionTrace getLastPositionTrace() {
+		return lastPositionTrace;
 	}
 
-	public void setLastUsedTrace(Trace lastUsedTrace) {
-		this.lastUsedTrace = lastUsedTrace;
+	public void setLastPositionTrace(PositionTrace lastPositionTrace) {
+		this.lastPositionTrace = lastPositionTrace;
 	}
-	
+
 	@Override
 	public String toString() {
 		return user.getId() +  "";

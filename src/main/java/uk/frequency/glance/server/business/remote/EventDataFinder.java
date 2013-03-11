@@ -1,10 +1,12 @@
 package uk.frequency.glance.server.business.remote;
 
+import java.util.List;
+
 import uk.frequency.glance.server.business.logic.GeometryUtil;
 import uk.frequency.glance.server.model.component.Location;
 import uk.frequency.glance.server.model.component.Position;
 
-public class EventDataFetcher {
+public class EventDataFinder {
 
 	static final String googleAPIsKey = "AIzaSyByhzaP3j5iMrMSw_hnMQUTugiVH0cTldc"; //TODO get from properties
 	static final String imageSize = "200x200"; //TODO find better place to define it
@@ -13,31 +15,40 @@ public class EventDataFetcher {
 	
 	public static void main(String[] args) {
 		Position p = new Position();
-		p.setLat(51.52261);
-		p.setLng(-0.085541);
-		EventDataFetcher fetcher = new EventDataFetcher(p);
-		System.out.println(fetcher.getLocation().getName());
-		System.out.println(fetcher.getLocation().getAddress());
-		System.out.println(fetcher.getLocation().getPosition());
-		System.out.println(fetcher.getImageUrl());
+		p.setLat(51.552873);
+		p.setLng(-0.08287);
+		new EventDataFinder(p);
 	}
 	
 	Location location;
 	String imageUrl;
 	
-	public EventDataFetcher(Position pos) {
+	public EventDataFinder(Position pos) {
 		loadInfo(pos);
 	}
 
 	private void loadInfo(Position pos){
 		GooglePlaces places = new GooglePlaces(pos, searchRadius);
-		int index = GeometryUtil.findCloser(pos, places.getResultPositions());
+		List<Position> results = places.getResultPositions();
+		int index = GeometryUtil.findCloser(pos, results);
 		location = places.getLocation(index);
 		imageUrl = places.getImageUrl(index, imageMaxHeight);
 		
-		//TODO if no image, get from streetview. if no name, get from geocoding
-//		String imageUrl = GoogleStreetView.getStreetViewImageUrl(pos);
-//		String name = GoogleGeocoding.getLocationName(pos);
+		if(imageUrl == null){
+			imageUrl = GoogleStreetView.getStreetViewImageUrl(pos);
+		}
+		
+		/*TEST*/
+//		double dist = GeometryUtil.distance(pos, results.get(index));
+//		String streetViewImage = GoogleStreetView.getStreetViewImageUrl(pos);
+//		String geocodingName = GoogleGeocoding.getLocationName(pos);
+//		System.out.println(location.getName());
+//		System.out.println(location.getAddress());
+//		System.out.println(location.getPosition());
+//		System.out.println(imageUrl);
+//		System.out.println(GeometryUtil.degreesToMeters(dist) + "m");
+//		System.out.println(geocodingName);
+//		System.out.println(streetViewImage);
 	}
 	
 	public Location getLocation(){

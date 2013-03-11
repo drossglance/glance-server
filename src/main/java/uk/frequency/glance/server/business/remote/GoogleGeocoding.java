@@ -17,8 +17,8 @@ public class GoogleGeocoding {
 
 	static final String rootUrl = "http://maps.googleapis.com/maps/api/geocode/json";
 	
-	static final String imageSize = EventDataFetcher.imageSize;
-	static final String key = EventDataFetcher.googleAPIsKey;
+	static final String imageSize = EventDataFinder.imageSize;
+	static final String key = EventDataFinder.googleAPIsKey;
 	
 	public static String getAddress(Position pos){
 		Geocoder geo = new Geocoder(); //TODO create clientId? https://developers.google.com/maps/documentation/business/guide
@@ -49,7 +49,7 @@ public class GoogleGeocoding {
 			return "Somewhere"; //TODO
 		}
 
-		String[] preferedTypesInOrder = {"route", "locality", "political", "administrative_area_level_2", "administrative_area_level_2", "country"};  
+		String[] preferedTypesInOrder = {"street_address", "route", "locality", "political", "administrative_area_level_2", "administrative_area_level_2", "country"};  
 		for(String preferedType :  preferedTypesInOrder){
 			for(GeocoderResult result : res.getResults()){
 				for(GeocoderAddressComponent comp : result.getAddressComponents()){

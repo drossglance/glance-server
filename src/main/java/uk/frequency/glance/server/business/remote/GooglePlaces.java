@@ -13,16 +13,16 @@ public class GooglePlaces {
 
 	static final String rootUrl = "https://maps.googleapis.com/maps/api/place/";
 	
-	static final String imageSize = EventDataFetcher.imageSize;
-	static final String key = EventDataFetcher.googleAPIsKey;
+	static final String imageSize = EventDataFinder.imageSize;
+	static final String key = EventDataFinder.googleAPIsKey;
 	
 	private RemoteAPIClient client = new RemoteAPIClient(rootUrl);
 	
-	private Position position;
+	private Position requestedPosition;
 	private List<Place> results;
 	
 	public GooglePlaces(Position position, int radius) {
-		this.position = position;
+		this.requestedPosition = position;
 		requestPlaceSearch(position, radius);
 	}
 

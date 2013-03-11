@@ -6,8 +6,8 @@ public class GoogleStreetView {
 
 	static final String rootUrl = "http://maps.googleapis.com/maps/api/streetview";
 	
-	static final String imageSize = EventDataFetcher.imageSize;
-	static final String key = EventDataFetcher.googleAPIsKey;
+	static final String imageSize = EventDataFinder.imageSize;
+	static final String key = EventDataFinder.googleAPIsKey;
 	
 	public static String getStreetViewImageUrl(double lat, double lng, int heading){
 		String url = rootUrl + 

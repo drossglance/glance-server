@@ -12,15 +12,24 @@ public class GeometryUtil {
 	
 	public static double distance(Position p1, Position p2){
 		return Point.distance(p1.getLat(), p1.getLng(), p2.getLat(), p2.getLng());
-		//FIXME get a proper geometry library to handle earth`s variable radius and points across the 180deg meridian
 	}
 	
 	public static double degreesToKm(double degrees){
+		//FIXME get a proper geometry library to handle earth's variable radius and points across the 180deg meridian
 		return degrees*ROUGH_KM_DEGREE_RATIO;
 	}
 	
 	public static double kmToDegrees(double km){
+		//FIXME get a proper geometry library to handle earth's variable radius and points across the 180deg meridian
 		return km/ROUGH_KM_DEGREE_RATIO;
+	}
+	
+	public static int degreesToMeters(double degrees){
+		return (int)(degreesToKm(degrees)*1000);
+	}
+	
+	public static double metersToDegrees(int meters){
+		return kmToDegrees((double)meters/1000);
 	}
 	
 	public static int findCloser(Position pos, List<Position> list){
