@@ -7,9 +7,8 @@ import java.io.IOException;
 import java.text.ParseException;
 import java.text.SimpleDateFormat;
 import java.util.ArrayList;
+import java.util.Date;
 import java.util.List;
-
-import com.google.gson.reflect.TypeToken;
 
 import uk.frequency.glance.server.model.component.Position;
 import uk.frequency.glance.server.model.user.UserProfile;
@@ -17,11 +16,13 @@ import uk.frequency.glance.server.transfer.UserDTO;
 import uk.frequency.glance.server.transfer.event.EventDTO;
 import uk.frequency.glance.server.transfer.trace.PositionTraceDTO;
 
+import com.google.gson.reflect.TypeToken;
+
 public class TestCaseLauncher {
 
 	static final String DIR = "src/test/java/test_cases";
 	static final String DATE_FORMAT = "HH:mm:ss";
-	static final int TIME_BETWEEN_REQUESTS = 2 * 1000;
+	static final int TIME_BETWEEN_REQUESTS = 1 * 1000;
 
 	public static void main(String[] args) {
 		try {
@@ -37,9 +38,10 @@ public class TestCaseLauncher {
 		
 		List<PositionTraceDTO> traces = loadTraces(fileName, user.getId());
 		for(PositionTraceDTO trace : traces){
+			Date requestTime = new Date();
 			TestClient.postAndPrint(trace, "trace");
 			Thread.sleep(TIME_BETWEEN_REQUESTS);
-			List<EventDTO> events = (List<EventDTO>) TestClient.getListAndPrint("event/user-" + user.getId(), new TypeToken<List<EventDTO>>(){});
+			List<EventDTO> events = (List<EventDTO>) TestClient.getListAndPrint("event/user-" + user.getId() + "/created_after-" + requestTime.getTime(), new TypeToken<List<EventDTO>>(){});
 			verifyEvents(events);
 		}
 	}

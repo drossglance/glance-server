@@ -1,6 +1,7 @@
 package uk.frequency.glance.server.business;
 
 import java.lang.reflect.ParameterizedType;
+import java.util.Date;
 import java.util.List;
 
 import org.hibernate.ObjectNotFoundException;
@@ -28,6 +29,11 @@ public abstract class GenericBL<T extends GenericEntity> {
 	public T findById(long id) throws ObjectNotFoundException {
 		T entity = dal.findById(id);
 		return entity; 
+	}
+	
+	public List<T> findCreatedAfter(Date time) throws ObjectNotFoundException {
+		List<T> entities = dal.findCreatedAfter(time);
+		return entities; 
 	}
 
 	public List<T> findAll() {

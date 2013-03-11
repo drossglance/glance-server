@@ -4,6 +4,7 @@ import java.util.Date;
 import java.util.List;
 
 import org.hibernate.Query;
+import org.hibernate.criterion.Restrictions;
 
 import uk.frequency.glance.server.model.event.Event;
 
@@ -34,6 +35,12 @@ public class EventDAL extends GenericDAL<Event>{
 			.setParameter("end", end);
 		return q.list();
 	}
+	
+	public List<Event> findCreatedAfter(long userId, Date time) {
+        return findByCriteria(
+        		Restrictions.eq("user.id", userId),
+        		Restrictions.gt("creationTime", time));
+    }
 	
 	public List<Event> findByUser(long authorId, int startPage, int endPage){
 //		Query q = getSession().createQuery("from Event where user.id = :userId")

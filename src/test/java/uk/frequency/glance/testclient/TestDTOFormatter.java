@@ -3,6 +3,7 @@ package uk.frequency.glance.testclient;
 import uk.frequency.glance.server.transfer.GenericDTO;
 import uk.frequency.glance.server.transfer.UserDTO;
 import uk.frequency.glance.server.transfer.event.EventDTO;
+import uk.frequency.glance.server.transfer.event.MoveEventDTO;
 import uk.frequency.glance.server.transfer.event.StayEventDTO;
 import uk.frequency.glance.server.transfer.trace.PositionTraceDTO;
 import uk.frequency.glance.server.transfer.trace.TraceDTO;
@@ -32,6 +33,16 @@ public class TestDTOFormatter {
 			str += "\t" + stay.getLocation().getName()
 					+ "\t" + stay.getLocation().getPosition().getLat()
 					+ "\t" + stay.getLocation().getPosition().getLng();
+		}else if(event instanceof MoveEventDTO){
+				MoveEventDTO move = (MoveEventDTO) event;
+				str += "\t" + move.getStartLocation().getName()
+						+ "\t" + move.getStartLocation().getPosition().getLat()
+						+ "\t" + move.getStartLocation().getPosition().getLng();
+				if(move.getEndLocation() != null){
+					str +=  "\t" + move.getEndLocation().getName()
+							+ "\t" + move.getEndLocation().getPosition().getLat()
+							+ "\t" + move.getEndLocation().getPosition().getLng();
+				}
 		} else {
 			throw new AssertionError();
 		}

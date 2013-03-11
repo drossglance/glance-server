@@ -8,6 +8,7 @@ import javax.ws.rs.GET;
 import javax.ws.rs.Path;
 import javax.ws.rs.PathParam;
 import javax.ws.rs.Produces;
+import javax.ws.rs.WebApplicationException;
 import javax.ws.rs.core.MediaType;
 import javax.ws.rs.core.Response;
 import javax.ws.rs.core.Response.Status;
@@ -15,6 +16,7 @@ import javax.ws.rs.core.Response.Status;
 import org.hibernate.ObjectNotFoundException;
 
 import uk.frequency.glance.server.business.EventBL;
+import uk.frequency.glance.server.data_access.util.HibernateUtil;
 import uk.frequency.glance.server.model.Comment;
 import uk.frequency.glance.server.model.event.Event;
 import uk.frequency.glance.server.model.event.ListenEvent;
@@ -78,6 +80,22 @@ public class EventSL extends GenericSL<Event, EventDTO>{
 		return dto;
 	}
 	
+	@GET
+	@Path("/user-{id}/created_after-{time}")
+	@Produces(MediaType.APPLICATION_JSON)
+	public List<EventDTO> findCreatedAfter(
+			@PathParam("id") long userId,
+			@PathParam("time") long time) {
+		try{
+			List<Event> entity = eventBl.findCreatedAfter(userId, new Date(time));
+			List<EventDTO> dto = toDTO(entity);
+			eventBl.flush();
+			return dto;
+		}catch(ObjectNotFoundException e){
+			throw new WebApplicationException(Status.NOT_FOUND);
+		}
+	}
+	
 	@Override
 	protected EventDTO toDTO(Event event){
 		
@@ -92,7 +110,7 @@ public class EventSL extends GenericSL<Event, EventDTO>{
 			MoveEventDTO moveDto = new MoveEventDTO();
 			moveDto.setStartLocation(move.getStartLocation());
 			moveDto.setEndLocation(move.getEndLocation());
-			moveDto.setTrail(move.getTrail());
+			moveDto.setTrail(HibernateUtil.initializeAndUnproxy(move.getTrail()));
 			dto = moveDto;
 		}else if(event instanceof TellEvent){
 			TellEvent tell = (TellEvent)event;

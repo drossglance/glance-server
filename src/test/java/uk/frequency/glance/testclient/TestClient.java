@@ -82,7 +82,7 @@ public class TestClient {
 			System.out.println(TestDTOFormatter.format(resp));
 			return resp;
 		}catch(RuntimeException e){
-			System.err.println(e.getMessage());
+			e.printStackTrace();
 			return null;
 		}
 	}
@@ -93,7 +93,7 @@ public class TestClient {
 			System.out.println(TestDTOFormatter.format(resp));
 			return resp;
 		}catch(RuntimeException e){
-			System.err.println(e.getMessage());
+			e.printStackTrace();
 			return null;
 		}
 	}
@@ -106,7 +106,7 @@ public class TestClient {
 			}
 			return resp;
 		}catch(RuntimeException e){
-			System.err.println(e.getMessage());
+			e.printStackTrace();
 			return null;
 		}
 	}

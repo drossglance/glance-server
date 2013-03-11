@@ -1,12 +1,14 @@
 package uk.frequency.glance.server.data_access;
 
 import java.lang.reflect.ParameterizedType;
+import java.util.Date;
 import java.util.List;
 
 import org.hibernate.Criteria;
 import org.hibernate.Session;
 import org.hibernate.criterion.Criterion;
 import org.hibernate.criterion.Example;
+import org.hibernate.criterion.Restrictions;
 
 import uk.frequency.glance.server.data_access.util.HibernateUtil;
 import uk.frequency.glance.server.model.GenericEntity;
@@ -30,6 +32,10 @@ public class GenericDAL<T extends GenericEntity> {
         T entity = (T) getSession().load(entityClass, id);
         return entity;
     }
+    
+    public List<T> findCreatedAfter(Date time) {
+        return findByCriteria(Restrictions.gt("creationTime", time));
+    }
  
     public List<T> findAll() {
         return findByCriteria();
@@ -46,6 +52,14 @@ public class GenericDAL<T extends GenericEntity> {
     }
  
     public T makePersistent(T entity) {
+    	
+    	{//TODO use @PrePersist in the GenericEntity instead
+	    	if(entity.getCreationTime() == null){
+	    		entity.setCreationTime(new Date());
+	    	}
+	    	entity.setUpdateTime(new Date());
+    	}
+    	
     	getSession().save(entity);
         return entity;
     }

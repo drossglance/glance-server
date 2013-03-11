@@ -1,5 +1,6 @@
 package uk.frequency.glance.server.model.component;
 
+import javax.persistence.Column;
 import javax.persistence.DiscriminatorColumn;
 import javax.persistence.DiscriminatorType;
 import javax.persistence.Embeddable;
@@ -10,6 +11,7 @@ public class Media{
 
 	public enum MediaType { IMAGE, DRAWING, SOUND, VIDEO }
 	
+	@Column(columnDefinition="varchar(2083)") //http://stackoverflow.com/questions/219569/best-database-field-type-for-a-url
 	String url;
 	
 	MediaType type;

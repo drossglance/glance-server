@@ -2,6 +2,7 @@ package uk.frequency.glance.server.service;
 
 import java.net.URI;
 import java.util.ArrayList;
+import java.util.Date;
 import java.util.List;
 
 import javax.ws.rs.Consumes;
@@ -66,6 +67,20 @@ public abstract class GenericSL<T extends GenericEntity, U extends GenericDTO> {
 		}
 	}
 	
+	@GET
+	@Path("/created_after-{time}")
+	@Produces(MediaType.APPLICATION_JSON)
+	public List<U> findCreatedAfter(@PathParam("time") long time) {
+		try{
+			List<T> entity = business.findCreatedAfter(new Date(time));
+			List<U> dto = toDTO(entity);
+			business.flush();
+			return dto;
+		}catch(ObjectNotFoundException e){
+			throw new WebApplicationException(Status.NOT_FOUND);
+		}
+	}
+	
 	@POST
 	@Consumes(MediaType.APPLICATION_JSON)
 	public Response create(U dto){
@@ -115,14 +130,14 @@ public abstract class GenericSL<T extends GenericEntity, U extends GenericDTO> {
 	
 	protected void initToDTO(T entity, U dto){
 		dto.setId(entity.getId());
-		dto.setCreationTime(entity.getCreationTime());
-		dto.setUpdateTime(entity.getUpdateTime());
+		dto.setCreationTime(entity.getCreationTime().getTime());
+		dto.setUpdateTime(entity.getUpdateTime().getTime());
 	}
 	
 	protected void initFromDTO(U dto, T entity){
 		entity.setId(dto.getId());
-		entity.setCreationTime(dto.getCreationTime());
-		entity.setUpdateTime(dto.getUpdateTime());
+		entity.setCreationTime(new Date(dto.getCreationTime()));
+		entity.setUpdateTime(new Date(dto.getUpdateTime()));
 	}
 	
 }

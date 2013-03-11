@@ -4,14 +4,13 @@ import java.util.ArrayList;
 import java.util.Date;
 import java.util.List;
 
-import org.hibernate.ObjectNotFoundException;
 import org.hibernate.Transaction;
 
+import uk.frequency.glance.server.business.remote.EventDataFinder;
 import uk.frequency.glance.server.data_access.EventDAL;
 import uk.frequency.glance.server.data_access.TraceDAL;
 import uk.frequency.glance.server.data_access.UserDAL;
 import uk.frequency.glance.server.data_access.util.HibernateUtil;
-import uk.frequency.glance.server.business.remote.EventDataFinder;
 import uk.frequency.glance.server.model.component.Location;
 import uk.frequency.glance.server.model.component.Media;
 import uk.frequency.glance.server.model.component.Media.MediaType;
@@ -55,11 +54,7 @@ public class EventGeneration extends Thread {
 			}
 			tr.commit();
 		}catch(RuntimeException e){
-			if(e instanceof ObjectNotFoundException){
-				//failed because the currentTrace wasn't persisted, no worries
-			}else{
-				e.printStackTrace();
-			}
+			e.printStackTrace();
             if (tr.isActive()) {
                 tr.rollback();
             }
@@ -190,7 +185,7 @@ public class EventGeneration extends Thread {
 		List<Position> trail = new ArrayList<Position>();
 		trail.add(startPos);
 		MoveEvent event = new MoveEvent();
-		event.setType(EventType.STAY);
+		event.setType(EventType.TRAVEL);
 		event.setUser(user);
 		event.setStartTime(start);
 		event.setStartLocation(location);

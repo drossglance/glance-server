@@ -1,16 +1,15 @@
 package uk.frequency.glance.server.transfer;
 
 import java.io.Serializable;
-import java.util.Date;
 
 @SuppressWarnings("serial")
 public abstract class GenericDTO implements Serializable {
 
 	long id;
 
-	protected Date creationTime;
+	protected long creationTime;
 
-	protected Date updateTime;
+	protected long updateTime;
 
 	public long getId() {
 		return id;
@@ -20,19 +19,19 @@ public abstract class GenericDTO implements Serializable {
 		this.id = id;
 	}
 
-	public Date getCreationTime() {
+	public long getCreationTime() {
 		return creationTime;
 	}
 
-	public void setCreationTime(Date creationTime) {
+	public void setCreationTime(long creationTime) {
 		this.creationTime = creationTime;
 	}
 
-	public Date getUpdateTime() {
+	public long getUpdateTime() {
 		return updateTime;
 	}
 
-	public void setUpdateTime(Date updateTime) {
+	public void setUpdateTime(long updateTime) {
 		this.updateTime = updateTime;
 	}
 

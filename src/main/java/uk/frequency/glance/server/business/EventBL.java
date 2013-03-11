@@ -38,6 +38,11 @@ public class EventBL extends GenericBL<Event>{
 		return eventDal.findByTimeRange(userId, start, end);
 	}
 	
+	public List<Event> findCreatedAfter(long userId, Date time) throws ObjectNotFoundException {
+		List<Event> entities = eventDal.findCreatedAfter(userId, time);
+		return entities; 
+	}
+	
 	public void onTraceReceived(Trace trace){
 		new EventGeneration(trace, eventDal, traceDal, userDal).start();
 	}
