@@ -5,7 +5,7 @@ import java.util.List;
 
 import org.hibernate.ObjectNotFoundException;
 
-import uk.frequency.glance.server.business.logic.EventGeneration;
+import uk.frequency.glance.server.business.logic.EventGenerationLogic;
 import uk.frequency.glance.server.data_access.EventDAL;
 import uk.frequency.glance.server.data_access.TraceDAL;
 import uk.frequency.glance.server.data_access.UserDAL;
@@ -44,7 +44,7 @@ public class EventBL extends GenericBL<Event>{
 	}
 	
 	public void onTraceReceived(Trace trace){
-		new EventGeneration(trace, eventDal, traceDal, userDal).start();
+		new EventGenerationLogic(trace, eventDal, traceDal, userDal).start();
 	}
 	
 }

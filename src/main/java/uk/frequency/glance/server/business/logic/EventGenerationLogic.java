@@ -25,7 +25,7 @@ import uk.frequency.glance.server.model.trace.Trace;
 import uk.frequency.glance.server.model.user.EventGenerationInfo;
 import uk.frequency.glance.server.model.user.User;
 
-public class EventGeneration extends Thread {
+public class EventGenerationLogic extends Thread {
 
 	Trace currentTrace;
 	EventGenerationInfo genInfo;
@@ -35,9 +35,9 @@ public class EventGeneration extends Thread {
 	UserDAL userDal;
 
 	private final int MIN_STAY_TIME = 2 * 60 * 1000; //in miliseconds
-	private final double MAX_STAY_RADIUS = GeometryUtil.metersToDegrees(20); //in degrees
+	private final double MAX_STAY_RADIUS = GeometryUtil.metersToDegrees(35);
 
-	public EventGeneration(Trace currentTrace, EventDAL eventDal, TraceDAL traceDal, UserDAL userDal) {
+	public EventGenerationLogic(Trace currentTrace, EventDAL eventDal, TraceDAL traceDal, UserDAL userDal) {
 		this.currentTrace = currentTrace;
 		this.eventDal = eventDal;
 		this.traceDal = traceDal;
