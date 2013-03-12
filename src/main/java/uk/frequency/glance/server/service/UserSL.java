@@ -102,6 +102,9 @@ public class UserSL extends GenericSL<User, UserDTO>{
 		UserDTO dto = new UserDTO();
 		initToDTO(user, dto);
 		
+		dto.setUsername(user.getUsername());
+		dto.setFacebookId(user.getFacebookId());
+		
 		if(user.getProfileHistory() != null && !user.getProfileHistory().isEmpty()){
 			dto.setProfile(user.getProfileHistory().get(0)); //TODO get most recent profile
 		}
@@ -122,15 +125,16 @@ public class UserSL extends GenericSL<User, UserDTO>{
 		User user = new User();
 		initFromDTO(dto, user);
 
+		user.setUsername(dto.getUsername());
+		user.setFacebookId(dto.getFacebookId());
+		if(dto.getUsername() == null && dto.getFacebookId() == null){
+			throw new MissingFieldException("username or facebookId");
+		}
+		
 		if (dto.getProfile() != null) {
 			List<UserProfile> profiles = new ArrayList<UserProfile>();
 			profiles.add(dto.getProfile());
 			user.setProfileHistory(profiles);
-		}
-		
-		user.setUsername(dto.getUsername());
-		if(dto.getUsername() == null){
-			throw new MissingFieldException("username");
 		}
 
 		return user;
