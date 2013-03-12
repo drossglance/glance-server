@@ -32,13 +32,33 @@ public class UserSL extends GenericSL<User, UserDTO>{
 	
 	@GET
 	@Produces(MediaType.APPLICATION_JSON)
-	@Path("/{id}/friendship")
+	@Path("/{id}/friendship/all")
 	public List<FriendshipDTO> findFriendships(
 			@PathParam("id") long userId){
 		List<Friendship> entities = userBl.findFriendships(userId);
 		List<FriendshipDTO> dto = listToDTO(entities);
 		business.flush();
 		return dto;
+	}
+	
+	@GET
+	@Produces(MediaType.APPLICATION_JSON)
+	@Path("/{id}/friendship")
+	public List<Long> findFriends(
+			@PathParam("id") long userId){
+		List<Long> list = userBl.findFriends(userId);
+		business.flush();
+		return list;
+	}
+	
+	@GET
+	@Produces(MediaType.APPLICATION_JSON)
+	@Path("/{id}/friendship/received")
+	public List<Long> findFriendshipRequests(
+			@PathParam("id") long userId){
+		List<Long> list = userBl.findFriendshipRequests(userId);
+		business.flush();
+		return list;
 	}
 	
 	@PUT

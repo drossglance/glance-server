@@ -16,7 +16,7 @@ import uk.frequency.glance.server.model.GenericEntity;
 	})
 public class Friendship extends GenericEntity{
 
-	public enum Status {REQUEST_SENT, REQUEST_RECEIVED, FRIENDS, DENIED}
+	public enum Status {REQUEST_SENT, REQUEST_RECEIVED, ACCEPTED, DENIED, BLOCKED}
 
 //	@Id
 //	@GeneratedValue(generator = "foreign")

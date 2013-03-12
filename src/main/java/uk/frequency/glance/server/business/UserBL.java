@@ -5,10 +5,13 @@ import java.util.List;
 import org.hibernate.TransientObjectException;
 import org.hibernate.exception.ConstraintViolationException;
 
+import uk.frequency.glance.server.business.exception.WrongStateException;
 import uk.frequency.glance.server.data_access.UserDAL;
 import uk.frequency.glance.server.model.user.EventGenerationInfo;
 import uk.frequency.glance.server.model.user.Friendship;
 import uk.frequency.glance.server.model.user.User;
+
+import static uk.frequency.glance.server.model.user.Friendship.Status.*;
 
 public class UserBL extends GenericBL<User>{
 
@@ -43,16 +46,21 @@ public class UserBL extends GenericBL<User>{
 		User friend = new User();
 		friend.setId(friendId);
 		
+		Friendship existing = userDal.findFriendship(user, friend);
+		if(existing != null){
+			throw new WrongStateException("Friendship request already exists. Status is " + existing.getStatus());
+		}
+		
 		Friendship f = new Friendship();
 		f.setUser(user);
 		f.setFriend(friend);
-		f.setStatus(Friendship.Status.REQUEST_SENT);
+		f.setStatus(REQUEST_SENT);
 		userDal.makePersistent(f);
 		
 		Friendship f2 = new Friendship();
 		f2.setUser(friend);
 		f2.setFriend(user);
-		f2.setStatus(Friendship.Status.REQUEST_RECEIVED);
+		f2.setStatus(REQUEST_RECEIVED);
 		userDal.makePersistent(f2);
 		
 		return f;
@@ -65,11 +73,20 @@ public class UserBL extends GenericBL<User>{
 		friend.setId(friendId);
 		
 		Friendship f = userDal.findFriendship(user, friend);
-		f.setStatus(Friendship.Status.FRIENDS);
+		
+		if(f == null){
+			throw new WrongStateException("Friendship request doesn't exist.");
+		}else if(f.getStatus() == REQUEST_SENT){
+			throw new WrongStateException("Friendship request can't be accepted by the same user who sent it.");
+		}else if(f.getStatus() != REQUEST_RECEIVED){
+			throw new WrongStateException("Friendship state is: " + f.getStatus() + ". Can only accept in state: " + REQUEST_RECEIVED + ".");
+		}
+		
+		f.setStatus(ACCEPTED);
 		userDal.makePersistent(f);
 		
 		Friendship f2 = userDal.findReciprocal(f);
-		f2.setStatus(Friendship.Status.FRIENDS);
+		f2.setStatus(ACCEPTED);
 		userDal.makePersistent(f2);
 		
 		return f;
@@ -82,15 +99,34 @@ public class UserBL extends GenericBL<User>{
 		friend.setId(friendId);
 		
 		Friendship f = userDal.findFriendship(user, friend);
-		f.setStatus(Friendship.Status.DENIED);
+		
+		if(f == null){
+			throw new WrongStateException("Friendship request doesn't exist.");
+		}else if(f.getStatus() == REQUEST_SENT){
+			throw new WrongStateException("Friendship request can't be denied by the same user who sent it.");
+		}else if(f.getStatus() != REQUEST_RECEIVED){
+			throw new WrongStateException("Friendship state is: " + f.getStatus() + ". Can only deny in state: " + REQUEST_RECEIVED + ".");
+		}
+		
+		f.setStatus(DENIED);
 		userDal.makePersistent(f);
 		
 		Friendship f2 = userDal.findReciprocal(f);
-		f2.setStatus(Friendship.Status.DENIED);
+		f2.setStatus(DENIED);
 		userDal.makePersistent(f2);
 		
 		return f;
 	}
 	
+	public List<Long> findFriends(long userId){
+		User user = new User();
+		user.setId(userId);
+		return userDal.findFriendsIds(user, ACCEPTED);
+	}
 	
+	public List<Long> findFriendshipRequests(long userId){
+		User user = new User();
+		user.setId(userId);
+		return userDal.findFriendsIds(user, REQUEST_RECEIVED);
+	}
 }
