@@ -7,9 +7,9 @@ public abstract class GenericDTO implements Serializable {
 
 	long id;
 
-	protected long creationTime;
+	protected Long creationTime;
 
-	protected long updateTime;
+	protected Long updateTime;
 	
 	public long getId() {
 		return id;
@@ -19,19 +19,19 @@ public abstract class GenericDTO implements Serializable {
 		this.id = id;
 	}
 
-	public long getCreationTime() {
+	public Long getCreationTime() {
 		return creationTime;
 	}
 
-	public void setCreationTime(long creationTime) {
+	public void setCreationTime(Long creationTime) {
 		this.creationTime = creationTime;
 	}
 
-	public long getUpdateTime() {
+	public Long getUpdateTime() {
 		return updateTime;
 	}
 
-	public void setUpdateTime(long updateTime) {
+	public void setUpdateTime(Long updateTime) {
 		this.updateTime = updateTime;
 	}
 

@@ -8,6 +8,7 @@ import org.hibernate.Criteria;
 import org.hibernate.Session;
 import org.hibernate.criterion.Criterion;
 import org.hibernate.criterion.Example;
+import org.hibernate.criterion.Property;
 import org.hibernate.criterion.Restrictions;
 
 import uk.frequency.glance.server.data_access.util.HibernateUtil;
@@ -37,8 +38,10 @@ public class GenericDAL<T extends GenericEntity> {
         return findByCriteria(Restrictions.gt("creationTime", time));
     }
  
-    public List<T> findAll() {
-        return findByCriteria();
+    public List<T> findAllOrderById() {
+    	return getSession().createCriteria(entityClass)
+    			.addOrder(Property.forName("id").asc())
+    			.list();
     }
     
     public List<T> findByExample(T exampleInstance, String[] excludeProperty) {
@@ -51,13 +54,14 @@ public class GenericDAL<T extends GenericEntity> {
         return crit.list();
     }
  
-    public T makePersistent(T entity) {
+    public T save(T entity) {
     	
     	{//TODO use @PrePersist in the GenericEntity instead
+    		Date now = new Date();
 	    	if(entity.getCreationTime() == null){
-	    		entity.setCreationTime(new Date());
+	    		entity.setCreationTime(now);
 	    	}
-	    	entity.setUpdateTime(new Date());
+	    	entity.setUpdateTime(now);
     	}
     	
     	getSession().save(entity);

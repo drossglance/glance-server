@@ -58,18 +58,6 @@ public class EventSL extends GenericSL<Event, EventDTO>{
 	
 	@GET
 	@Produces(MediaType.APPLICATION_JSON)
-	@Path("/{start}to{end}")
-	public List<EventDTO> findByTimeRange(
-			@PathParam("start") long start,
-			@PathParam("end") long end) {
-		List<Event> list = eventBl.findByTimeRange(new Date(start), new Date(end)); 
-		List<EventDTO> dto = toDTO(list);
-		eventBl.flush();
-		return dto;
-	}
-	
-	@GET
-	@Produces(MediaType.APPLICATION_JSON)
 	@Path("/user-{id}/{start}to{end}")
 	public List<EventDTO> findByUserAndTimeRange(
 			@PathParam("id") long userId,

@@ -29,18 +29,17 @@ public class EventBL extends GenericBL<Event>{
 		List<Event> list = eventDal.findByUser(userId);
 		return list;
 	}
-	
-	public List<Event> findByTimeRange(Date start, Date end){
-		return eventDal.findByTimeRange(start, end);
-	}
-	
+
 	public List<Event> findByTimeRange(long userId, Date start, Date end){
 		return eventDal.findByTimeRange(userId, start, end);
 	}
 	
 	public List<Event> findCreatedAfter(long userId, Date time) throws ObjectNotFoundException {
-		List<Event> entities = eventDal.findCreatedAfter(userId, time);
-		return entities; 
+		return eventDal.findCreatedAfter(userId, time);
+	}
+	
+	public Event findMostRecent(long userId){
+		return eventDal.findMostRecent(userId);
 	}
 	
 	public void onTraceReceived(Trace trace){

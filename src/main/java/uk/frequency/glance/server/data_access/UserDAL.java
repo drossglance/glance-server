@@ -59,7 +59,8 @@ public class UserDAL extends GenericDAL<User>{
 	public List<Long> findFriendsIds(User user, Friendship.Status status){
 		Query q = getSession().createQuery("select f.friend.id from Friendship f where " +
 				"f.user = :user " +
-				"and f.status = " + status.ordinal())
+				"and f.status = " + status.ordinal() + " " +
+				"order by f.friend.id")
 			.setParameter("user", user);
         return (List<Long>)q.list(); 
 	}

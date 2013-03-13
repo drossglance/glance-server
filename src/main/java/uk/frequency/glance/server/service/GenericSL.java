@@ -87,7 +87,7 @@ public abstract class GenericSL<T extends GenericEntity, U extends GenericDTO> {
 		try{
 			T entity = fromDTO(dto);
 			business.create(entity);
-			U newDto = toDTO(entity); //needed to capture data created on the server side (like id)
+			U newDto = toDTO(entity); //needed to capture data created on the server side (like id, creationTime, updateTime)
 			URI uri = uriInfo.getAbsolutePathBuilder().path("{index}").build(entity.getId());
 			business.flush();
 			return Response.created(uri).

@@ -46,6 +46,9 @@ public class UserBL extends GenericBL<User>{
 		User friend = new User();
 		friend.setId(friendId);
 		
+		if(userId == friendId){
+			throw new WrongStateException("Can't send a friendship request to yourself.");
+		}
 		Friendship existing = userDal.findFriendship(user, friend);
 		if(existing != null){
 			throw new WrongStateException("Friendship request already exists. Status is " + existing.getStatus());

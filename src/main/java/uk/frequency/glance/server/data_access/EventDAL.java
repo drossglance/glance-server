@@ -20,16 +20,6 @@ public class EventDAL extends GenericDAL<Event>{
 		return q.list();
 	}
 	
-	public List<Event> findByTimeRange(Date start, Date end){
-		Query q = getSession().createQuery("from Event e where " +
-				"(e.startTime >= :start and e.startTime < :end) " +
-					"or (e.endTime >= :start and e.endTime < :end)" +
-					"order by startTime")
-			.setParameter("start", start)
-			.setParameter("end", end);
-		return q.list();
-	}
-	
 	public List<Event> findByTimeRange(long userId, Date start, Date end){
 		Query q = getSession().createQuery("from Event e where " +
 				"e.user.id = :userId " + 
@@ -48,15 +38,13 @@ public class EventDAL extends GenericDAL<Event>{
         		Restrictions.gt("creationTime", time));
     }
 	
-	public List<Event> findByUser(long authorId, int startPage, int endPage){
-//		Query q = getSession().createQuery("from Event where user.id = :userId")
-//			.setParameter("userId", authorId);
-//		return q.list();
-//		
-//		Criteria c = getSession().createCriteria(Event.class)
-//				.add()
-		//TODO pagination
-		throw new UnsupportedOperationException();
+	public Event findMostRecent(long userId){
+		Query q = getSession().createQuery("from Event e where " +
+				"e.user.id = :userId " + 
+				"and e.startTime = (select max(e2.startTime) from Event e2 where " +
+					"e2.user.id = :userId)")
+			.setParameter("userId", userId);
+		return (Event)q.uniqueResult();
 	}
 	
 }

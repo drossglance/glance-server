@@ -37,11 +37,11 @@ public abstract class GenericBL<T extends GenericEntity> {
 	}
 
 	public List<T> findAll() {
-		return dal.findAll();
+		return dal.findAllOrderById();
 	}
-
+	
 	public T create(T entity) throws ConstraintViolationException, TransientObjectException{
-		dal.makePersistent(entity);
+		dal.save(entity);
 		return entity;
 	}
 	

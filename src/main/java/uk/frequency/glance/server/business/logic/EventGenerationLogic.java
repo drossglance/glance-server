@@ -97,7 +97,7 @@ public class EventGenerationLogic extends Thread {
 					newEvent = createMoveEvent(user, recent.lastButOne.getPosition(), recent.lastButOne.getTime());
 					/*DEBUG*/System.out.println("MOVE EVENT CREATED");
 				}
-				eventDal.makePersistent(newEvent);
+				eventDal.save(newEvent);
 				genInfo.setCurrentEvent(newEvent);
 			}
 		} else {
@@ -111,12 +111,12 @@ public class EventGenerationLogic extends Thread {
 					PositionTrace previous = genInfo.getLastPositionTrace();
 					stay.setEndTime(previous.getTime());
 					genInfo.setCurrentEvent(null);
-					eventDal.makePersistent(stay);
+					eventDal.save(stay);
 					/*DEBUG*/System.out.println("STAY EVENT CLOSED");
 					
 					//create a move event
 					Event newEvent = createMoveEvent(user, previous.getPosition(), previous.getTime());
-					eventDal.makePersistent(newEvent);
+					eventDal.save(newEvent);
 					genInfo.setCurrentEvent(newEvent);
 					/*DEBUG*/System.out.println("MOVE EVENT CREATED");
 				}
@@ -135,12 +135,12 @@ public class EventGenerationLogic extends Thread {
 					
 					//create a stay event
 					Event newEvent = createStayEvent(user, recent.center, recent.first.getTime());
-					eventDal.makePersistent(newEvent);
+					eventDal.save(newEvent);
 					genInfo.setCurrentEvent(newEvent);
 					/*DEBUG*/System.out.println("STAY EVENT CREATED");
 				}
 				
-				eventDal.makePersistent(move);
+				eventDal.save(move);
 				
 			} else {
 				// TODO handle other types of events
