@@ -16,6 +16,7 @@ import javax.ws.rs.core.Response;
 import uk.frequency.glance.server.business.EventBL;
 import uk.frequency.glance.server.business.UserBL;
 import uk.frequency.glance.server.business.exception.MissingFieldException;
+import uk.frequency.glance.server.model.component.Location;
 import uk.frequency.glance.server.model.event.Event;
 import uk.frequency.glance.server.model.event.MoveEvent;
 import uk.frequency.glance.server.model.event.StayEvent;
@@ -116,13 +117,17 @@ public class UserSL extends GenericSL<User, UserDTO>{
 					StayEvent stay = (StayEvent) recentEvent;
 					StayEventDTO stayDto = new StayEventDTO();
 					stayDto.setStartTime(stay.getStartTime().getTime());
-					stayDto.setLocation(stay.getLocation());
+					Location location = new Location();
+					location.setName(stay.getLocation().getName());
+					stayDto.setLocation(location);
 					eventDto = stayDto;
 				}else if(recentEvent instanceof MoveEvent){
 					MoveEvent move = (MoveEvent) recentEvent;
 					MoveEventDTO moveDto = new MoveEventDTO();
 					moveDto.setStartTime(move.getStartTime().getTime());
-					moveDto.setStartLocation(move.getStartLocation());
+					Location location = new Location();
+					location.setName(move.getStartLocation().getName());
+					moveDto.setStartLocation(location);
 					eventDto = moveDto;
 				}else{
 					throw new AssertionError();

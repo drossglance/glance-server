@@ -15,13 +15,13 @@ import uk.frequency.glance.server.transfer.GenericDTO;
 @SuppressWarnings("serial")
 public abstract class EventDTO extends GenericDTO{
 
-	long userId;
+	Long userId;
 	
 	EventType type;
 	
-	long startTime;
+	Long startTime;
 	
-	long endTime;
+	Long endTime;
 	
 	EventScore score;
 	
@@ -31,11 +31,11 @@ public abstract class EventDTO extends GenericDTO{
 	
 	List<Long> commentIds;
 	
-	public long getUserId() {
+	public Long getUserId() {
 		return userId;
 	}
 
-	public void setUserId(long userId) {
+	public void setUserId(Long userId) {
 		this.userId = userId;
 	}
 
@@ -47,19 +47,19 @@ public abstract class EventDTO extends GenericDTO{
 		this.type = type;
 	}
 
-	public long getStartTime() {
+	public Long getStartTime() {
 		return startTime;
 	}
 
-	public void setStartTime(long startTime) {
+	public void setStartTime(Long startTime) {
 		this.startTime = startTime;
 	}
 
-	public long getEndTime() {
+	public Long getEndTime() {
 		return endTime;
 	}
 
-	public void setEndTime(long endTime) {
+	public void setEndTime(Long endTime) {
 		this.endTime = endTime;
 	}
 
