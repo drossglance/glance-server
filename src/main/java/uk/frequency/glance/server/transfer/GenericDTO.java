@@ -5,17 +5,17 @@ import java.io.Serializable;
 @SuppressWarnings("serial")
 public abstract class GenericDTO implements Serializable {
 
-	long id;
+	Long id;
 
 	protected Long creationTime;
 
 	protected Long updateTime;
 	
-	public long getId() {
+	public Long getId() {
 		return id;
 	}
 
-	public void setId(long id) {
+	public void setId(Long id) {
 		this.id = id;
 	}
 
