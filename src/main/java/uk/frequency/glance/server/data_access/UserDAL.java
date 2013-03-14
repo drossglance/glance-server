@@ -30,6 +30,7 @@ public class UserDAL extends GenericDAL<User>{
 	    		entity.setCreationTime(new Date());
 	    	}
 	    	entity.setUpdateTime(new Date());
+	    	entity.setDeleted(false);
     	}
 		
     	getSession().saveOrUpdate(entity);
