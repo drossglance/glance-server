@@ -71,6 +71,8 @@ public class UserSL extends GenericSL<User, UserDTO>{
 			if(!user.getProfileHistory().isEmpty()){
 				UserProfile recentProfile = user.getProfileHistory().get(0); 
 				UserProfile profile = new UserProfile();
+				profile.setFirstName(recentProfile.getFirstName());
+				profile.setMiddleName(recentProfile.getMiddleName());
 				profile.setFullName(recentProfile.getFullName());
 				profile.setImageUrl(recentProfile.getImageUrl());
 				dto.setProfile(profile);
@@ -106,6 +108,8 @@ public class UserSL extends GenericSL<User, UserDTO>{
 			if(!friend.getProfileHistory().isEmpty()){
 				UserProfile recentProfile = friend.getProfileHistory().get(0); 
 				UserProfile profile = new UserProfile();
+				profile.setFirstName(recentProfile.getFirstName());
+				profile.setMiddleName(recentProfile.getMiddleName());
 				profile.setFullName(recentProfile.getFullName());
 				profile.setImageUrl(recentProfile.getImageUrl());
 				dto.setProfile(profile);
