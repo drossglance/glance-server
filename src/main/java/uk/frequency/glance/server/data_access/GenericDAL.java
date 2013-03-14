@@ -62,6 +62,7 @@ public class GenericDAL<T extends GenericEntity> {
 	    		entity.setCreationTime(now);
 	    	}
 	    	entity.setUpdateTime(now);
+	    	entity.setDeleted(false);
     	}
     	
     	getSession().save(entity);

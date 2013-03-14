@@ -14,7 +14,7 @@ public abstract class GenericEntity {
 
 	@Id
 	@GeneratedValue(strategy=GenerationType.TABLE) //TODO create different generators for each hierarchy
-	protected long id;
+	protected Long id;
 	
 //	@Column(insertable=false, updatable=false, nullable=false)
 	protected Date creationTime;
@@ -23,7 +23,7 @@ public abstract class GenericEntity {
 	protected Date updateTime;
 	
 //	@Column(insertable=false, updatable=false, nullable=false)
-	protected boolean deleted;
+	protected Boolean deleted;
 
 	
 	@PrePersist
@@ -36,11 +36,11 @@ public abstract class GenericEntity {
 		updateTime = new Date();  //TODO use hibernate "Entity Manager" to make this work
 	}
 	
-	public long getId() {
+	public Long getId() {
 		return id;
 	}
 
-	public void setId(long id) {
+	public void setId(Long id) {
 		this.id = id;
 	}
 

@@ -13,7 +13,6 @@ public class GooglePlaces {
 
 	static final String rootUrl = "https://maps.googleapis.com/maps/api/place/";
 	
-	static final String imageSize = EventDataFinder.imageSize;
 	static final String key = EventDataFinder.googleAPIsKey;
 	
 	private RemoteAPIClient client = new RemoteAPIClient(rootUrl);

@@ -17,7 +17,6 @@ public class GoogleGeocoding {
 
 	static final String rootUrl = "http://maps.googleapis.com/maps/api/geocode/json";
 	
-	static final String imageSize = EventDataFinder.imageSize;
 	static final String key = EventDataFinder.googleAPIsKey;
 	
 	public static String getAddress(Position pos){
