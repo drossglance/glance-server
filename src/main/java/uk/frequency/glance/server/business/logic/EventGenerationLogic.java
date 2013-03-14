@@ -5,6 +5,7 @@ import java.util.Date;
 import java.util.List;
 
 import org.hibernate.Transaction;
+import org.hibernate.exception.ConstraintViolationException;
 
 import uk.frequency.glance.server.business.remote.EventDataFinder;
 import uk.frequency.glance.server.data_access.EventDAL;
@@ -53,6 +54,8 @@ public class EventGenerationLogic extends Thread {
 				handleTrace();
 			}
 			tr.commit();
+		}catch(ConstraintViolationException e){
+			//probably traces with repeated time
 		}catch(RuntimeException e){
 			e.printStackTrace();
             if (tr.isActive()) {

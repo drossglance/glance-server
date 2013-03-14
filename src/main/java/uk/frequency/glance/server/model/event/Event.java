@@ -10,6 +10,8 @@ import javax.persistence.Inheritance;
 import javax.persistence.InheritanceType;
 import javax.persistence.OneToMany;
 
+import org.hibernate.annotations.Cascade;
+import org.hibernate.annotations.CascadeType;
 import org.hibernate.annotations.LazyCollection;
 import org.hibernate.annotations.LazyCollectionOption;
 import org.hibernate.annotations.Proxy;
@@ -32,6 +34,7 @@ public class Event extends UserExpression {
 
 	EventScore score;
 	
+	@Cascade(value=CascadeType.DELETE)
 	@LazyCollection(LazyCollectionOption.FALSE)
 	@ElementCollection
 	List<Media> media;
@@ -40,6 +43,7 @@ public class Event extends UserExpression {
 	@OneToMany
 	List<User> participants;
 
+	@Cascade(value=CascadeType.DELETE)
 	@OneToMany(mappedBy = "subject")
 	List<Comment> comments;
 

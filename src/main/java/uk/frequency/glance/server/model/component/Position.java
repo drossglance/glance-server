@@ -27,7 +27,7 @@ public class Position{
 
 	@Override
 	public String toString() {
-		return lat + " , " + lng;
+		return lat + "," + lng;
 	}
 	
 }

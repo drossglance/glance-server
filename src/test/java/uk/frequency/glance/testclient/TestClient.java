@@ -20,15 +20,18 @@ import com.sun.jersey.api.client.WebResource;
 
 public class TestClient {
 
-	static String host = "localhost:8080";
-//	static String host = "glance-server.herokuapp.com";
+	private String rootUrl;
 	
 	static Client client = Client.create();
 	static Gson gson = JsonMessageBodyHandler.buildGson();
+	
+	public TestClient(String host) {
+		this.rootUrl = host;
+	}
 
-	public static GenericDTO post(GenericDTO dto, String path) {
+	public GenericDTO post(GenericDTO dto, String path) {
 		String json = gson.toJson(dto);
-		WebResource resource = client.resource("http://" + host + "/services/" + path);
+		WebResource resource = client.resource(rootUrl + path);
 		ClientResponse response = resource
 				.type(APPLICATION_JSON)
 				.accept(APPLICATION_JSON)
@@ -48,57 +51,69 @@ public class TestClient {
 		}
 	}
 	
-	public static <T> T get(String path, Class<T> type){
-		WebResource resource = client.resource("http://" + host + "/services/" + path);
+	public String getText(String path){
+		WebResource resource = client.resource(rootUrl + path);
 		ClientResponse response = resource
 				.accept(APPLICATION_JSON)
 				.get(ClientResponse.class);
-		if (response.getStatus() != 200) {
-			throw new RuntimeException("Failed : " + response.getStatus() + "\n" + response.getEntity(String.class).toString());
+		if (response.getStatus() == 200) {
+			return response.getEntity(String.class);
 		}else{
+			throw new RuntimeException("Failed : " + response.getStatus() + "\n" + response.getEntity(String.class).toString());
+		}
+	}
+	
+	public <T> T get(String path, Class<T> type){
+		WebResource resource = client.resource(rootUrl + path);
+		ClientResponse response = resource
+				.accept(APPLICATION_JSON)
+				.get(ClientResponse.class);
+		if (response.getStatus() == 200) {
 			String json = response.getEntity(String.class);
 			T obj = gson.fromJson(json, type);
 			return obj;
+		}else{
+			throw new RuntimeException("Failed : " + response.getStatus() + "\n" + response.getEntity(String.class).toString());
 		}
 	}
 	
-	public static <T> List<T> getList(String path, TypeToken<List<T>> type){
-		WebResource resource = client.resource("http://" + host + "/services/" + path);
+	public <T> List<T> getList(String path, TypeToken<List<T>> type){
+		WebResource resource = client.resource(rootUrl + path);
 		ClientResponse response = resource
 				.accept(APPLICATION_JSON)
 				.get(ClientResponse.class);
-		if (response.getStatus() != 200) {
-			throw new RuntimeException("Failed : " + response.getStatus() + "\n" + response.getEntity(String.class).toString());
-		}else{
+		if (response.getStatus() == 200) {
 			String json = response.getEntity(String.class);
 			List<T> obj = gson.fromJson(json, type.getType());
 			return obj;
+		}else{
+			throw new RuntimeException("Failed : " + response.getStatus() + "\n" + response.getEntity(String.class).toString());
 		}
 	}
 	
-	public static GenericDTO postAndPrint(GenericDTO dto, String path) {
+	public GenericDTO postAndPrint(GenericDTO dto, String path) {
 		try{
 			GenericDTO resp = post(dto, path);
 			System.out.println(TestDTOFormatter.format(resp));
 			return resp;
 		}catch(RuntimeException e){
-			e.printStackTrace();
+//			System.err.println(e.getMessage());
 			return null;
 		}
 	}
 	
-	public static <T extends GenericDTO> T getAndPrint(String path, Class<T> type){
+	public <T extends GenericDTO> T getAndPrint(String path, Class<T> type){
 		try{
 			T resp = get(path, type);
 			System.out.println(TestDTOFormatter.format(resp));
 			return resp;
 		}catch(RuntimeException e){
-			e.printStackTrace();
+//			System.err.println(e.getMessage());
 			return null;
 		}
 	}
 	
-	public static <T extends GenericDTO> List<T> getListAndPrint(String path, TypeToken<List<T>> type){
+	public <T extends GenericDTO> List<T> getListAndPrint(String path, TypeToken<List<T>> type){
 		try{
 			List<T> resp = getList(path, type);
 			for (GenericDTO dto : resp) {
@@ -106,7 +121,7 @@ public class TestClient {
 			}
 			return resp;
 		}catch(RuntimeException e){
-			e.printStackTrace();
+//			System.err.println(e.getMessage());
 			return null;
 		}
 	}

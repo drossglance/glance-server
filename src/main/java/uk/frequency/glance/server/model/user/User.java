@@ -11,6 +11,9 @@ import javax.persistence.OneToMany;
 import javax.persistence.OneToOne;
 import javax.persistence.Table;
 
+import org.hibernate.annotations.Cascade;
+import org.hibernate.annotations.CascadeType;
+
 import uk.frequency.glance.server.model.GenericEntity;
 import uk.frequency.glance.server.model.event.Event;
 import uk.frequency.glance.server.model.trace.Trace;
@@ -23,18 +26,22 @@ public class User extends GenericEntity{
 	
 	String facebookId;
 	
+	@Cascade(value=CascadeType.DELETE)
 	@ElementCollection
 	@CollectionTable(joinColumns=@JoinColumn(name="user_id")) //for PostgreSQL compatibility, TODO:do this for all fks as a NamingStrategy
 	List<UserProfile> profileHistory;
 	
 	UserSettings settings;
 	
+	@Cascade(value=CascadeType.DELETE)
 	@OneToMany(mappedBy="user")
 	List<Event> events;
 	
+	@Cascade(value=CascadeType.DELETE)
 	@OneToMany(mappedBy="user")
 	List<Trace> traces;
 	
+	@Cascade(value=CascadeType.DELETE)
 	@OneToOne(mappedBy="user")
 	EventGenerationInfo eventGenerationInfo;
 	

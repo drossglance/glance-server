@@ -23,10 +23,14 @@ public class TestCaseLauncher {
 	static final String DIR = "src/test/java/test_cases";
 	static final String DATE_FORMAT = "HH:mm:ss";
 	static final int TIME_BETWEEN_REQUESTS = 1 * 1000;
+	
+	static String ROOT_URL = "http://localhost:8080/services/";
+//	static String ROOT_URL = "http://glance-server.herokuapp.com/services/";
+	static final TestClient client = new TestClient(ROOT_URL);
 
 	public static void main(String[] args) {
 		try {
-			runTestCase("case_1");
+			runTestCase("real_data_2_1");
 		} catch (Exception e) {
 			e.printStackTrace();
 		}
@@ -34,14 +38,16 @@ public class TestCaseLauncher {
 	
 	static void runTestCase(String fileName) throws IOException, ParseException, InterruptedException{
 		UserDTO user = createTestUser();
-		user = (UserDTO) TestClient.postAndPrint(user, "user");
+		user = (UserDTO) client.postAndPrint(user, "user");
 		
 		List<PositionTraceDTO> traces = loadTraces(fileName, user.getId());
 		for(PositionTraceDTO trace : traces){
 			Date requestTime = new Date();
-			TestClient.postAndPrint(trace, "trace");
+			client.postAndPrint(trace, "trace");
 			Thread.sleep(TIME_BETWEEN_REQUESTS);
-			List<EventDTO> events = (List<EventDTO>) TestClient.getListAndPrint("event/user-" + user.getId() + "/created_after-" + requestTime.getTime(), new TypeToken<List<EventDTO>>(){});
+			
+			String path = String.format("event/user-%d/created_after-%d", user.getId(), requestTime.getTime());
+			List<EventDTO> events = (List<EventDTO>) client.getListAndPrint(path, new TypeToken<List<EventDTO>>(){});
 			verifyEvents(events);
 		}
 	}
@@ -78,8 +84,8 @@ public class TestCaseLauncher {
 	
 	static PositionTraceDTO parseTrace(String line, long user) throws ParseException{
 		String[] parts = line.split("\t");
-		String[] latlngParts = parts[0].split(",");
-		long time = new SimpleDateFormat(DATE_FORMAT).parse(parts[1]).getTime();
+		long time = new SimpleDateFormat(DATE_FORMAT).parse(parts[0]).getTime();
+		String[] latlngParts = parts[1].split(",");
 		double lat = Double.valueOf(latlngParts[0]);
 		double lng = Double.valueOf(latlngParts[1]);
 		Position pos = new Position();

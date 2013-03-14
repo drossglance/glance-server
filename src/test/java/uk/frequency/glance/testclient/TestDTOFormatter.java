@@ -1,5 +1,9 @@
 package uk.frequency.glance.testclient;
 
+import java.text.DateFormat;
+import java.text.SimpleDateFormat;
+import java.util.Date;
+
 import uk.frequency.glance.server.transfer.GenericDTO;
 import uk.frequency.glance.server.transfer.event.EventDTO;
 import uk.frequency.glance.server.transfer.event.MoveEventDTO;
@@ -10,6 +14,16 @@ import uk.frequency.glance.server.transfer.user.UserDTO;
 
 public class TestDTOFormatter {
 
+	private static DateFormat dateFormat = new SimpleDateFormat("HH:mm:ss");
+
+	public static String format(Long time){
+		if(time == null){
+			return "";
+		}else{
+			return dateFormat.format(new Date(time));
+		}
+	}
+	
 	public static String format(GenericDTO dto) {
 		if (dto instanceof EventDTO)
 			return format((EventDTO) dto);
@@ -25,23 +39,20 @@ public class TestDTOFormatter {
 		String str = "EVENT"
 				+ "\t" + event.getId()
 				+ "\t" + event.getType()
-				+ "\t" + event.getStartTime()
-				+ "\t" + event.getEndTime();
+				+ "\t" + format(event.getStartTime())
+				+ "\t" + format(event.getEndTime());
 		
 		if(event instanceof StayEventDTO){
 			StayEventDTO stay = (StayEventDTO) event;
 			str += "\t" + stay.getLocation().getName()
-					+ "\t" + stay.getLocation().getPosition().getLat()
-					+ "\t" + stay.getLocation().getPosition().getLng();
+					+ "\t" + stay.getLocation().getAddress();
 		}else if(event instanceof MoveEventDTO){
 				MoveEventDTO move = (MoveEventDTO) event;
 				str += "\t" + move.getStartLocation().getName()
-						+ "\t" + move.getStartLocation().getPosition().getLat()
-						+ "\t" + move.getStartLocation().getPosition().getLng();
+						+ "\t" + move.getStartLocation().getAddress();
 				if(move.getEndLocation() != null){
 					str +=  "\t" + move.getEndLocation().getName()
-							+ "\t" + move.getEndLocation().getPosition().getLat()
-							+ "\t" + move.getEndLocation().getPosition().getLng();
+							+ "\t" + move.getEndLocation().getAddress();
 				}
 		} else {
 			throw new AssertionError();
@@ -54,12 +65,11 @@ public class TestDTOFormatter {
 		String str = "TRACE"
 				+ "\t" + trace.getId()
 				+ "\t" + trace.getUserId()
-				+ "\t" + trace.getTime();
+				+ "\t" + format(trace.getTime());
 		
 		if(trace instanceof PositionTraceDTO){
 			PositionTraceDTO stay = (PositionTraceDTO) trace;
-			str += "\t" + stay.getPosition().getLat()
-					+ "\t" + stay.getPosition().getLng();
+			str += "\t" + stay.getPosition();
 		} else {
 			throw new AssertionError();
 		}
