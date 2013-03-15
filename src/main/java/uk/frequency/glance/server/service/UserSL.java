@@ -173,11 +173,33 @@ public class UserSL extends GenericSL<User, UserDTO>{
 	@GET
 	@Produces(MediaType.APPLICATION_JSON)
 	@Path("/{id}/friendship/received")
-	public List<Long> findFriendshipRequests(
+	public List<UserDTO> findFriendshipRequests(
 			@PathParam("id") long userId){
-		List<Long> list = userBl.findFriendshipRequests(userId);
+		List<User> entities = userBl.findFriendshipRequests(userId);
+		List<UserDTO> dtoList = new ArrayList<UserDTO>();
+
+		for(User user : entities){
+			long id = user.getId();
+			if(id == userId) continue;
+			
+			UserDTO dto = new UserDTO();
+			dto.setId(user.getId());
+			
+			if(!user.getProfileHistory().isEmpty()){
+				UserProfile recentProfile = user.getProfileHistory().get(0); 
+				UserProfile profile = new UserProfile();
+				profile.setFirstName(recentProfile.getFirstName());
+				profile.setMiddleName(recentProfile.getMiddleName());
+				profile.setFullName(recentProfile.getFullName());
+				profile.setImageUrl(recentProfile.getImageUrl());
+				dto.setProfile(profile);
+			}
+
+			dtoList.add(dto);
+		}
 		business.flush();
-		return list;
+		return dtoList;
+		
 	}
 	
 	@PUT

@@ -127,9 +127,9 @@ public class UserBL extends GenericBL<User>{
 		return userDal.findFriendsIds(user, ACCEPTED);
 	}
 	
-	public List<Long> findFriendshipRequests(long userId){
+	public List<User> findFriendshipRequests(long userId){
 		User user = new User();
 		user.setId(userId);
-		return userDal.findFriendsIds(user, REQUEST_RECEIVED);
+		return userDal.findFriends(user, REQUEST_RECEIVED);
 	}
 }
