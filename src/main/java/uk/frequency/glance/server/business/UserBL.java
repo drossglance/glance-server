@@ -58,13 +58,13 @@ public class UserBL extends GenericBL<User>{
 		f.setUser(user);
 		f.setFriend(friend);
 		f.setStatus(REQUEST_SENT);
-		userDal.makePersistent(f);
+		userDal.saveOrUpdate(f);
 		
 		Friendship f2 = new Friendship();
 		f2.setUser(friend);
 		f2.setFriend(user);
 		f2.setStatus(REQUEST_RECEIVED);
-		userDal.makePersistent(f2);
+		userDal.saveOrUpdate(f2);
 		
 		return f;
 	}
@@ -86,11 +86,11 @@ public class UserBL extends GenericBL<User>{
 		}
 		
 		f.setStatus(ACCEPTED);
-		userDal.makePersistent(f);
+		userDal.saveOrUpdate(f);
 		
 		Friendship f2 = userDal.findReciprocal(f);
 		f2.setStatus(ACCEPTED);
-		userDal.makePersistent(f2);
+		userDal.saveOrUpdate(f2);
 		
 		return f;
 	}
@@ -112,11 +112,31 @@ public class UserBL extends GenericBL<User>{
 		}
 		
 		f.setStatus(DENIED);
-		userDal.makePersistent(f);
+		userDal.saveOrUpdate(f);
 		
 		Friendship f2 = userDal.findReciprocal(f);
 		f2.setStatus(DENIED);
-		userDal.makePersistent(f2);
+		userDal.saveOrUpdate(f2);
+		
+		return f;
+	}
+	
+	public Friendship removeFriendship(long userId, long friendId){
+		User user = new User();
+		user.setId(userId);
+		User friend = new User();
+		friend.setId(friendId);
+		
+		Friendship f = userDal.findFriendship(user, friend);
+		
+		if(f == null){
+			throw new WrongStateException("Friendship request doesn't exist.");
+		}
+		
+		userDal.removeFriendship(f);
+		
+		Friendship f2 = userDal.findReciprocal(f);
+		userDal.removeFriendship(f2);
 		
 		return f;
 	}

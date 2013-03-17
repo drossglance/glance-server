@@ -4,6 +4,7 @@ import java.util.ArrayList;
 import java.util.List;
 
 import javax.ws.rs.Consumes;
+import javax.ws.rs.DELETE;
 import javax.ws.rs.GET;
 import javax.ws.rs.POST;
 import javax.ws.rs.PUT;
@@ -12,6 +13,7 @@ import javax.ws.rs.PathParam;
 import javax.ws.rs.Produces;
 import javax.ws.rs.core.MediaType;
 import javax.ws.rs.core.Response;
+import javax.ws.rs.core.Response.Status;
 
 import uk.frequency.glance.server.business.EventBL;
 import uk.frequency.glance.server.business.UserBL;
@@ -236,6 +238,16 @@ public class UserSL extends GenericSL<User, UserDTO>{
 		FriendshipDTO dto = toDTO(entity);
 		business.flush();
 		return dto;
+	}
+	
+	@DELETE
+	@Path("/{id}/friendship/{friend}")
+	public Response removeFriendship(
+			@PathParam("id") long userId,
+			@PathParam("friend") long friendId){
+		userBl.removeFriendship(userId, friendId);
+		business.flush();
+		return Response.status(Status.NO_CONTENT).build();
 	}
 	
 	@Override

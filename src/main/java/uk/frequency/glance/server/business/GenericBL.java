@@ -47,7 +47,7 @@ public abstract class GenericBL<T extends GenericEntity> {
 	
 	public void deleteById(long id) throws ConstraintViolationException, TransientObjectException{
 		T entity = dal.findById(id);
-		dal.makeTransient(entity);
+		dal.delete(entity);
 	}
 	
 	public void flush(){

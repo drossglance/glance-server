@@ -69,7 +69,7 @@ public class GenericDAL<T extends GenericEntity> {
         return entity;
     }
     
-    public void makeTransient(T entity) {
+    public void delete(T entity) {
     	getSession().delete(entity);
     }
  

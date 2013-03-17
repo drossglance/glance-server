@@ -23,7 +23,7 @@ public class UserDAL extends GenericDAL<User>{
         return entity;
     }
 	
-	public Friendship makePersistent(Friendship entity) {
+	public Friendship saveOrUpdate(Friendship entity) {
 		
 		{//TODO use @PrePersist in the GenericEntity instead
 	    	if(entity.getCreationTime() == null){
@@ -75,6 +75,10 @@ public class UserDAL extends GenericDAL<User>{
 			.setParameter("user", user)
 			.setParameter("status", status);
         return (List<User>)q.list(); 
+	}
+	
+	public void removeFriendship(Friendship friendship){
+		getSession().delete(friendship);
 	}
 	
 }
