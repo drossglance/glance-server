@@ -31,6 +31,8 @@ import uk.frequency.glance.server.transfer.event.StayEventDTO;
 import uk.frequency.glance.server.transfer.user.FriendshipDTO;
 import uk.frequency.glance.server.transfer.user.UserDTO;
 
+import static uk.frequency.glance.server.model.user.FriendshipStatus.*;
+
 
 @Path("/user")
 public class UserSL extends GenericSL<User, UserDTO>{
@@ -52,6 +54,83 @@ public class UserSL extends GenericSL<User, UserDTO>{
 			throw new MissingFieldException("username or facebookId");
 		}
 		return super.create(dto);
+	}
+	
+	@GET
+	@Produces(MediaType.APPLICATION_JSON)
+	@Path("/{id}/glancePage")
+	public List<UserDTO> buildGlancePage(
+			@PathParam("id") long userId){
+		List<UserDTO> dtoList = new ArrayList<UserDTO>();
+		
+		List<User> friends = userBl.findFriends(userId);
+		for(User friend : friends){
+			
+			UserDTO dto = new UserDTO();
+			dto.setId(friend.getId());
+			if(!friend.getProfileHistory().isEmpty()){
+				UserProfile recentProfile = friend.getProfileHistory().get(0); 
+				UserProfile profile = new UserProfile();
+				profile.setFirstName(recentProfile.getFirstName());
+				profile.setMiddleName(recentProfile.getMiddleName());
+				profile.setFullName(recentProfile.getFullName());
+				profile.setImageUrl(recentProfile.getImageUrl());
+				dto.setProfile(profile);
+			}
+			
+			Event recentEvent = eventBl.findMostRecent(friend.getId());
+			if(recentEvent != null){
+				EventDTO eventDto;
+				if(recentEvent instanceof StayEvent){
+					StayEvent stay = (StayEvent) recentEvent;
+					StayEventDTO stayDto = new StayEventDTO();
+					stayDto.setStartTime(stay.getStartTime().getTime());
+					Location location = new Location();
+					location.setName(stay.getLocation().getName());
+					stayDto.setLocation(location);
+					eventDto = stayDto;
+				}else if(recentEvent instanceof MoveEvent){
+					MoveEvent move = (MoveEvent) recentEvent;
+					MoveEventDTO moveDto = new MoveEventDTO();
+					moveDto.setStartTime(move.getStartTime().getTime());
+					Location location = new Location();
+					location.setName(move.getStartLocation().getName());
+					moveDto.setStartLocation(location);
+					eventDto = moveDto;
+				}else{
+					throw new AssertionError();
+				}
+				List<EventDTO> events = new ArrayList<EventDTO>();
+				events.add(eventDto);
+				dto.setEvents(events);
+			}
+			dto.setWavelinePreviewUrl("http://aconcepti.com/images/stream_graph.png"); //TODO replace this dummy image w/ actual calculated waveline
+			
+			dto.setFriendshipStatus(ACCEPTED);
+			dtoList.add(dto);
+		}
+		
+		List<User> requestsReceived = userBl.findFriendshipRequestsReceived(userId);
+		for (User friend : requestsReceived) {
+
+			UserDTO dto = new UserDTO();
+			dto.setId(friend.getId());
+			if (!friend.getProfileHistory().isEmpty()) {
+				UserProfile recentProfile = friend.getProfileHistory().get(0);
+				UserProfile profile = new UserProfile();
+				profile.setFirstName(recentProfile.getFirstName());
+				profile.setMiddleName(recentProfile.getMiddleName());
+				profile.setFullName(recentProfile.getFullName());
+				profile.setImageUrl(recentProfile.getImageUrl());
+				dto.setProfile(profile);
+			}
+
+			dto.setFriendshipStatus(REQUEST_RECEIVED);
+			dtoList.add(dto);
+		}
+		
+		business.flush();
+		return dtoList;
 	}
 	
 	@GET
@@ -87,63 +166,6 @@ public class UserSL extends GenericSL<User, UserDTO>{
 					dto.setFriendshipStatus(friendship.getStatus());
 				}
 			}
-			
-			dtoList.add(dto);
-		}
-		business.flush();
-		return dtoList;
-	}
-	
-	@GET
-	@Produces(MediaType.APPLICATION_JSON)
-	@Path("/{id}/glancePage")
-	public List<UserDTO> buildGlancePage(
-			@PathParam("id") long userId){
-		List<User> friends = userBl.findFriends(userId);
-		List<UserDTO> dtoList = new ArrayList<UserDTO>();
-		for(User friend : friends){
-			Event recentEvent = eventBl.findMostRecent(friend.getId());
-			
-			UserDTO dto = new UserDTO();
-			dto.setId(friend.getId());
-			
-			if(!friend.getProfileHistory().isEmpty()){
-				UserProfile recentProfile = friend.getProfileHistory().get(0); 
-				UserProfile profile = new UserProfile();
-				profile.setFirstName(recentProfile.getFirstName());
-				profile.setMiddleName(recentProfile.getMiddleName());
-				profile.setFullName(recentProfile.getFullName());
-				profile.setImageUrl(recentProfile.getImageUrl());
-				dto.setProfile(profile);
-			}
-			
-			if(recentEvent != null){
-				EventDTO eventDto;
-				if(recentEvent instanceof StayEvent){
-					StayEvent stay = (StayEvent) recentEvent;
-					StayEventDTO stayDto = new StayEventDTO();
-					stayDto.setStartTime(stay.getStartTime().getTime());
-					Location location = new Location();
-					location.setName(stay.getLocation().getName());
-					stayDto.setLocation(location);
-					eventDto = stayDto;
-				}else if(recentEvent instanceof MoveEvent){
-					MoveEvent move = (MoveEvent) recentEvent;
-					MoveEventDTO moveDto = new MoveEventDTO();
-					moveDto.setStartTime(move.getStartTime().getTime());
-					Location location = new Location();
-					location.setName(move.getStartLocation().getName());
-					moveDto.setStartLocation(location);
-					eventDto = moveDto;
-				}else{
-					throw new AssertionError();
-				}
-				List<EventDTO> events = new ArrayList<EventDTO>();
-				events.add(eventDto);
-				dto.setEvents(events);
-			}
-			
-			dto.setWavelinePreviewUrl("http://aconcepti.com/images/stream_graph.png"); //TODO replace this dummy image w/ actual calculated waveline
 			
 			dtoList.add(dto);
 		}
