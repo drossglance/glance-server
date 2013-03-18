@@ -80,10 +80,12 @@ public class UserSL extends GenericSL<User, UserDTO>{
 				dto.setProfile(profile);
 			}
 			
-			Friendship friendship = friendsips.get(cur);
-			if (friendsips.size() > cur && id == friendship.getFriend().getId()) { //assumes friendships is ordered by friends' ids
-				cur++;
-				dto.setFriendshipStatus(friendship.getStatus());
+			if(friendsips.size() > cur){
+				Friendship friendship = friendsips.get(cur);
+				if (id == friendship.getFriend().getId()) { //assumes friendships is ordered by friends' ids
+					cur++;
+					dto.setFriendshipStatus(friendship.getStatus());
+				}
 			}
 			
 			dtoList.add(dto);
