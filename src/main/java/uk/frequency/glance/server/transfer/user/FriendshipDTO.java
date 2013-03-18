@@ -1,6 +1,6 @@
 package uk.frequency.glance.server.transfer.user;
 
-import uk.frequency.glance.server.model.user.Friendship.Status;
+import uk.frequency.glance.server.model.user.FriendshipStatus;
 import uk.frequency.glance.server.transfer.GenericDTO;
 
 
@@ -11,7 +11,7 @@ public class FriendshipDTO extends GenericDTO{
 	
 	long friendId;
 	
-	Status status;
+	FriendshipStatus status;
 
 	public long getUserId() {
 		return userId;
@@ -29,11 +29,11 @@ public class FriendshipDTO extends GenericDTO{
 		this.friendId = friendId;
 	}
 
-	public Status getStatus() {
+	public FriendshipStatus getStatus() {
 		return status;
 	}
 
-	public void setStatus(Status status) {
+	public void setStatus(FriendshipStatus status) {
 		this.status = status;
 	}
 	

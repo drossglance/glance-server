@@ -11,7 +11,7 @@ import uk.frequency.glance.server.model.user.EventGenerationInfo;
 import uk.frequency.glance.server.model.user.Friendship;
 import uk.frequency.glance.server.model.user.User;
 
-import static uk.frequency.glance.server.model.user.Friendship.Status.*;
+import static uk.frequency.glance.server.model.user.FriendshipStatus.*;
 
 public class UserBL extends GenericBL<User>{
 
@@ -38,6 +38,19 @@ public class UserBL extends GenericBL<User>{
 		User user = new User();
 		user.setId(userId);
 		return userDal.findFriendships(user);
+	}
+	
+
+	public List<User> findFriends(long userId){
+		User user = new User();
+		user.setId(userId);
+		return userDal.findFriends(user, ACCEPTED);
+	}
+	
+	public List<User> findFriendshipRequestsReceived(long userId){
+		User user = new User();
+		user.setId(userId);
+		return userDal.findFriends(user, REQUEST_RECEIVED);
 	}
 	
 	public Friendship createFriendshipRequest(long userId, long friendId){
@@ -95,7 +108,7 @@ public class UserBL extends GenericBL<User>{
 		return f;
 	}
 	
-	public Friendship denyFriendshipRequest(long userId, long friendId){
+	public Friendship declineFriendshipRequest(long userId, long friendId){
 		User user = new User();
 		user.setId(userId);
 		User friend = new User();
@@ -111,11 +124,11 @@ public class UserBL extends GenericBL<User>{
 			throw new WrongStateException("Friendship state is: " + f.getStatus() + ". Can only deny in state: " + REQUEST_RECEIVED + ".");
 		}
 		
-		f.setStatus(DENIED);
+		f.setStatus(DECLINED);
 		userDal.saveOrUpdate(f);
 		
 		Friendship f2 = userDal.findReciprocal(f);
-		f2.setStatus(DENIED);
+		f2.setStatus(DECLINED);
 		userDal.saveOrUpdate(f2);
 		
 		return f;
@@ -140,16 +153,5 @@ public class UserBL extends GenericBL<User>{
 		
 		return f;
 	}
-	
-	public List<Long> findFriends(long userId){
-		User user = new User();
-		user.setId(userId);
-		return userDal.findFriendsIds(user, ACCEPTED);
-	}
-	
-	public List<User> findFriendshipRequests(long userId){
-		User user = new User();
-		user.setId(userId);
-		return userDal.findFriends(user, REQUEST_RECEIVED);
-	}
+
 }

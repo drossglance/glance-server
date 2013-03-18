@@ -7,6 +7,7 @@ import org.hibernate.Query;
 
 import uk.frequency.glance.server.model.user.EventGenerationInfo;
 import uk.frequency.glance.server.model.user.Friendship;
+import uk.frequency.glance.server.model.user.FriendshipStatus;
 import uk.frequency.glance.server.model.user.User;
 
 @SuppressWarnings("unchecked")
@@ -39,7 +40,8 @@ public class UserDAL extends GenericDAL<User>{
 	
 	public List<Friendship> findFriendships(User user) {
 		Query q = getSession().createQuery("from Friendship f where " +
-				"f.user = :user")
+				"f.user = :user " +
+				"order by f.friend.id")
 			.setParameter("user", user);
         return (List<Friendship>)q.list();
     }
@@ -57,17 +59,7 @@ public class UserDAL extends GenericDAL<User>{
         return findFriendship(friendship.getFriend(), friendship.getUser());
 	}
 	
-	public List<Long> findFriendsIds(User user, Friendship.Status status){
-		Query q = getSession().createQuery("select f.friend.id from Friendship f where " +
-				"f.user = :user " +
-				"and f.status = :status " +
-				"order by f.friend.id")
-			.setParameter("user", user)
-			.setParameter("status", status);
-        return (List<Long>)q.list(); 
-	}
-	
-	public List<User> findFriends(User user, Friendship.Status status){
+	public List<User> findFriends(User user, FriendshipStatus status){
 		Query q = getSession().createQuery("select f.friend from Friendship f where " +
 				"f.user = :user " +
 				"and f.status = :status " +

@@ -61,7 +61,7 @@ public class UserSL extends GenericSL<User, UserDTO>{
 			@PathParam("id") long userId){
 		List<User> entities = userBl.findAll();
 		List<UserDTO> dtoList = new ArrayList<UserDTO>();
-		List<Long> friendsIds = userBl.findFriends(userId);
+		List<Friendship> friendsips = userBl.findFriendships(userId);
 		int cur = 0;
 		for(User user : entities){
 			long id = user.getId();
@@ -80,11 +80,10 @@ public class UserSL extends GenericSL<User, UserDTO>{
 				dto.setProfile(profile);
 			}
 			
-			if (friendsIds.size() > cur && id == friendsIds.get(cur)) {
+			Friendship friendship = friendsips.get(cur);
+			if (friendsips.size() > cur && id == friendship.getFriend().getId()) { //assumes friendships is ordered by friends' ids
 				cur++;
-				dto.setMyFriend(true);
-			}else{
-				dto.setMyFriend(false);
+				dto.setFriendshipStatus(friendship.getStatus());
 			}
 			
 			dtoList.add(dto);
@@ -98,11 +97,10 @@ public class UserSL extends GenericSL<User, UserDTO>{
 	@Path("/{id}/glancePage")
 	public List<UserDTO> buildGlancePage(
 			@PathParam("id") long userId){
-		List<Long> friendsIds = userBl.findFriends(userId);
+		List<User> friends = userBl.findFriends(userId);
 		List<UserDTO> dtoList = new ArrayList<UserDTO>();
-		for(long friendId : friendsIds){
-			User friend = userBl.findById(friendId);
-			Event recentEvent = eventBl.findMostRecent(friendId);
+		for(User friend : friends){
+			Event recentEvent = eventBl.findMostRecent(friend.getId());
 			
 			UserDTO dto = new UserDTO();
 			dto.setId(friend.getId());
@@ -164,20 +162,10 @@ public class UserSL extends GenericSL<User, UserDTO>{
 	
 	@GET
 	@Produces(MediaType.APPLICATION_JSON)
-	@Path("/{id}/friendship")
-	public List<Long> findFriends(
-			@PathParam("id") long userId){
-		List<Long> list = userBl.findFriends(userId);
-		business.flush();
-		return list;
-	}
-	
-	@GET
-	@Produces(MediaType.APPLICATION_JSON)
 	@Path("/{id}/friendship/received")
 	public List<UserDTO> findFriendshipRequests(
 			@PathParam("id") long userId){
-		List<User> entities = userBl.findFriendshipRequests(userId);
+		List<User> entities = userBl.findFriendshipRequestsReceived(userId);
 		List<UserDTO> dtoList = new ArrayList<UserDTO>();
 
 		for(User user : entities){
@@ -234,7 +222,7 @@ public class UserSL extends GenericSL<User, UserDTO>{
 	public FriendshipDTO denyFriendship(
 			@PathParam("id") long userId,
 			@PathParam("friend") long friendId){
-		Friendship entity = userBl.denyFriendshipRequest(userId, friendId);
+		Friendship entity = userBl.declineFriendshipRequest(userId, friendId);
 		FriendshipDTO dto = toDTO(entity);
 		business.flush();
 		return dto;

@@ -16,8 +16,6 @@ import uk.frequency.glance.server.model.GenericEntity;
 	})
 public class Friendship extends GenericEntity{
 
-	public enum Status {REQUEST_SENT, REQUEST_RECEIVED, ACCEPTED, DENIED, BLOCKED}
-
 //	@Id
 //	@GeneratedValue(generator = "foreign")
 //    @GenericGenerator(
@@ -44,7 +42,7 @@ public class Friendship extends GenericEntity{
 	@JoinColumn(name="friend_id")
 	User friend;
 	
-	Status status;
+	FriendshipStatus status;
 	
 //	@Formula("(select f from Friendship f where f.user = friend and f.friend = user)")
 //	@OneToOne
@@ -87,11 +85,11 @@ public class Friendship extends GenericEntity{
 		this.friend = friend;
 	}
 
-	public Status getStatus() {
+	public FriendshipStatus getStatus() {
 		return status;
 	}
 
-	public void setStatus(Status status) {
+	public void setStatus(FriendshipStatus status) {
 		this.status = status;
 	}
 

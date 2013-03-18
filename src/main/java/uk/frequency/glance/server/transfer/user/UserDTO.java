@@ -4,6 +4,7 @@ import java.util.List;
 
 import javax.xml.bind.annotation.XmlRootElement;
 
+import uk.frequency.glance.server.model.user.FriendshipStatus;
 import uk.frequency.glance.server.model.user.UserProfile;
 import uk.frequency.glance.server.transfer.GenericDTO;
 import uk.frequency.glance.server.transfer.event.EventDTO;
@@ -22,7 +23,7 @@ public class UserDTO extends GenericDTO{
 	
 	List<EventDTO> events;
 	
-	Boolean isMyFriend;
+	FriendshipStatus friendshipStatus;
 	
 	String wavelinePreviewUrl;
 
@@ -66,12 +67,12 @@ public class UserDTO extends GenericDTO{
 		this.eventsIds = eventsIds;
 	}
 
-	public Boolean isMyFriend() {
-		return isMyFriend;
+	public FriendshipStatus getFriendshipStatus() {
+		return friendshipStatus;
 	}
 
-	public void setMyFriend(Boolean isMyFriend) {
-		this.isMyFriend = isMyFriend;
+	public void setFriendshipStatus(FriendshipStatus friendshipStatus) {
+		this.friendshipStatus = friendshipStatus;
 	}
 
 	public String getWavelinePreviewUrl() {
