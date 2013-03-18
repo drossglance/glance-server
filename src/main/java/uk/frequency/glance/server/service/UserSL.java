@@ -180,7 +180,7 @@ public class UserSL extends GenericSL<User, UserDTO>{
 	
 	@GET
 	@Produces(MediaType.APPLICATION_JSON)
-	@Path("/{id}/friendship/full")
+	@Path("/{id}/friendship")
 	public List<FriendshipDTO> findFriendships(
 			@PathParam("id") long userId){
 		List<Friendship> entities = userBl.findFriendships(userId);
