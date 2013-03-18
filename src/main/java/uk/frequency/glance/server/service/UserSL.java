@@ -64,6 +64,25 @@ public class UserSL extends GenericSL<User, UserDTO>{
 			@PathParam("id") long userId){
 		List<UserDTO> dtoList = new ArrayList<UserDTO>();
 		
+		List<User> requestsReceived = userBl.findFriendshipRequestsReceived(userId);
+		for (User friend : requestsReceived) {
+
+			UserDTO dto = new UserDTO();
+			dto.setId(friend.getId());
+			if (!friend.getProfileHistory().isEmpty()) {
+				UserProfile recentProfile = friend.getProfileHistory().get(0);
+				UserProfile profile = new UserProfile();
+				profile.setFirstName(recentProfile.getFirstName());
+				profile.setMiddleName(recentProfile.getMiddleName());
+				profile.setFullName(recentProfile.getFullName());
+				profile.setImageUrl(recentProfile.getImageUrl());
+				dto.setProfile(profile);
+			}
+
+			dto.setFriendshipStatus(REQUEST_RECEIVED);
+			dtoList.add(dto);
+		}
+		
 		List<User> friends = userBl.findFriends(userId);
 		for(User friend : friends){
 			
@@ -111,25 +130,6 @@ public class UserSL extends GenericSL<User, UserDTO>{
 			dtoList.add(dto);
 		}
 		
-		List<User> requestsReceived = userBl.findFriendshipRequestsReceived(userId);
-		for (User friend : requestsReceived) {
-
-			UserDTO dto = new UserDTO();
-			dto.setId(friend.getId());
-			if (!friend.getProfileHistory().isEmpty()) {
-				UserProfile recentProfile = friend.getProfileHistory().get(0);
-				UserProfile profile = new UserProfile();
-				profile.setFirstName(recentProfile.getFirstName());
-				profile.setMiddleName(recentProfile.getMiddleName());
-				profile.setFullName(recentProfile.getFullName());
-				profile.setImageUrl(recentProfile.getImageUrl());
-				dto.setProfile(profile);
-			}
-
-			dto.setFriendshipStatus(REQUEST_RECEIVED);
-			dtoList.add(dto);
-		}
-		
 		business.flush();
 		return dtoList;
 	}
@@ -159,7 +159,7 @@ public class UserSL extends GenericSL<User, UserDTO>{
 			}
 			
 			FriendshipStatus status = dto.getFriendshipStatus();
-			if(status == null || status == ACCEPTED || status == REQUEST_SENT) {
+			if(status == null || status == ACCEPTED || status == REQUEST_SENT || status == DECLINED) {
 				
 				if(!user.getProfileHistory().isEmpty()){
 					UserProfile recentProfile = user.getProfileHistory().get(0); 
@@ -247,8 +247,8 @@ public class UserSL extends GenericSL<User, UserDTO>{
 	
 	@PUT
 	@Produces(MediaType.APPLICATION_JSON)
-	@Path("/{id}/friendship/deny-{friend}")
-	public FriendshipDTO denyFriendship(
+	@Path("/{id}/friendship/decline-{friend}")
+	public FriendshipDTO declineFriendship(
 			@PathParam("id") long userId,
 			@PathParam("friend") long friendId){
 		Friendship entity = userBl.declineFriendshipRequest(userId, friendId);
