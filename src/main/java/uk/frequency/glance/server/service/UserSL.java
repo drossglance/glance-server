@@ -23,6 +23,7 @@ import uk.frequency.glance.server.model.event.Event;
 import uk.frequency.glance.server.model.event.MoveEvent;
 import uk.frequency.glance.server.model.event.StayEvent;
 import uk.frequency.glance.server.model.user.Friendship;
+import uk.frequency.glance.server.model.user.FriendshipStatus;
 import uk.frequency.glance.server.model.user.User;
 import uk.frequency.glance.server.model.user.UserProfile;
 import uk.frequency.glance.server.transfer.event.EventDTO;
@@ -147,17 +148,7 @@ public class UserSL extends GenericSL<User, UserDTO>{
 			if(id == userId) continue;
 			
 			UserDTO dto = new UserDTO();
-			dto.setId(user.getId());
-			
-			if(!user.getProfileHistory().isEmpty()){
-				UserProfile recentProfile = user.getProfileHistory().get(0); 
-				UserProfile profile = new UserProfile();
-				profile.setFirstName(recentProfile.getFirstName());
-				profile.setMiddleName(recentProfile.getMiddleName());
-				profile.setFullName(recentProfile.getFullName());
-				profile.setImageUrl(recentProfile.getImageUrl());
-				dto.setProfile(profile);
-			}
+			dto.setId(id);
 			
 			if(friendsips.size() > cur){
 				Friendship friendship = friendsips.get(cur);
@@ -167,7 +158,21 @@ public class UserSL extends GenericSL<User, UserDTO>{
 				}
 			}
 			
-			dtoList.add(dto);
+			FriendshipStatus status = dto.getFriendshipStatus();
+			if(status == null || status == ACCEPTED || status == REQUEST_SENT) {
+				
+				if(!user.getProfileHistory().isEmpty()){
+					UserProfile recentProfile = user.getProfileHistory().get(0); 
+					UserProfile profile = new UserProfile();
+					profile.setFirstName(recentProfile.getFirstName());
+					profile.setMiddleName(recentProfile.getMiddleName());
+					profile.setFullName(recentProfile.getFullName());
+					profile.setImageUrl(recentProfile.getImageUrl());
+					dto.setProfile(profile);
+				}
+			
+				dtoList.add(dto);
+			}
 		}
 		business.flush();
 		return dtoList;
