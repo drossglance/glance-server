@@ -46,7 +46,9 @@ public class Facebook {
 		
 		Page page = client.fetchObject("me", Page.class);
 		profile.setImageUrl(page.getPicture());
-		profile.setBgImageUrl(page.getCover().getSource());
+		if(page.getCover() != null){
+			profile.setBgImageUrl(page.getCover().getSource());
+		}
 		
 		return profile;
 	}
