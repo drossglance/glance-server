@@ -76,6 +76,11 @@
 			<artifactId>geocoder-java</artifactId>
 			<version>0.12</version>
 		</dependency>
+		<dependency>
+			<groupId>com.restfb</groupId>
+			<artifactId>restfb</artifactId>
+			<version>1.6.12</version>
+		</dependency>
 		
 		<!-- TODO: clean this later (use log4j) -->
 		<dependency>

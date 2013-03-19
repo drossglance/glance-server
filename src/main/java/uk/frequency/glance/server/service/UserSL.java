@@ -1,5 +1,10 @@
 package uk.frequency.glance.server.service;
 
+import static uk.frequency.glance.server.model.user.FriendshipStatus.ACCEPTED;
+import static uk.frequency.glance.server.model.user.FriendshipStatus.DECLINED;
+import static uk.frequency.glance.server.model.user.FriendshipStatus.REQUEST_RECEIVED;
+import static uk.frequency.glance.server.model.user.FriendshipStatus.REQUEST_SENT;
+
 import java.util.ArrayList;
 import java.util.List;
 
@@ -11,6 +16,7 @@ import javax.ws.rs.PUT;
 import javax.ws.rs.Path;
 import javax.ws.rs.PathParam;
 import javax.ws.rs.Produces;
+import javax.ws.rs.QueryParam;
 import javax.ws.rs.core.MediaType;
 import javax.ws.rs.core.Response;
 import javax.ws.rs.core.Response.Status;
@@ -31,8 +37,6 @@ import uk.frequency.glance.server.transfer.event.MoveEventDTO;
 import uk.frequency.glance.server.transfer.event.StayEventDTO;
 import uk.frequency.glance.server.transfer.user.FriendshipDTO;
 import uk.frequency.glance.server.transfer.user.UserDTO;
-
-import static uk.frequency.glance.server.model.user.FriendshipStatus.*;
 
 
 @Path("/user")
@@ -59,10 +63,11 @@ public class UserSL extends GenericSL<User, UserDTO>{
 	
 	@GET
 	@Produces(MediaType.APPLICATION_JSON)
-	@Path("/facebookLogin/{facebookId}")
+	@Path("/facebookLogin")
 	public UserDTO facebookLogin(
-			@PathParam("facebookId") String facebookId){
-		User user = userBl.facebookLogin(facebookId);
+			@QueryParam("fbId") String facebookId,
+			@QueryParam("token") String accessToken){
+		User user = userBl.facebookLogin(facebookId, accessToken);
 		UserDTO dto = toDTO(user);
 		business.flush();
 		return dto;

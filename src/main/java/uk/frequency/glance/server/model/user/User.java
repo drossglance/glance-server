@@ -29,6 +29,8 @@ public class User extends GenericEntity{
 	@Column(unique=true)
 	String facebookId;
 	
+	String fbAccessToken;
+	
 	@Cascade(value=CascadeType.DELETE)
 	@ElementCollection
 	@CollectionTable(joinColumns=@JoinColumn(name="user_id")) //for PostgreSQL compatibility, TODO:do this for all fks as a NamingStrategy
@@ -107,6 +109,14 @@ public class User extends GenericEntity{
 
 	public void setEventGenerationInfo(EventGenerationInfo eventGenerationInfo) {
 		this.eventGenerationInfo = eventGenerationInfo;
+	}
+
+	public String getFbAccessToken() {
+		return fbAccessToken;
+	}
+
+	public void setFbAccessToken(String fbAccessToken) {
+		this.fbAccessToken = fbAccessToken;
 	}
 
 	@Override

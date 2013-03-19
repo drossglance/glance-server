@@ -6,10 +6,12 @@ import org.hibernate.TransientObjectException;
 import org.hibernate.exception.ConstraintViolationException;
 
 import uk.frequency.glance.server.business.exception.WrongStateException;
+import uk.frequency.glance.server.business.remote.Facebook;
 import uk.frequency.glance.server.data_access.UserDAL;
 import uk.frequency.glance.server.model.user.EventGenerationInfo;
 import uk.frequency.glance.server.model.user.Friendship;
 import uk.frequency.glance.server.model.user.User;
+import uk.frequency.glance.server.model.user.UserProfile;
 
 import static uk.frequency.glance.server.model.user.FriendshipStatus.*;
 
@@ -22,11 +24,13 @@ public class UserBL extends GenericBL<User>{
 		userDal = (UserDAL)dal;
 	}
 	
-	public User facebookLogin(String facebookId){
+	public User facebookLogin(String facebookId, String accessToken){
 		User user = userDal.findByFacebookId(facebookId);
 		if(user == null){
 			user = new User();
 			user.setFacebookId(facebookId);
+			UserProfile profile = new Facebook(accessToken).requestUserData();
+			user.setProfile(profile);
 			return create(user);
 		}else{
 			return user;
