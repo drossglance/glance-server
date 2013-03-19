@@ -4,6 +4,7 @@ import java.util.Arrays;
 import java.util.List;
 
 import javax.persistence.CollectionTable;
+import javax.persistence.Column;
 import javax.persistence.ElementCollection;
 import javax.persistence.Entity;
 import javax.persistence.JoinColumn;
@@ -19,11 +20,13 @@ import uk.frequency.glance.server.model.event.Event;
 import uk.frequency.glance.server.model.trace.Trace;
 
 @Entity
-@Table(name="tb_user") //for PostgreSQL compatibility, TODO:do this for all tables as a NamingStrategy
+@Table(name="tb_user") //for PostgreSQL compatibility, TODO:do this for all tables as a NamingStrategy 
 public class User extends GenericEntity{
 
+	@Column(unique=true)
 	String username;
 	
+	@Column(unique=true)
 	String facebookId;
 	
 	@Cascade(value=CascadeType.DELETE)

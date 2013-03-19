@@ -22,13 +22,24 @@ public class UserBL extends GenericBL<User>{
 		userDal = (UserDAL)dal;
 	}
 	
+	public User facebookLogin(String facebookId){
+		User user = userDal.findByFacebookId(facebookId);
+		if(user == null){
+			user = new User();
+			user.setFacebookId(facebookId);
+			return create(user);
+		}else{
+			return user;
+		}
+	}
+	
 	@Override
 	public User create(User user) throws ConstraintViolationException, TransientObjectException {
 		user = super.create(user);
 		if(user.getEventGenerationInfo() == null){
 			EventGenerationInfo gen = new EventGenerationInfo();
 			gen.setUser(user);
-			userDal.makePersistent(gen);
+			userDal.save(gen);
 			user.setEventGenerationInfo(gen);
 		}
 		return user;

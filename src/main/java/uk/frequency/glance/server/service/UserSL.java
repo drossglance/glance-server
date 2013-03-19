@@ -59,6 +59,17 @@ public class UserSL extends GenericSL<User, UserDTO>{
 	
 	@GET
 	@Produces(MediaType.APPLICATION_JSON)
+	@Path("/facebookLogin/{facebookId}")
+	public UserDTO facebookLogin(
+			@PathParam("facebookId") String facebookId){
+		User user = userBl.facebookLogin(facebookId);
+		UserDTO dto = toDTO(user);
+		business.flush();
+		return dto;
+	}
+	
+	@GET
+	@Produces(MediaType.APPLICATION_JSON)
 	@Path("/{id}/glancePage")
 	public List<UserDTO> buildGlancePage(
 			@PathParam("id") long userId){

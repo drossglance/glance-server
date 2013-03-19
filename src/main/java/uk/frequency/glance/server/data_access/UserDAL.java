@@ -13,8 +13,15 @@ import uk.frequency.glance.server.model.user.User;
 @SuppressWarnings("unchecked")
 public class UserDAL extends GenericDAL<User>{
 	
-	public EventGenerationInfo makePersistent(EventGenerationInfo entity) {
-    	getSession().saveOrUpdate(entity);
+	public User findByFacebookId(String facebookId){
+		Query q = getSession().createQuery("from User u where " +
+				"u.facebookId = :facebookId")
+				.setParameter("facebookId", facebookId);
+		return (User)q.uniqueResult();
+	}
+	
+	public EventGenerationInfo save(EventGenerationInfo entity) {
+    	getSession().save(entity);
         return entity;
     }
 	
