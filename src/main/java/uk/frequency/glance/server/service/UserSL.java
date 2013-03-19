@@ -279,13 +279,13 @@ public class UserSL extends GenericSL<User, UserDTO>{
 			dto.setProfile(user.getProfileHistory().get(0)); //TODO get most recent profile
 		}
 		
-		if(user.getEvents() != null){
-			List<Long> eventIds = new ArrayList<Long>();
-			for(Event event : user.getEvents()){
-				eventIds.add(event.getId());
-			}
-			dto.setEventsIds(eventIds);
-		}
+//		if(user.getEvents() != null){
+//			List<Long> eventIds = new ArrayList<Long>();
+//			for(Event event : user.getEvents()){
+//				eventIds.add(event.getId());
+//			}
+//			dto.setEventsIds(eventIds);
+//		}
 		
 		return dto;
 	}
