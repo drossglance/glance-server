@@ -7,6 +7,7 @@ import uk.frequency.glance.server.model.user.UserProfile;
 import com.restfb.DefaultFacebookClient;
 import com.restfb.FacebookClient;
 import com.restfb.types.Page;
+import com.restfb.types.Photo;
 
 @SuppressWarnings("unused")
 public class Facebook {
@@ -44,11 +45,14 @@ public class Facebook {
 		profile.setWebsite(fbUser.getWebsite());
 		profile.setFbLink(fbUser.getLink());
 		
-		Page page = client.fetchObject("me", Page.class);
-		profile.setImageUrl(page.getPicture());
-		if(page.getCover() != null){
-			profile.setBgImageUrl(page.getCover().getSource());
-		}
+		String profileImgUrl = String.format("https://graph.facebook.com/%s/picture?type=large", fbUser.getUsername());
+		profile.setImageUrl(profileImgUrl);
+		
+//		Page page = client.fetchObject("me", Page.class);
+//		profile.setImageUrl(page.getPicture());
+//		if(page.getCover() != null){
+//			profile.setBgImageUrl(page.getCover().getSource());
+//		}
 		
 		return profile;
 	}
