@@ -8,6 +8,7 @@ import javax.persistence.Column;
 import javax.persistence.ElementCollection;
 import javax.persistence.Entity;
 import javax.persistence.JoinColumn;
+import javax.persistence.Lob;
 import javax.persistence.OneToMany;
 import javax.persistence.OneToOne;
 import javax.persistence.Table;
@@ -29,6 +30,7 @@ public class User extends GenericEntity{
 	@Column(unique=true)
 	String facebookId;
 	
+	@Lob
 	String fbAccessToken;
 	
 	@Cascade(value=CascadeType.DELETE)

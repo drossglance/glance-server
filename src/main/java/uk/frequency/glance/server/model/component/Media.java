@@ -11,7 +11,7 @@ public class Media{
 
 	public enum MediaType { IMAGE, DRAWING, SOUND, VIDEO }
 	
-	@Column(columnDefinition="varchar(2083)") //http://stackoverflow.com/questions/219569/best-database-field-type-for-a-url
+	@Column(length=2083) //http://stackoverflow.com/questions/219569/best-database-field-type-for-a-url
 	String url;
 	
 	MediaType type;
