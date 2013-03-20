@@ -29,6 +29,7 @@ public class UserBL extends GenericBL<User>{
 		if(user == null){
 			user = new User();
 			user.setFacebookId(facebookId);
+			user.setFbAccessToken(accessToken);
 			UserProfile profile = new Facebook(accessToken).requestUserData();
 			user.setProfile(profile);
 			return create(user);

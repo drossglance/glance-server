@@ -3,6 +3,7 @@ package uk.frequency.glance.server.model.user;
 import java.util.Date;
 
 import javax.persistence.Embeddable;
+import javax.persistence.Lob;
 
 @Embeddable
 public class UserProfile {
@@ -12,8 +13,9 @@ public class UserProfile {
 	String fullName;
 	
 	String gender;
-	String bio;
-	String about;
+	
+	@Lob String bio;
+	@Lob String about;
 	String birthday;
 	
 	String hometown;
