@@ -125,29 +125,31 @@ public class UserBL extends GenericBL<User>{
 	}
 	
 	public Friendship declineFriendshipRequest(long userId, long friendId){
-		User user = new User();
-		user.setId(userId);
-		User friend = new User();
-		friend.setId(friendId);
+		return removeFriendship(userId, friendId); //simplifies testing //TODO change back
 		
-		Friendship f = userDal.findFriendship(user, friend);
-		
-		if(f == null){
-			throw new WrongStateException("Friendship request doesn't exist.");
-		}else if(f.getStatus() == REQUEST_SENT){
-			throw new WrongStateException("Friendship request can't be denied by the same user who sent it.");
-		}else if(f.getStatus() != REQUEST_RECEIVED){
-			throw new WrongStateException("Friendship state is: " + f.getStatus() + ". Can only deny in state: " + REQUEST_RECEIVED + ".");
-		}
-		
-		f.setStatus(DECLINED);
-		userDal.saveOrUpdate(f);
-		
-		Friendship f2 = userDal.findReciprocal(f);
-		f2.setStatus(DECLINED);
-		userDal.saveOrUpdate(f2);
-		
-		return f;
+//		User user = new User();
+//		user.setId(userId);
+//		User friend = new User();
+//		friend.setId(friendId);
+//		
+//		Friendship f = userDal.findFriendship(user, friend);
+//		
+//		if(f == null){
+//			throw new WrongStateException("Friendship request doesn't exist.");
+//		}else if(f.getStatus() == REQUEST_SENT){
+//			throw new WrongStateException("Friendship request can't be denied by the same user who sent it.");
+//		}else if(f.getStatus() != REQUEST_RECEIVED){
+//			throw new WrongStateException("Friendship state is: " + f.getStatus() + ". Can only deny in state: " + REQUEST_RECEIVED + ".");
+//		}
+//		
+//		f.setStatus(DECLINED);
+//		userDal.saveOrUpdate(f);
+//		
+//		Friendship f2 = userDal.findReciprocal(f);
+//		f2.setStatus(DECLINED);
+//		userDal.saveOrUpdate(f2);
+//		
+//		return f;
 	}
 	
 	public Friendship removeFriendship(long userId, long friendId){
