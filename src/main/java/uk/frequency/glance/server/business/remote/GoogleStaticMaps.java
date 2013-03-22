@@ -64,7 +64,7 @@ public class GoogleStaticMaps {
 	}
 	
 	private static String locationListString(BoundingBox bounds){
-		List<Position> pos = new ArrayList<>();
+		List<Position> pos = new ArrayList<Position>();
 		pos.add(bounds.getNECorner());
 		pos.add(bounds.getSWCorner());
 		return locationListString(pos);
