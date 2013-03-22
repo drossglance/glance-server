@@ -1,41 +1,37 @@
 package uk.frequency.glance.server.model.event;
 
-import javax.persistence.Column;
 import javax.persistence.Embeddable;
 
 @Embeddable
 public class EventScore {
 
-	@Column(columnDefinition="int default 0")
-	int work;
+	Float work = 0f;
 	
-	@Column(columnDefinition="int default 0")
-	int fun;
+	Float fun = 0f;
 	
-	@Column(columnDefinition="int default 0")
-	int health;
+	Float health = 0f;
 	
-	public int getWork() {
+	public float getWork() {
 		return work;
 	}
 
-	public void setWork(int work) {
+	public void setWork(float work) {
 		this.work = work;
 	}
 
-	public int getFun() {
+	public float getFun() {
 		return fun;
 	}
 
-	public void setFun(int fun) {
+	public void setFun(float fun) {
 		this.fun = fun;
 	}
 
-	public int getHealth() {
+	public float getHealth() {
 		return health;
 	}
 
-	public void setHealth(int health) {
+	public void setHealth(float health) {
 		this.health = health;
 	}
 

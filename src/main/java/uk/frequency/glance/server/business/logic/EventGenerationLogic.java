@@ -7,6 +7,7 @@ import java.util.List;
 import org.hibernate.Transaction;
 import org.hibernate.exception.ConstraintViolationException;
 
+import uk.frequency.glance.server.DebugUtil;
 import uk.frequency.glance.server.business.remote.EventDataFinder;
 import uk.frequency.glance.server.data_access.EventDAL;
 import uk.frequency.glance.server.data_access.TraceDAL;
@@ -36,7 +37,7 @@ public class EventGenerationLogic extends Thread {
 	UserDAL userDal;
 
 	private final int MIN_STAY_TIME = 2 * 60 * 1000; //in miliseconds
-	private final double MAX_STAY_RADIUS = GeometryUtil.metersToDegrees(35);
+	private final double MAX_STAY_RADIUS = LatLngGeometryUtil.metersToDegrees(35);
 
 	public EventGenerationLogic(Trace currentTrace, EventDAL eventDal, TraceDAL traceDal, UserDAL userDal) {
 		this.currentTrace = currentTrace;
@@ -91,56 +92,77 @@ public class EventGenerationLogic extends Thread {
 		if (currentEvent == null) {
 			if(recent.isLongEnough){
 				Event newEvent;
-				if (recent.isNotMoving) {
-					//create a stay event
-					newEvent = createStayEvent(user, recent.center, recent.first.getTime());
-					/*DEBUG*/System.out.println("STAY EVENT CREATED");
-				}else{
+				if (recent.startedMoving) {
 					//create a move event
-					newEvent = createMoveEvent(user, recent.lastButOne.getPosition(), recent.lastButOne.getTime());
-					/*DEBUG*/System.out.println("MOVE EVENT CREATED");
+					EventDataFinder finder = new EventDataFinder(recent.moveBegin.getPosition());
+					newEvent = createMoveEvent(user, finder, recent.moveBegin.getTime());
+					/*DEBUG*/System.out.println("MOVE: " + DebugUtil.timeStr(recent.moveBegin.getTime()) + ", " + finder.getLocation().getPosition());
+					eventDal.save(newEvent);
+					genInfo.setCurrentEvent(newEvent);
+
+				}else if(recent.isStable){
+					//create a stay event
+					EventDataFinder finder = new EventDataFinder(recent.center);
+					newEvent = createStayEvent(user, finder, recent.first.getTime());
+					/*DEBUG*/System.out.println("STAY: " + DebugUtil.timeStr(recent.first.getTime()) + ", " + finder.getLocation().getPosition());
+					eventDal.save(newEvent);
+					genInfo.setCurrentEvent(newEvent);
 				}
-				eventDal.save(newEvent);
-				genInfo.setCurrentEvent(newEvent);
 			}
 		} else {
 			//update current event 
 			
 			if (currentEvent instanceof StayEvent) {
 				StayEvent stay = ((StayEvent) currentEvent);
-				double distance = GeometryUtil.distance(stay.getLocation().getPosition(), currentTrace.getPosition());
-				if (distance > 2 * MAX_STAY_RADIUS) {
+
+				if (recent.startedMoving) {
+
 					// close stay Event
-					PositionTrace previous = genInfo.getLastPositionTrace();
+					PositionTrace previous = recent.moveBegin;
+					/*DEBUG*/System.out.println("STAY to MOVE: " + DebugUtil.timeStr(previous.getTime()));
 					stay.setEndTime(previous.getTime());
-					genInfo.setCurrentEvent(null);
 					eventDal.save(stay);
-					/*DEBUG*/System.out.println("STAY EVENT CLOSED");
 					
 					//create a move event
-					Event newEvent = createMoveEvent(user, previous.getPosition(), previous.getTime());
+					Event newEvent = createMoveEvent(user, stay, previous.getTime());
 					eventDal.save(newEvent);
 					genInfo.setCurrentEvent(newEvent);
-					/*DEBUG*/System.out.println("MOVE EVENT CREATED");
+				}else{
+					if(recent.isLongEnough){ //TODO shouldn't need
+						boolean isStableInNewLocation = LatLngGeometryUtil.distance(recent.center, stay.getLocation().getPosition()) > MAX_STAY_RADIUS*2;
+						if(recent.isStable && isStableInNewLocation){
+							
+							// close stay Event
+							PositionTrace previous = genInfo.getLastPositionTrace();
+							stay.setEndTime(previous.getTime());
+							eventDal.save(stay);
+							
+							// create stay Event
+							/*DEBUG*/System.out.println("STAY to STAY: " + DebugUtil.timeStr(currentTrace.getTime()) + ", " + recent.center);
+							EventDataFinder finder = new EventDataFinder(recent.center);
+							Event newEvent = createStayEvent(user, finder, currentTrace.getTime());
+							eventDal.save(newEvent);
+							genInfo.setCurrentEvent(newEvent);
+						}
+					}
 				}
 
 			}else if (currentEvent instanceof MoveEvent) {
 				MoveEvent move = ((MoveEvent) currentEvent);
 				move.getTrail().add(currentTrace.getPosition());
 				
-				if(recent.isNotMoving){
+				if(recent.isStable){
+					
 					// close move Event
 					EventDataFinder finder = new EventDataFinder(recent.center);
 					move.setEndLocation(finder.getLocation());
 					move.setEndTime(recent.first.getTime());
-					genInfo.setCurrentEvent(null);
-					/*DEBUG*/System.out.println("MOVE EVENT CLOSED");
 					
 					//create a stay event
-					Event newEvent = createStayEvent(user, recent.center, recent.first.getTime());
+					Event newEvent = createStayEvent(user, finder, recent.first.getTime());
 					eventDal.save(newEvent);
 					genInfo.setCurrentEvent(newEvent);
-					/*DEBUG*/System.out.println("STAY EVENT CREATED");
+					/*DEBUG*/System.out.println("MOVE to STAY: " + DebugUtil.timeStr(recent.first.getTime()) + ", " + finder.getLocation().getPosition());
 				}
 				
 				eventDal.save(move);
@@ -159,8 +181,7 @@ public class EventGenerationLogic extends Thread {
 		// TODO notify client device
 	}
 	
-	private Event createStayEvent(User user, Position pos, Date start) {
-		EventDataFinder finder = new EventDataFinder(pos);
+	private Event createStayEvent(User user, EventDataFinder finder, Date start) {
 		Location location = finder.getLocation();
 		String imageUrl = finder.getImageUrl();
 
@@ -177,8 +198,7 @@ public class EventGenerationLogic extends Thread {
 		return event;
 	}
 	
-	private Event createMoveEvent(User user, Position startPos, Date start) {
-		EventDataFinder finder = new EventDataFinder(startPos);
+	private Event createMoveEvent(User user, EventDataFinder finder, Date start) {
 		Location location = finder.getLocation();
 		String imageUrl = finder.getImageUrl();
 
@@ -186,7 +206,27 @@ public class EventGenerationLogic extends Thread {
 		media.setType(MediaType.IMAGE);
 		media.setUrl(imageUrl);
 		List<Position> trail = new ArrayList<Position>();
-		trail.add(startPos);
+		trail.add(finder.getLocation().getPosition());
+		MoveEvent event = new MoveEvent();
+		event.setType(EventType.TRAVEL);
+		event.setUser(user);
+		event.setStartTime(start);
+		event.setStartLocation(location);
+		event.setTrail(trail);
+		event.setMedia(media);
+		event.setScore(new EventScore());
+		return event;
+	}
+	
+	private Event createMoveEvent(User user, StayEvent stay, Date start) {
+		Location location = stay.getLocation();
+		String imageUrl = stay.getMedia().get(0).getUrl();
+
+		Media media = new Media();
+		media.setType(MediaType.IMAGE);
+		media.setUrl(imageUrl);
+		List<Position> trail = new ArrayList<Position>();
+		trail.add(stay.getLocation().getPosition());
 		MoveEvent event = new MoveEvent();
 		event.setType(EventType.TRAVEL);
 		event.setUser(user);
@@ -201,9 +241,10 @@ public class EventGenerationLogic extends Thread {
 	private class RecentTraces{
 		
 		PositionTrace first;
-		PositionTrace lastButOne;
+		PositionTrace moveBegin;
 		Position center;
-		boolean isNotMoving;
+		boolean startedMoving;
+		boolean isStable;
 		boolean isLongEnough;
 		
 		RecentTraces(User user){
@@ -211,12 +252,33 @@ public class EventGenerationLogic extends Thread {
 			first = traceDal.findRightBefore(user, timeWindowStart); //include the last trace right before the time window starts
 			isLongEnough = first != null;
 			if(isLongEnough){
+				
 				List<PositionTrace> traces = traceDal.findAfter(user, timeWindowStart);
 				traces.add(0, first);
-				BoundingBox box = BoundingBox.from(traces);
-				isNotMoving = box.canContainCircle(MAX_STAY_RADIUS);
-				center = box.findCenter();
-				lastButOne = traces.get(traces.size()-2);
+				isLongEnough = traces.size() > 2;
+				if(isLongEnough){
+
+					BoundingBox box1 = BoundingBox.fromTraces(traces.subList(0, traces.size()-2)); //2 traces ago
+					BoundingBox box2 = BoundingBox.fromTraces(traces.subList(0, traces.size()-1)); //1 trace ago
+					BoundingBox box3 = BoundingBox.fromTraces(traces); //current
+					center = box3.findCenter();
+					
+					isStable = !box3.canContainCircle(MAX_STAY_RADIUS);
+					
+					boolean wasStable = !box1.canContainCircle(MAX_STAY_RADIUS);
+					boolean changedPosition = wasStable && box2.canContainCircle(MAX_STAY_RADIUS);
+					boolean keepsChangingPosition = changedPosition && box3.canContainCircle(MAX_STAY_RADIUS);
+					
+					Position p1 = traces.get(traces.size()-2).getPosition(); //last position but one
+					Position p2 = traces.get(traces.size()-1).getPosition(); //last position
+					double distP1C = LatLngGeometryUtil.distance(center, p1);
+					double distP2C = LatLngGeometryUtil.distance(center, p2);
+					double distP1P2 = LatLngGeometryUtil.distance(p1, p2);
+					boolean isDistanceGrowing = distP2C > distP1C && distP1P2 < distP1C;
+					
+					startedMoving = keepsChangingPosition && isDistanceGrowing;
+					moveBegin = startedMoving? traces.get(traces.size()-3) : null;
+				}
 			}
 		}
 		

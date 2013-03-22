@@ -1,7 +1,9 @@
-package uk.frequency.glance.util;
+package uk.frequency.glance.server;
 
 import java.io.PrintWriter;
 import java.io.StringWriter;
+import java.text.DateFormat;
+import java.util.Date;
 
 public class DebugUtil {
 
@@ -55,6 +57,14 @@ public class DebugUtil {
 		e.printStackTrace(new PrintWriter(sw));
 		String str = e.getMessage() + "\n" + e.getLocalizedMessage() + "\n" + sw.toString();
 		sendEmail(str);
+	}
+	
+	public static String timeStr(Date time){
+		return DateFormat.getTimeInstance(DateFormat.MEDIUM).format(time);
+	}
+	
+	public static String dateStr(Date time){
+		return DateFormat.getDateInstance(DateFormat.MEDIUM).format(time);
 	}
 
 }

@@ -3,19 +3,31 @@
 select * from tb_user u where 1 < (select count(*) from event e where e.user_id=u.id and e.start_time = (select max(e2.start_time) from event e2 where e2.user_id=u.id));
 
 //FIND MULTIPLE "LAST EVENTS" FOR USER
-WITH u as (SELECT 98304 as id)
+WITH u as (SELECT 0 as id)
 select e.id from event e, u where e.user_id=u.id and e.start_time = (select max(e2.start_time) from event e2 where e2.user_id=u.id);
 
 //DELETE EVENT
 WITH e as (select 0 as id)
-delete from event_media, e where event=e.id;
-delete from stay_event, e where id=e.id;
-delete from move_event, e where id=e.id;
-delete from event, e where id=e.id;
+delete from event_media where event=e.id;
+delete from stay_event where id=e.id;
+delete from move_event where id=e.id;
+delete from event where id=e.id;
 		
 //CLEAN ALL TRACES
-delete * from event_generation_info;
-delete * from positin_trace;
-delete * from trace;
+delete from event_generation_info;
+delete from positin_trace;
+delete from trace;
 
-//CLEAN ALL TRACES OLDER THAN 1 HOUR 
+//CLEAN ALL TRACES OLDER THAN DATE
+WITH t as (select id from trace where time < '2013-03-20 20:30')
+delete from event_generation_info where last_position_trace in t;
+delete from position_trace  where id in t;
+delete from trace where id in t;
+
+//CLEAN ALL EVENTS OLDER THAN DATE
+WITH e as (select id from event where user_id=3 and start_time < '2013-03-20 20:30')
+delete from event_media where event in e;
+delete from stay_event where id in e;
+delete from move_event_trail where move_event in e;
+delete from move_event where id in e;
+delete from event where id in e;

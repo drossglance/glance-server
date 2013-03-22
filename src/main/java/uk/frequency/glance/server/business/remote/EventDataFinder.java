@@ -2,7 +2,7 @@ package uk.frequency.glance.server.business.remote;
 
 import java.util.List;
 
-import uk.frequency.glance.server.business.logic.GeometryUtil;
+import uk.frequency.glance.server.business.logic.LatLngGeometryUtil;
 import uk.frequency.glance.server.model.component.Location;
 import uk.frequency.glance.server.model.component.Position;
 
@@ -30,7 +30,7 @@ public class EventDataFinder {
 	private void loadInfo(Position pos){
 		GooglePlaces places = new GooglePlaces(pos, searchRadius);
 		List<Position> results = places.getResultPositions();
-		int index = GeometryUtil.findCloser(pos, results);
+		int index = LatLngGeometryUtil.findCloser(pos, results);
 		location = places.getLocation(index);
 		imageUrl = places.getImageUrl(index, imageMaxHeight);
 		

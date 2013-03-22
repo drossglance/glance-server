@@ -1,4 +1,4 @@
-package uk.frequency.glance.testclient;
+package uk.frequency.glance.test;
 
 import java.text.DateFormat;
 import java.text.SimpleDateFormat;
@@ -14,7 +14,7 @@ import uk.frequency.glance.server.transfer.user.UserDTO;
 
 public class TestDTOFormatter {
 
-	private static DateFormat dateFormat = new SimpleDateFormat("HH:mm:ss");
+	private static DateFormat dateFormat = new SimpleDateFormat("HH:mm:ss:S");
 
 	public static String format(Long time){
 		if(time == null){

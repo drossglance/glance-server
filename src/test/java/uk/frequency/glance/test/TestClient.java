@@ -1,4 +1,4 @@
-package uk.frequency.glance.testclient;
+package uk.frequency.glance.test;
 
 import static javax.ws.rs.core.MediaType.APPLICATION_JSON;
 
@@ -28,7 +28,7 @@ public class TestClient {
 	public TestClient(String host) {
 		this.rootUrl = host;
 	}
-
+	
 	public GenericDTO post(GenericDTO dto, String path) {
 		String json = gson.toJson(dto);
 		WebResource resource = client.resource(rootUrl + path);

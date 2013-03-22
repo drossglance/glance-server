@@ -1,11 +1,13 @@
 package uk.frequency.glance.server.business.logic;
 
 import java.awt.Point;
+import java.util.ArrayList;
 import java.util.List;
 
 import uk.frequency.glance.server.model.component.Position;
+import uk.frequency.glance.server.transfer.trace.PositionTraceDTO;
 
-public class GeometryUtil {
+public class LatLngGeometryUtil {
 
 	final static double ROUGH_KM_DEGREE_RATIO = 111.111;
 	//http://gis.stackexchange.com/questions/2951/algorithm-for-offsetting-a-latitude-longitude-by-some-amount-of-meters
@@ -32,18 +34,29 @@ public class GeometryUtil {
 		return kmToDegrees((double)meters/1000);
 	}
 	
+	/**
+	 * Finds among "list", the position that is closest to "pos"
+	 */
 	public static int findCloser(Position pos, List<Position> list){
 		int closer = -1;
 		double minDist = Double.POSITIVE_INFINITY;
 		for(int i=0; i<list.size(); i++){
 			Position p = list.get(i);
-			double dist = GeometryUtil.distance(pos, p);
+			double dist = LatLngGeometryUtil.distance(pos, p);
 			if(dist < minDist){
 				minDist = dist;
 				closer = i;
 			}
 		}
 		return closer;
+	}
+	
+	public static List<Position> tracesToPositions(List<PositionTraceDTO> traces){
+		List<Position> pos = new ArrayList<Position>();
+		for (PositionTraceDTO trace : traces) {
+			pos.add(trace.getPosition());
+		}
+		return pos;
 	}
 	
 }
