@@ -7,6 +7,8 @@ import java.io.IOException;
 import java.text.ParseException;
 import java.text.SimpleDateFormat;
 import java.util.ArrayList;
+import java.util.Collections;
+import java.util.Comparator;
 import java.util.Date;
 import java.util.List;
 
@@ -14,6 +16,7 @@ import uk.frequency.glance.server.model.component.Position;
 import uk.frequency.glance.server.model.user.UserProfile;
 import uk.frequency.glance.server.transfer.event.EventDTO;
 import uk.frequency.glance.server.transfer.trace.PositionTraceDTO;
+import uk.frequency.glance.server.transfer.trace.TraceDTO;
 import uk.frequency.glance.server.transfer.user.UserDTO;
 
 import com.google.gson.reflect.TypeToken;
@@ -30,8 +33,8 @@ public class TestCaseLauncher {
 
 	public static void main(String[] args) {
 		try {
-			runTestCase("fionn_03-22");
-//			runTestCase("victor_03-22");
+//			runTestCase("fionn_03-22");
+			runTestCase("victor_03-22");
 //			runTestCase("test");
 //			runTestCase("case_1");
 		} catch (Exception e) {
@@ -44,6 +47,7 @@ public class TestCaseLauncher {
 		user = (UserDTO) client.postAndPrint(user, "user");
 		
 		List<PositionTraceDTO> traces = loadTraces(fileName, user.getId());
+		Collections.sort(traces, new TraceTimeComp());
 		for(PositionTraceDTO trace : traces){
 			Date requestTime = new Date();
 			client.postAndPrint(trace, "trace");
@@ -100,5 +104,17 @@ public class TestCaseLauncher {
 		trace.setUserId(user);
 		return trace;
 	}
-
+	
+	static class TraceTimeComp implements Comparator<TraceDTO>{
+		@Override
+		public int compare(TraceDTO o1, TraceDTO o2) {
+			if(o1.getTime() < o2.getTime())
+				return -1;
+			else if(o1.getTime() > o2.getTime())
+				return 1;
+			else
+				return 0;
+		}
+	}
+	
 }

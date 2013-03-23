@@ -28,7 +28,7 @@ public class PositionTraceDebug {
 	static GoogleStaticMaps maps = new GoogleStaticMaps(width, height);
 	
 	public static void main(String[] args) {
-		List<PositionTraceDTO> traces = DBDownloader.downloadPositionTraces(2);
+		List<PositionTraceDTO> traces = DBDownloader.downloadPositionTraces(1);
 		
 //		int pace = 100;
 //		for (int i = 0; i < traces.size(); i+=pace) {

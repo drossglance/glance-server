@@ -12,18 +12,10 @@ import uk.frequency.glance.server.model.user.User;
 @SuppressWarnings("unchecked")
 public class TraceDAL extends GenericDAL<Trace>{
 
-	public List<Trace> findByUser(User user){
-		Query q = getSession().createQuery("from Event where " +
-				"user = :user " +
-				"order by time")
-			.setEntity("user", user);
-		return q.list();
-	}
-	
 	public List<Trace> findByUser(long userId){
 		Query q = getSession().createQuery("from Trace where " +
 				"user.id = :userId " +
-				"order by time")
+				"order by creationTime")
 			.setParameter("userId", userId);
 		return q.list();
 	}
@@ -49,6 +41,8 @@ public class TraceDAL extends GenericDAL<Trace>{
 	}
 	
 	public PositionTrace findRightBefore(User user, Date time){
+//		/*DEBUG*/String timeStr = new SimpleDateFormat("dd-MM-yyyy HH:mm:ss.S").format(time);
+//		/*DEBUG*/String query = String.format("select * from trace where user_id=%d and time=(select max(time) from trace t where t.user_id=%d and t.time < '%s');", user.getId(), user.getId(), timeStr);
 		Query q = getSession().createQuery("from Trace where " +
 				"user = :user " +
 				"and time = (select max(time) from Trace t where " +
