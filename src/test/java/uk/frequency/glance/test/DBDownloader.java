@@ -13,7 +13,7 @@ public class DBDownloader {
 	private static final String ROOT_URL = "http://glance-server.herokuapp.com/services/";
 
 	public static void main(String[] args) {
-		downloadTracesAndPrintForDebug(2);
+		downloadTracesAndPrintForDebug(1);
 //		downloadAndPrintJson("user");
 	}
 	
