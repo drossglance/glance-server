@@ -34,8 +34,8 @@ public class TestCaseLauncher {
 
 	public static void main(String[] args) {
 		try {
-			runTestCase("fionn_03-22");
-//			runTestCase("victor_03-25_move");
+//			runTestCase("fionn_03-22");
+			runTestCase("victor_03-25_move");
 //			runTestCase("test");
 //			runTestCase("case_1");
 		} catch (Exception e) {

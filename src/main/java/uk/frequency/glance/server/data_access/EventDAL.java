@@ -44,7 +44,12 @@ public class EventDAL extends GenericDAL<Event>{
 				"and e.startTime = (select max(e2.startTime) from Event e2 where " +
 					"e2.user.id = :userId)")
 			.setParameter("userId", userId);
-		return (Event)q.list().get(0); //TODO there should be just 1 stay/move, but there can possibly be listen, etc at the same time 
+		List<Event> list = q.list();
+		if(list.isEmpty()){
+			return null;
+		}else{
+			return (Event)q.list().get(0); //TODO there should be just 1 stay/move, but there can possibly be listen, etc at the same time
+		}
 	}
 	
 }
