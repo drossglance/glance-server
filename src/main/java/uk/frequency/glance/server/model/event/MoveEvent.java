@@ -2,33 +2,41 @@ package uk.frequency.glance.server.model.event;
 
 import java.util.List;
 
-import javax.persistence.AttributeOverride;
-import javax.persistence.AttributeOverrides;
-import javax.persistence.Column;
 import javax.persistence.ElementCollection;
 import javax.persistence.Entity;
+import javax.persistence.JoinColumn;
+import javax.persistence.ManyToOne;
 import javax.persistence.OrderColumn;
 
-import uk.frequency.glance.server.model.component.Location;
+import org.hibernate.annotations.Cascade;
+import org.hibernate.annotations.CascadeType;
+
+import uk.frequency.glance.server.model.Location;
 import uk.frequency.glance.server.model.component.Position;
 
 @Entity
 public class MoveEvent extends Event {
 
-	@AttributeOverrides({
-		@AttributeOverride(name="name", column=@Column(name="start_loc_name")),
-		@AttributeOverride(name="address", column=@Column(name="start_loc_address")),
-		@AttributeOverride(name="position.lat", column=@Column(name="start_loc_lat")),
-		@AttributeOverride(name="position.lng", column=@Column(name="start_loc_lng"))
-	})
+//	@AttributeOverrides({
+//		@AttributeOverride(name="name", column=@Column(name="start_loc_name")),
+//		@AttributeOverride(name="address", column=@Column(name="start_loc_address")),
+//		@AttributeOverride(name="position.lat", column=@Column(name="start_loc_lat")),
+//		@AttributeOverride(name="position.lng", column=@Column(name="start_loc_lng"))
+//	})
+	@ManyToOne
+	@JoinColumn
+	@Cascade({CascadeType.SAVE_UPDATE})
 	Location startLocation;
 	
-	@AttributeOverrides({
-		@AttributeOverride(name="name", column=@Column(name="end_loc_name")),
-		@AttributeOverride(name="address", column=@Column(name="end_loc_address")),
-		@AttributeOverride(name="position.lat", column=@Column(name="end_loc_lat")),
-		@AttributeOverride(name="position.lng", column=@Column(name="end_loc_lng"))
-	})
+//	@AttributeOverrides({
+//		@AttributeOverride(name="name", column=@Column(name="end_loc_name")),
+//		@AttributeOverride(name="address", column=@Column(name="end_loc_address")),
+//		@AttributeOverride(name="position.lat", column=@Column(name="end_loc_lat")),
+//		@AttributeOverride(name="position.lng", column=@Column(name="end_loc_lng"))
+//	})
+	@ManyToOne
+	@JoinColumn
+	@Cascade({CascadeType.SAVE_UPDATE})
 	Location endLocation;
 	
 	@ElementCollection

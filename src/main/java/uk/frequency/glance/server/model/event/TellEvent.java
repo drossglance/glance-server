@@ -1,21 +1,26 @@
 package uk.frequency.glance.server.model.event;
 
-import javax.persistence.AttributeOverride;
-import javax.persistence.AttributeOverrides;
-import javax.persistence.Column;
 import javax.persistence.Entity;
+import javax.persistence.JoinColumn;
+import javax.persistence.ManyToOne;
 
-import uk.frequency.glance.server.model.component.Location;
+import org.hibernate.annotations.Cascade;
+import org.hibernate.annotations.CascadeType;
+
+import uk.frequency.glance.server.model.Location;
 
 @Entity
 public class TellEvent extends Event {
 
-	@AttributeOverrides({
-		@AttributeOverride(name="name", column=@Column(name="loc_name")),
-		@AttributeOverride(name="address", column=@Column(name="loc_address")),
-		@AttributeOverride(name="position.lat", column=@Column(name="loc_lat")),
-		@AttributeOverride(name="position.lng", column=@Column(name="loc_lng"))
-	})
+//	@AttributeOverrides({
+//		@AttributeOverride(name="name", column=@Column(name="loc_name")),
+//		@AttributeOverride(name="address", column=@Column(name="loc_address")),
+//		@AttributeOverride(name="position.lat", column=@Column(name="loc_lat")),
+//		@AttributeOverride(name="position.lng", column=@Column(name="loc_lng"))
+//	})
+	@ManyToOne
+	@JoinColumn
+	@Cascade({CascadeType.SAVE_UPDATE})
 	Location location;
 	
 	String text;

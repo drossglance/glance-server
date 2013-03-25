@@ -13,7 +13,7 @@ import uk.frequency.glance.server.data_access.EventDAL;
 import uk.frequency.glance.server.data_access.TraceDAL;
 import uk.frequency.glance.server.data_access.UserDAL;
 import uk.frequency.glance.server.data_access.util.HibernateUtil;
-import uk.frequency.glance.server.model.component.Location;
+import uk.frequency.glance.server.model.Location;
 import uk.frequency.glance.server.model.component.Media;
 import uk.frequency.glance.server.model.component.Media.MediaType;
 import uk.frequency.glance.server.model.component.Position;
@@ -98,17 +98,18 @@ public class EventGenerationLogic extends Thread {
 					//create a move event
 					EventDataFinder finder = new EventDataFinder(recent.moveBegin.getPosition());
 					MoveEvent newEvent = createMoveEvent(user, finder, recent.moveBegin.getTime());
-					/*DEBUG*/System.out.println("MOVE: " + DebugUtil.timeStr(recent.moveBegin.getTime()) + ", " + finder.getLocation().getPosition());
 					eventDal.save(newEvent);
 					genInfo.setCurrentEvent(newEvent);
 
+					/*DEBUG*/System.out.println("MOVE: " + DebugUtil.timeStr(recent.moveBegin.getTime()) + ", " + finder.getLocation().getPosition());
 				}else if(recent.isStable){
 					//create a stay event
 					EventDataFinder finder = new EventDataFinder(recent.center);
 					StayEvent newEvent = createStayEvent(user, finder, recent.first.getTime());
-					/*DEBUG*/System.out.println("STAY: " + DebugUtil.timeStr(recent.first.getTime()) + ", " + finder.getLocation().getPosition());
 					eventDal.save(newEvent);
 					genInfo.setCurrentEvent(newEvent);
+					
+					/*DEBUG*/System.out.println("STAY: " + DebugUtil.timeStr(recent.first.getTime()) + ", " + finder.getLocation().getPosition());
 				}
 					
 			} else  if (currentEvent instanceof StayEvent) {
@@ -118,14 +119,15 @@ public class EventGenerationLogic extends Thread {
 
 					// close stay Event
 					PositionTrace previous = recent.moveBegin;
-					/*DEBUG*/System.out.println("STAY to MOVE: " + DebugUtil.timeStr(previous.getTime()));
-					stay.setEndTime(previous.getTime());
+					closeStayEvent(stay, previous.getTime());
 					eventDal.save(stay);
 					
 					//create a move event
 					Event newEvent = createMoveEvent(user, stay, previous.getTime());
 					eventDal.save(newEvent);
 					genInfo.setCurrentEvent(newEvent);
+					
+					/*DEBUG*/System.out.println("STAY to MOVE: " + DebugUtil.timeStr(previous.getTime()));
 				}else{
 					
 					boolean teleported = recent.isStable 
@@ -135,15 +137,16 @@ public class EventGenerationLogic extends Thread {
 						
 						// close stay Event
 						PositionTrace previous = genInfo.getLastPositionTrace();
-						stay.setEndTime(previous.getTime());
+						closeStayEvent(stay, previous.getTime());
 						eventDal.save(stay);
 						
 						// create stay Event
-						/*DEBUG*/System.out.println("STAY to STAY: " + DebugUtil.timeStr(currentTrace.getTime()) + ", " + recent.center);
 						EventDataFinder finder = new EventDataFinder(recent.center);
-						Event newEvent = createStayEvent(user, finder, currentTrace.getTime());
+						Event newEvent = createStayEvent(user, finder, recent.first.getTime());
 						eventDal.save(newEvent);
 						genInfo.setCurrentEvent(newEvent);
+						
+						/*DEBUG*/System.out.println("STAY to STAY: " + DebugUtil.timeStr(recent.first.getTime()) + ", " + finder.getLocation().getPosition());
 					}
 				}
 
@@ -155,13 +158,13 @@ public class EventGenerationLogic extends Thread {
 					
 					// close move Event
 					EventDataFinder finder = new EventDataFinder(recent.center);
-					move.setEndLocation(finder.getLocation());
-					move.setEndTime(recent.first.getTime());
+					closeMoveEvent(move, recent.first.getTime(), finder.getLocation());
 					
 					//create a stay event
 					Event newEvent = createStayEvent(user, finder, recent.first.getTime());
 					eventDal.save(newEvent);
 					genInfo.setCurrentEvent(newEvent);
+					
 					/*DEBUG*/System.out.println("MOVE to STAY: " + DebugUtil.timeStr(recent.first.getTime()) + ", " + finder.getLocation().getPosition());
 				}
 				
@@ -201,6 +204,22 @@ public class EventGenerationLogic extends Thread {
 		return event;
 	}
 	
+	private void closeStayEvent(StayEvent event, Date end){
+		event.setEndTime(end);
+		
+		double hours = TimeUtil.getDurationInHours(event.getStartTime(), event.getEndTime());
+		EventScore score = new EventScore();
+		if(hours < 1){
+			score.setRelevance(3f);
+		}else if(hours < 4){
+			score.setRelevance(2f);
+		}else{
+			score.setRelevance(1f);
+		}
+		//TODO new location: +2
+		event.setScore(score);
+	}
+	
 	private MoveEvent createMoveEvent(User user, EventDataFinder finder, Date start) {
 		Location location = finder.getLocation();
 		String imageUrl = finder.getImageUrl();
@@ -228,6 +247,22 @@ public class EventGenerationLogic extends Thread {
 		event.setMedia(media);
 		event.setScore(new EventScore());
 		return event;
+	}
+
+	private void closeMoveEvent(MoveEvent event, Date end, Location location){
+		event.setEndTime(end);
+		event.setEndLocation(location);
+		
+		double hours = TimeUtil.getDurationInHours(event.getStartTime(), event.getEndTime());
+		EventScore score = new EventScore();
+		if(hours < .5){
+			score.setRelevance(2f);
+		}else if(hours < 2){
+			score.setRelevance(3f);
+		}else{
+			score.setRelevance(4f);
+		}
+		event.setScore(score);
 	}
 	
 	private class RecentTraces{

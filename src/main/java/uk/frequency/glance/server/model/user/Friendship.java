@@ -12,8 +12,8 @@ import uk.frequency.glance.server.model.GenericEntity;
 @Entity
 //@IdClass(FriendshipId.class)
 @Table(uniqueConstraints={
-		@UniqueConstraint(columnNames={"user_id", "friend_id"})
-	})
+	@UniqueConstraint(columnNames={"user_id", "friend_id"})
+})
 public class Friendship extends GenericEntity{
 
 //	@Id

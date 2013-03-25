@@ -3,7 +3,7 @@ package uk.frequency.glance.server.business.remote;
 import java.util.ArrayList;
 import java.util.List;
 
-import uk.frequency.glance.server.model.component.Location;
+import uk.frequency.glance.server.model.Location;
 import uk.frequency.glance.server.model.component.Position;
 import static uk.frequency.glance.server.business.remote.GooglePlacesModel.*;
 import static uk.frequency.glance.server.business.remote.GooglePlacesModel.Results.Status.*;

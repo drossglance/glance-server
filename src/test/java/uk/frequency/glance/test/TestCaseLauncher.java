@@ -24,8 +24,9 @@ import com.google.gson.reflect.TypeToken;
 public class TestCaseLauncher {
 
 	static final String DIR = "src/test/java/test_cases";
-	static final String DATE_FORMAT = "HH:mm:ss:S";
-	static final int TIME_BETWEEN_REQUESTS = 500;
+//	static final String DATE_FORMAT = "HH:mm:ss:S";
+	static final String DATE_FORMAT = "HH:mm:ss";
+	static final int TIME_BETWEEN_REQUESTS = 3000;
 	
 	static String ROOT_URL = "http://localhost:8080/services/";
 //	static String ROOT_URL = "http://glance-server.herokuapp.com/services/";
@@ -34,9 +35,9 @@ public class TestCaseLauncher {
 	public static void main(String[] args) {
 		try {
 //			runTestCase("fionn_03-22");
-			runTestCase("victor_03-22");
+//			runTestCase("victor_03-22");
 //			runTestCase("test");
-//			runTestCase("case_1");
+			runTestCase("case_1");
 		} catch (Exception e) {
 			e.printStackTrace();
 		}

@@ -52,6 +52,12 @@ public class User extends GenericEntity{
 	@OneToOne(mappedBy="user")
 	EventGenerationInfo eventGenerationInfo;
 	
+	@OneToMany(mappedBy="user")
+	List<Friendship> friendships;
+	
+	@OneToMany(mappedBy="user")
+	List<UserLocation> locations;
+	
 	public String getUsername() {
 		return username;
 	}

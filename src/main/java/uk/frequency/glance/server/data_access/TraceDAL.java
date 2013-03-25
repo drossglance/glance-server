@@ -34,21 +34,20 @@ public class TraceDAL extends GenericDAL<Trace>{
 		Query q = getSession().createQuery("from Trace t where " +
 				"t.class = PositionTrace " +
 				"and t.user = :user " +
-				"and t.time > :time")
+				"and t.time > :time " +
+				"order by time")
 			.setParameter("user", user)
 			.setParameter("time", time);
 		return q.list();
 	}
 	
 	public PositionTrace findRightBefore(User user, Date time){
-//		/*DEBUG*/String timeStr = new SimpleDateFormat("dd-MM-yyyy HH:mm:ss.S").format(time);
-//		/*DEBUG*/String query = String.format("select * from trace where user_id=%d and time=(select max(time) from trace t where t.user_id=%d and t.time < '%s');", user.getId(), user.getId(), timeStr);
 		Query q = getSession().createQuery("from Trace where " +
 				"user = :user " +
 				"and time = (select max(time) from Trace t where " +
 					"t.class = PositionTrace " +
 					"and t.user = :user " +
-					"and t.time < :time)")
+					"and t.time <= :time)")
 			.setParameter("user", user)
 			.setParameter("time", time);
 		return (PositionTrace)q.uniqueResult();

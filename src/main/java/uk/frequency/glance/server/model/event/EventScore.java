@@ -11,28 +11,38 @@ public class EventScore {
 	
 	Float health = 0f;
 	
-	public float getWork() {
+	Float relevance = 0f;
+	
+	public Float getWork() {
 		return work;
 	}
 
-	public void setWork(float work) {
+	public void setWork(Float work) {
 		this.work = work;
 	}
 
-	public float getFun() {
+	public Float getFun() {
 		return fun;
 	}
 
-	public void setFun(float fun) {
+	public void setFun(Float fun) {
 		this.fun = fun;
 	}
 
-	public float getHealth() {
+	public Float getHealth() {
 		return health;
 	}
 
-	public void setHealth(float health) {
+	public void setHealth(Float health) {
 		this.health = health;
+	}
+
+	public Float getRelevance() {
+		return relevance;
+	}
+
+	public void setRelevance(Float relevance) {
+		this.relevance = relevance;
 	}
 
 	@Override

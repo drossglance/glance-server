@@ -20,6 +20,10 @@ public class UserDAL extends GenericDAL<User>{
 		return (User)q.uniqueResult();
 	}
 	
+	
+	
+	//EVENT GENERATION INFO
+	
 	public EventGenerationInfo save(EventGenerationInfo entity) {
     	getSession().save(entity);
         return entity;
@@ -30,6 +34,10 @@ public class UserDAL extends GenericDAL<User>{
     	getSession().merge(entity);
         return entity;
     }
+	
+	
+	
+	//FRIENDSHIP
 	
 	public Friendship saveOrUpdate(Friendship entity) {
 		
@@ -79,5 +87,10 @@ public class UserDAL extends GenericDAL<User>{
 	public void removeFriendship(Friendship friendship){
 		getSession().delete(friendship);
 	}
+	
+	
+	
+	//USER LOCATION
+	//TODO
 	
 }

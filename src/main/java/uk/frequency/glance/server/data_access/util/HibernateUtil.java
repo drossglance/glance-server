@@ -11,8 +11,8 @@ import org.hibernate.service.ServiceRegistryBuilder;
 
 import uk.frequency.glance.server.model.Comment;
 import uk.frequency.glance.server.model.GenericEntity;
+import uk.frequency.glance.server.model.Location;
 import uk.frequency.glance.server.model.UserExpression;
-import uk.frequency.glance.server.model.component.Location;
 import uk.frequency.glance.server.model.component.Media;
 import uk.frequency.glance.server.model.component.Position;
 import uk.frequency.glance.server.model.event.Event;
@@ -27,6 +27,7 @@ import uk.frequency.glance.server.model.trace.Trace;
 import uk.frequency.glance.server.model.user.EventGenerationInfo;
 import uk.frequency.glance.server.model.user.Friendship;
 import uk.frequency.glance.server.model.user.User;
+import uk.frequency.glance.server.model.user.UserLocation;
 import uk.frequency.glance.server.model.user.UserProfile;
 import uk.frequency.glance.server.model.user.UserSettings;
 
@@ -42,6 +43,7 @@ public class HibernateUtil {
 				.addAnnotatedClass(User.class)
 				.addAnnotatedClass(UserProfile.class)
 				.addAnnotatedClass(Friendship.class)
+				.addAnnotatedClass(UserLocation.class)
 				.addAnnotatedClass(UserSettings.class)
 				.addAnnotatedClass(EventGenerationInfo.class)
 				.addAnnotatedClass(Location.class)

@@ -7,7 +7,6 @@ import javax.persistence.Entity;
 import javax.persistence.JoinColumn;
 import javax.persistence.ManyToOne;
 
-import uk.frequency.glance.server.model.component.Location;
 import uk.frequency.glance.server.model.component.Media;
 import uk.frequency.glance.server.model.event.Event;
 
@@ -20,6 +19,8 @@ public class Comment extends UserExpression {
 	
 	String text;
 	
+	@ManyToOne
+	@JoinColumn
 	Location location;
 
 	@ElementCollection

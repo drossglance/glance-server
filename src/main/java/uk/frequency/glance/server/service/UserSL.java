@@ -24,7 +24,7 @@ import javax.ws.rs.core.Response.Status;
 import uk.frequency.glance.server.business.EventBL;
 import uk.frequency.glance.server.business.UserBL;
 import uk.frequency.glance.server.business.exception.MissingFieldException;
-import uk.frequency.glance.server.model.component.Location;
+import uk.frequency.glance.server.model.Location;
 import uk.frequency.glance.server.model.event.Event;
 import uk.frequency.glance.server.model.event.MoveEvent;
 import uk.frequency.glance.server.model.event.StayEvent;

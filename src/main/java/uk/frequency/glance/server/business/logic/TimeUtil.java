@@ -12,4 +12,18 @@ public class TimeUtil {
 		return cal.getTime();
 	}
 	
+	public static double getDurationInDays(Date begin, Date end){
+		long milis = getDuration(begin, end);
+		return (double)milis/(1000*60*60*24);
+	}
+	
+	public static double getDurationInHours(Date begin, Date end){
+		long milis = getDuration(begin, end);
+		return (double)milis/(1000*60*60);
+	}
+	
+	public static long getDuration(Date begin, Date end){
+		return end.getTime() - begin.getTime();
+	}
+	
 }

@@ -3,7 +3,7 @@ package uk.frequency.glance.server.business.remote;
 import java.util.ArrayList;
 import java.util.List;
 
-import uk.frequency.glance.server.model.component.Location;
+import uk.frequency.glance.server.model.Location;
 import uk.frequency.glance.server.model.component.Position;
 
 @SuppressWarnings("unused")
@@ -27,24 +27,25 @@ public class GooglePlacesModel {
 		String formatted_address; //useful: maybe for the event details page
 		Geometry geometry;
 		String name; //useful
-		String reference;
+		String id; //useful: to identify places (a place can have multiple references, but one id)
+		String reference; //useful: to request details
 		List<String> types; //useful: for distinguishing pub, work, gym, etc
 		String vicinity;
 		String icon;
-		List<Photo> photos;
+		List<Photo> photos; //useful
 	}
 	
 	static class DetailedPlace extends Place{
 		List<AddressComponent> address_components;
-		double rating;
+		double rating; //maybe useful: to decide when to use geocoding vs places
 		String url;
-		String website;  //useful: maybe for the event details page
+		String website;  //maybe useful: for the event details page
 	}
 	
 	static class Photo{
 		int height;
 		int width;
-		List<String> html_attributions;
+		List<String> html_attributions; //maybe useful: to decide when to use streetview vs places
 		String photo_reference;
 		static class HtmlAttributions{
 			String USER = "From a Google User";
