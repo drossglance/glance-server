@@ -16,7 +16,8 @@ import javax.ws.rs.core.Response.Status;
 import org.hibernate.ObjectNotFoundException;
 
 import uk.frequency.glance.server.business.EventBL;
-import uk.frequency.glance.server.data_access.util.HibernateUtil;
+import uk.frequency.glance.server.business.logic.EventScoreLogic;
+import uk.frequency.glance.server.data_access.util.HibernateConfig;
 import uk.frequency.glance.server.model.Comment;
 import uk.frequency.glance.server.model.event.Event;
 import uk.frequency.glance.server.model.event.ListenEvent;
@@ -99,7 +100,7 @@ public class EventSL extends GenericSL<Event, EventDTO>{
 			MoveEventDTO moveDto = new MoveEventDTO();
 			moveDto.setStartLocation(move.getStartLocation());
 			moveDto.setEndLocation(move.getEndLocation());
-			moveDto.setTrail(HibernateUtil.initializeAndUnproxy(move.getTrail()));
+			moveDto.setTrail(HibernateConfig.initializeAndUnproxy(move.getTrail()));
 			dto = moveDto;
 		}else if(event instanceof TellEvent){
 			TellEvent tell = (TellEvent)event;
@@ -123,7 +124,13 @@ public class EventSL extends GenericSL<Event, EventDTO>{
 		if(event.getEndTime() != null){
 			dto.setEndTime(event.getEndTime().getTime());
 		}
-		dto.setScore(event.getScore());
+		
+		if(event.getScore() == null){
+			event.setScore(EventScoreLogic.assignScore(event));
+		}else{
+			dto.setScore(event.getScore());
+		}
+		
 		dto.setMedia(event.getMedia());
 		
 		if(event.getParticipants() != null){
@@ -183,7 +190,7 @@ public class EventSL extends GenericSL<Event, EventDTO>{
 		event.setUser(user);
 		event.setType(dto.getType());
 		event.setStartTime(new Date(dto.getStartTime()));
-		if(dto.getEndTime() != 0){
+		if(dto.getEndTime() != null){
 			event.setEndTime(new Date(dto.getEndTime()));
 		}
 		event.setMedia(dto.getMedia());

@@ -31,7 +31,7 @@ import uk.frequency.glance.server.model.user.UserLocation;
 import uk.frequency.glance.server.model.user.UserProfile;
 import uk.frequency.glance.server.model.user.UserSettings;
 
-public class HibernateUtil {
+public class HibernateConfig {
 
 	private static final SessionFactory sessionFactory;
 

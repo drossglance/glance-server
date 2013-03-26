@@ -44,7 +44,7 @@ public class TestCaseLauncher {
 	}
 	
 	static void runTestCase(String fileName) throws IOException, ParseException, InterruptedException{
-		UserDTO user = createTestUser();
+		UserDTO user = createTestUser("testuser");
 		user = (UserDTO) client.postAndPrint(user, "user");
 		
 		List<PositionTraceDTO> traces = loadTraces(fileName, user.getId());
@@ -58,6 +58,8 @@ public class TestCaseLauncher {
 			List<EventDTO> events = (List<EventDTO>) client.getListAndPrint(path, new TypeToken<List<EventDTO>>(){});
 			verifyEvents(events);
 		}
+		
+		System.out.println("done.");
 	}
 	
 	static boolean verifyEvents(List<EventDTO> events){
@@ -65,11 +67,11 @@ public class TestCaseLauncher {
 		return true;
 	}
 	
-	static UserDTO createTestUser(){
+	public static UserDTO createTestUser(String username){
 		UserProfile profile = new UserProfile();
 		profile.setFullName("Test");
 		UserDTO user = new UserDTO();
-		user.setUsername("testuser");
+		user.setUsername(username);
 		user.setProfile(profile);
 		return user;
 	}

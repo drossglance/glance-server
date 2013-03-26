@@ -26,4 +26,11 @@ public class TimeUtil {
 		return end.getTime() - begin.getTime();
 	}
 	
+	public static double getHoursInTheDay(Date time){
+		Calendar cal = Calendar.getInstance();
+		cal.setTime(time);
+		int sec = cal.get(Calendar.SECOND);
+		return (double)sec/(60*60);
+	}
+	
 }

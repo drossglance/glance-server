@@ -13,7 +13,7 @@ import org.hibernate.Session;
 public class HibernateAutoInit implements ServletContextListener{
 
 	public void contextInitialized(ServletContextEvent ev) {
-		Session ses = HibernateUtil.getSessionFactory().openSession();
+		Session ses = HibernateConfig.getSessionFactory().openSession();
 		ses.close();
 	}
 	

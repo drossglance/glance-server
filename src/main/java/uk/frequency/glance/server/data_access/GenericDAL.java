@@ -11,7 +11,7 @@ import org.hibernate.criterion.Example;
 import org.hibernate.criterion.Property;
 import org.hibernate.criterion.Restrictions;
 
-import uk.frequency.glance.server.data_access.util.HibernateUtil;
+import uk.frequency.glance.server.data_access.util.HibernateConfig;
 import uk.frequency.glance.server.model.GenericEntity;
 
 /**
@@ -95,7 +95,7 @@ public class GenericDAL<T extends GenericEntity> {
 	}
 	
 	protected Session getSession(){
-		return HibernateUtil.getSessionFactory().getCurrentSession(); //internally creates a session per thread
+		return HibernateConfig.getSessionFactory().getCurrentSession(); //internally creates a session per thread
 	}
 	
 }

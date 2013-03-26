@@ -12,7 +12,7 @@ import uk.frequency.glance.server.business.remote.EventDataFinder;
 import uk.frequency.glance.server.data_access.EventDAL;
 import uk.frequency.glance.server.data_access.TraceDAL;
 import uk.frequency.glance.server.data_access.UserDAL;
-import uk.frequency.glance.server.data_access.util.HibernateUtil;
+import uk.frequency.glance.server.data_access.util.HibernateConfig;
 import uk.frequency.glance.server.model.Location;
 import uk.frequency.glance.server.model.component.Media;
 import uk.frequency.glance.server.model.component.Media.MediaType;
@@ -51,7 +51,7 @@ public class EventGenerationLogic extends Thread {
 
 	@Override
 	public void run() {
-		Transaction tr = HibernateUtil.getSessionFactory().getCurrentSession().beginTransaction();
+		Transaction tr = HibernateConfig.getSessionFactory().getCurrentSession().beginTransaction();
 		try{
 			init();
 			if (currentTrace instanceof PositionTrace) {
@@ -201,17 +201,7 @@ public class EventGenerationLogic extends Thread {
 	
 	private void closeStayEvent(StayEvent event, Date end){
 		event.setEndTime(end);
-		
-		double hours = TimeUtil.getDurationInHours(event.getStartTime(), event.getEndTime());
-		EventScore score = new EventScore();
-		if(hours < 1){
-			score.setRelevance(3f);
-		}else if(hours < 4){
-			score.setRelevance(2f);
-		}else{
-			score.setRelevance(1f);
-		}
-		//TODO new location: +2
+		EventScore score = EventScoreLogic.assignScore(event);
 		event.setScore(score);
 	}
 	
@@ -247,16 +237,7 @@ public class EventGenerationLogic extends Thread {
 	private void closeMoveEvent(MoveEvent event, Date end, Location location){
 		event.setEndTime(end);
 		event.setEndLocation(location);
-		
-		double hours = TimeUtil.getDurationInHours(event.getStartTime(), event.getEndTime());
-		EventScore score = new EventScore();
-		if(hours < .5){
-			score.setRelevance(2f);
-		}else if(hours < 2){
-			score.setRelevance(3f);
-		}else{
-			score.setRelevance(4f);
-		}
+		EventScore score = EventScoreLogic.assignScore(event);
 		event.setScore(score);
 	}
 	
