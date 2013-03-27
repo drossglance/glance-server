@@ -8,9 +8,9 @@ import java.util.List;
 import javax.swing.JFrame;
 import javax.swing.JPanel;
 
-import streamgraph.Layer;
 import uk.frequency.glance.server.business.logic.waveline.EventDataAdapter;
 import uk.frequency.glance.server.business.logic.waveline.Waveline;
+import uk.frequency.glance.server.business.logic.waveline.streamgraph.Layer;
 import uk.frequency.glance.server.model.event.Event;
 
 public class WavelineTest {

@@ -2,7 +2,7 @@ package uk.frequency.glance.server.business.logic.waveline;
 
 import java.util.List;
 
-import streamgraph.Layer;
+import uk.frequency.glance.server.business.logic.waveline.streamgraph.Layer;
 import uk.frequency.glance.server.model.event.Event;
 import uk.frequency.glance.server.model.event.EventType;
 import uk.frequency.glance.server.model.event.MoveEvent;

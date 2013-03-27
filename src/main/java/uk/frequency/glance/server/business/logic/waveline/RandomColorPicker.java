@@ -1,9 +1,9 @@
 package uk.frequency.glance.server.business.logic.waveline;
-import streamgraph.ColorPicker;
-import streamgraph.Layer;
-
 import java.awt.Color;
-import java.util.*;
+import java.util.Random;
+
+import uk.frequency.glance.server.business.logic.waveline.streamgraph.ColorPicker;
+import uk.frequency.glance.server.business.logic.waveline.streamgraph.Layer;
 
 /**
  * @author Victor

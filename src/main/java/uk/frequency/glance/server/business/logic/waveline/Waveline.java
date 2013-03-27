@@ -11,12 +11,12 @@ import java.awt.image.BufferedImage;
 import org.apache.commons.math3.analysis.UnivariateFunction;
 import org.apache.commons.math3.analysis.interpolation.SplineInterpolator;
 
-import streamgraph.ColorPicker;
-import streamgraph.Layer;
-import streamgraph.LayerLayout;
-import streamgraph.LayerSort;
-import streamgraph.NoLayerSort;
-import streamgraph.StreamLayout;
+import uk.frequency.glance.server.business.logic.waveline.streamgraph.ColorPicker;
+import uk.frequency.glance.server.business.logic.waveline.streamgraph.Layer;
+import uk.frequency.glance.server.business.logic.waveline.streamgraph.LayerLayout;
+import uk.frequency.glance.server.business.logic.waveline.streamgraph.LayerSort;
+import uk.frequency.glance.server.business.logic.waveline.streamgraph.NoLayerSort;
+import uk.frequency.glance.server.business.logic.waveline.streamgraph.StreamLayout;
 
 public class Waveline {
 
