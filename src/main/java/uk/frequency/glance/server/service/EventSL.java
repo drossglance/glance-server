@@ -88,6 +88,15 @@ public class EventSL extends GenericSL<Event, EventDTO>{
 	
 	@Override
 	protected EventDTO toDTO(Event event){
+		return staticToDTO(event);
+	}
+	
+	@Override
+	protected Event fromDTO(EventDTO dto) {
+		return staticFromDTO(dto);
+	}
+	
+	public static EventDTO staticToDTO(Event event){
 		
 		EventDTO dto;
 		if(event instanceof StayEvent){
@@ -152,8 +161,7 @@ public class EventSL extends GenericSL<Event, EventDTO>{
 		return dto;
 	}
 	
-	@Override
-	protected Event fromDTO(EventDTO dto) {
+	public static Event staticFromDTO(EventDTO dto) {
 
 		User user = new User();
 		user.setId(dto.getUserId());

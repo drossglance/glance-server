@@ -6,7 +6,7 @@ import java.util.ArrayList;
 import java.util.List;
 
 import uk.frequency.glance.server.business.logic.BoundingBox;
-import uk.frequency.glance.server.business.logic.EuclidianGeometryUtil;
+import uk.frequency.glance.server.business.logic.EuclideanGeometryUtil;
 import uk.frequency.glance.server.model.component.Position;
 
 public class GoogleStaticMaps {
@@ -84,14 +84,14 @@ public class GoogleStaticMaps {
 	
 	public Rectangle findRectangle(Position center, int zoom){
 		Point c = toPixel(center, zoom);
-		return EuclidianGeometryUtil.findRectangle(c, width, height);
+		return EuclideanGeometryUtil.findRectangle(c, width, height);
 	}
 	
 	public static int findZoomToContain(BoundingBox bounds, int width, int height){
 		Position center = bounds.findCenter();
 		for(int zoom=20; zoom>=0; zoom--){
 			Point c = toPixel(center, zoom);
-			Rectangle pixelBounds = EuclidianGeometryUtil.findRectangle(c, width, height);
+			Rectangle pixelBounds = EuclideanGeometryUtil.findRectangle(c, width, height);
 			BoundingBox newBounds = fromPixel(pixelBounds, zoom);
 			if(newBounds.contains(bounds)){
 				return zoom;

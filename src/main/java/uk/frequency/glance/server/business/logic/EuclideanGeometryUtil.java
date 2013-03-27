@@ -4,7 +4,7 @@ import java.awt.Point;
 import java.awt.Rectangle;
 import java.util.List;
 
-public class EuclidianGeometryUtil {
+public class EuclideanGeometryUtil {
 
 	public static Rectangle findRectangle(Point center, int width, int height){
 		return new Rectangle(center.x-width/2, center.y-height/2, width, height);

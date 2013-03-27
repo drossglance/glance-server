@@ -3,12 +3,12 @@ package uk.frequency.glance.server.business.remote;
 import java.util.ArrayList;
 import java.util.List;
 
+import uk.frequency.glance.server.business.logic.LatLngGeometryUtil;
 import uk.frequency.glance.server.model.Location;
 import uk.frequency.glance.server.model.component.Position;
 import static uk.frequency.glance.server.business.remote.GooglePlacesModel.*;
 import static uk.frequency.glance.server.business.remote.GooglePlacesModel.Results.Status.*;
 
-@SuppressWarnings("unused")
 public class GooglePlaces {
 
 	static final String rootUrl = "https://maps.googleapis.com/maps/api/place/";
@@ -19,6 +19,40 @@ public class GooglePlaces {
 	
 	private Position requestedPosition;
 	private List<Place> results;
+	
+	//TEST
+	public static void main(String[] args) {
+		int radius = 100;
+		showDistancesAndRatings("Victor's",					new Position(51.586896,-0.01582), 	radius);
+		showDistancesAndRatings("Fionn's", 					new Position(51.535036,-0.252256), 	radius);
+		showDistancesAndRatings("George's", 				new Position(51.519866,-0.201101), 	radius);
+		showDistancesAndRatings("Google Campus", 			new Position(51.522628,-0.085699), 	radius);
+		showDistancesAndRatings("Chelsea Stadium", 			new Position(51.48141,-0.19136), 	radius);
+		showDistancesAndRatings("Liverpool St. Station", 	new Position(51.517129,-0.08244), 	radius);
+		showDistancesAndRatings("Tesco", 					new Position(51.522802,-0.086995), 	radius);
+		showDistancesAndRatings("Sainsbury's", 				new Position(51.524871,-0.087443), 	radius);
+		showDistancesAndRatings("O2 Brixton Academy", 		new Position(51.465652,-0.115013), 	radius);
+		showDistancesAndRatings("Passing Clouds", 			new Position(51.54231,-0.075569), 	radius);
+		showDistancesAndRatings("Portobello Rd", 			new Position(51.517262,-0.206122), 	radius);
+	}
+	
+	//TEST
+	static void showDistancesAndRatings(String title, Position pos, int radius){
+		System.out.printf("#%s (%f,%f)\n", title, pos.getLat(), pos.getLng());
+		GooglePlaces places = new GooglePlaces(pos, radius);
+		places.showDistancesAndRatings();
+	}
+	
+	//TEST
+	void showDistancesAndRatings(){
+		for(int i=0; i<results.size(); i++){
+			requestPlaceDetails(i);
+			DetailedPlace place = (DetailedPlace)results.get(i);
+			int dist = (int)LatLngGeometryUtil.distanceInMeters(place.geometry.location, requestedPosition);
+			System.out.printf("%d\t%.1f\t%s\n", dist, place.rating, place.name);
+		}
+		System.out.println();
+	}
 	
 	public GooglePlaces(Position position, int radius) {
 		this.requestedPosition = position;

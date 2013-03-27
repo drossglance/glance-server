@@ -3,6 +3,9 @@ package uk.frequency.glance.test;
 import java.util.ArrayList;
 import java.util.List;
 
+import uk.frequency.glance.server.model.event.Event;
+import uk.frequency.glance.server.service.EventSL;
+import uk.frequency.glance.server.transfer.event.EventDTO;
 import uk.frequency.glance.server.transfer.trace.PositionTraceDTO;
 import uk.frequency.glance.server.transfer.trace.TraceDTO;
 
@@ -38,6 +41,12 @@ public class DBDownloader {
 		return client.getList(path, new TypeToken<List<TraceDTO>>(){});
 	}
 	
+	public static List<EventDTO> downloadEvents(long userId){
+		TestClient client = new TestClient(ROOT_URL);
+		String path = String.format("event/user-%d/", userId);
+		return client.getList(path, new TypeToken<List<EventDTO>>(){});
+	}
+	
 	static void downloadAndPrintJson(String path){
 		TestClient client = new TestClient(ROOT_URL);
 		String json = client.getText(path);
@@ -52,6 +61,14 @@ public class DBDownloader {
 			}
 		}
 		return pos;
+	}
+	
+	public static List<Event> fromDTO(List<EventDTO> dtos){
+		List<Event> events = new ArrayList<Event>();
+		for(EventDTO dto : dtos){
+			events.add(EventSL.staticFromDTO(dto));
+		}
+		return events;
 	}
 	
 }

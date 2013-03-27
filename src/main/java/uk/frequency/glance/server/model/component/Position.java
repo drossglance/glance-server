@@ -9,6 +9,15 @@ public class Position{
 	
 	double lng;
 	
+	public Position(){
+		
+	}
+	
+	public Position(double lat, double lng) {
+		this.lat = lat;
+		this.lng = lng;
+	}
+
 	public double getLat() {
 		return lat;
 	}

@@ -13,12 +13,12 @@ public class EventDataFinder {
 	static final int imageMaxHeight = 200;
 	static final int searchRadius = 100;
 	
-	public static void main(String[] args) {
-		Position p = new Position();
-		p.setLat(51.552873);
-		p.setLng(-0.08287);
-		new EventDataFinder(p);
-	}
+//	public static void main(String[] args) {
+//		Position p = new Position();
+//		p.setLat(51.552873);
+//		p.setLng(-0.08287);
+//		new EventDataFinder(p);
+//	}
 	
 	Location location;
 	String imageUrl;
@@ -38,15 +38,15 @@ public class EventDataFinder {
 			imageUrl = GoogleStreetView.getStreetViewImageUrl(pos);
 		}
 		
-		/*TEST*/
-//		double dist = GeometryUtil.distance(pos, results.get(index));
+		//TEST
+//		double dist = LatLngGeometryUtil.distance(pos, results.get(index));
 //		String streetViewImage = GoogleStreetView.getStreetViewImageUrl(pos);
 //		String geocodingName = GoogleGeocoding.getLocationName(pos);
 //		System.out.println(location.getName());
 //		System.out.println(location.getAddress());
 //		System.out.println(location.getPosition());
 //		System.out.println(imageUrl);
-//		System.out.println(GeometryUtil.degreesToMeters(dist) + "m");
+//		System.out.println(LatLngGeometryUtil.degreesToMeters(dist) + "m");
 //		System.out.println(geocodingName);
 //		System.out.println(streetViewImage);
 	}

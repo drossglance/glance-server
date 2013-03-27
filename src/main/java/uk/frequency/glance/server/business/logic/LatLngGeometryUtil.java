@@ -16,6 +16,10 @@ public class LatLngGeometryUtil {
 		return Point.distance(p1.getLat(), p1.getLng(), p2.getLat(), p2.getLng());
 	}
 	
+	public static double distanceInMeters(Position p1, Position p2){
+		return degreesToMeters(distance(p1, p2));
+	}
+	
 	public static double degreesToKm(double degrees){
 		//FIXME get a proper geometry library to handle earth's variable radius and points across the 180deg meridian
 		return degrees*ROUGH_KM_DEGREE_RATIO;
