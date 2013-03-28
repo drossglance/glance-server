@@ -31,13 +31,14 @@ public class Waveline {
 	int minX, maxX, dX;
 	float minY, maxY, dY;
 	
-	public Waveline(Layer[] layers){
+	public Waveline(Layer[] layers, ColorPicker coloring){
 		this.layers = layers;
-		ordering = new NoLayerSort();
-		layout = new StreamLayout();
-//		layout = new MinimizedWiggleLayout();
-//		layout = new ThemeRiverLayout();
-		coloring = new RandomColorPicker();
+		this.ordering = new NoLayerSort();
+		this.layout = new StreamLayout();
+//		this.layout = new MinimizedWiggleLayout();
+//		this.layout = new ThemeRiverLayout();
+//		this.coloring = new RandomColorPicker();
+		this.coloring = coloring;
 		init();
 	}
 	
@@ -155,7 +156,7 @@ public class Waveline {
 		for (int i = 0; i < layers.length; i++) {
 			float[] layer = layers[i].size;
 			for (int j = 0; j < layer.length; j++) {
-				layer[j]++;
+				layer[j]+=1;
 			}
 		}
 	}

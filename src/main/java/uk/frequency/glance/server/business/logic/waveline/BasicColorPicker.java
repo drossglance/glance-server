@@ -8,21 +8,23 @@ import uk.frequency.glance.server.business.logic.waveline.streamgraph.Layer;
 /**
  * @author Victor
  */
-public class RandomColorPicker implements ColorPicker {
+public class BasicColorPicker implements ColorPicker {
+
+	Color[] colors;
+	
+	public BasicColorPicker(Color... colors) {
+		this.colors = colors;
+	}
 
 	@Override
 	public String getName() {
-		return "Random Colors";
+		return "Basic Colors";
 	}
 
 	@Override
 	public void colorize(Layer[] layers) {
 		for (int i = 0; i < layers.length; i++) {
-			float h = lerp(0.0f, 1f, (float) Math.random());
-			float s = lerp(0.6f, 0.7f, (float) Math.random());
-			float b = lerp(0.5f, 0.95f, (float) Math.random());
-
-			layers[i].rgb = Color.HSBtoRGB(h, s, b);
+			layers[i].rgb = colors[i%colors.length].getRGB();
 		}
 	}
 
