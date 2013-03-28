@@ -18,7 +18,9 @@ public class Layer {
   public int      end;
   public float    sum;
   public float    volatility;
-
+  public float    minY;
+  public float    maxY;
+  
   public Layer(String name, float[] size) {
 
     // check for reasonable data

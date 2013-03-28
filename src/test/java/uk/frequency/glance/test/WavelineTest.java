@@ -5,7 +5,6 @@ import java.awt.Graphics;
 import java.awt.Image;
 import java.io.File;
 import java.io.IOException;
-import java.util.List;
 
 import javax.imageio.ImageIO;
 import javax.swing.JFrame;
@@ -13,17 +12,13 @@ import javax.swing.JPanel;
 
 import uk.frequency.glance.server.business.logic.PresentationUtil;
 import uk.frequency.glance.server.business.logic.waveline.BasicColorPicker;
-import uk.frequency.glance.server.business.logic.waveline.EventDataAdapter;
 import uk.frequency.glance.server.business.logic.waveline.Waveline;
+import uk.frequency.glance.server.business.logic.waveline.streamgraph.BelievableDataSource;
 import uk.frequency.glance.server.business.logic.waveline.streamgraph.ColorPicker;
-import uk.frequency.glance.server.business.logic.waveline.streamgraph.Layer;
-import uk.frequency.glance.server.model.event.Event;
 
 public class WavelineTest {
 
 	public static void main(String[] args) {
-//		Waveline w = new Waveline(new LateOnsetDataSource().make(20, 100));
-		
 		Image bg = null;
 		try {
 			File bgFile = new File("./src/test/java/waveline_background.png");
@@ -31,30 +26,34 @@ public class WavelineTest {
 		} catch (IOException e) {
 			e.printStackTrace();
 		}
+
+//		List<Event> events = DBDownloader.fromDTO(DBDownloader.downloadEvents(1));
+//		Layer[] layers = new EventDataWavelineAdapter().buildLayers(events);
+		ColorPicker coloring = new BasicColorPicker(PresentationUtil.WAVELINE_BLUE_SHADES);
+//		Waveline w = new Waveline(layers, coloring);
 		
-		List<Event> events = DBDownloader.fromDTO(DBDownloader.downloadEvents(1));
-		Layer[] layers = new EventDataAdapter().buildLayers(events);
-		ColorPicker coloring = new BasicColorPicker(PresentationUtil.WAVELINE_COLORS);
-		Waveline w = new Waveline(layers, coloring);
-		Image image = w.render(1000,400);
-		
+		Waveline w = new Waveline(new BelievableDataSource().make(9, 20), coloring);
+		Image image = w.render(720, 243);
+
 		Graphics g = bg.getGraphics();
 		g.drawImage(image, 0, 0, null);
-		
-		showOnFrame(image);
+
+		showOnFrame(bg);
 	}
 	
 	@SuppressWarnings("serial")
 	static void showOnFrame(final Image image) {
+		final int padding = 40;
+		
 		JFrame frame = new JFrame();
 		JPanel pane = new JPanel(){
 			@Override
 			public void paint(Graphics g) {
 				super.paint(g);
-				g.drawImage(image, 0, 0, null); 
+				g.drawImage(image, padding, padding, null); 
 			}
 		};
-		pane.setPreferredSize(new Dimension(image.getWidth(null), image.getHeight(null)));
+		pane.setPreferredSize(new Dimension(image.getWidth(null) + 2*padding, image.getHeight(null) + 2*padding));
 		frame.add(pane);
 		frame.pack();
 		frame.setLocationRelativeTo(null);

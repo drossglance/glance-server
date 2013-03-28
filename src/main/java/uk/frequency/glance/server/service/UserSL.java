@@ -140,7 +140,8 @@ public class UserSL extends GenericSL<User, UserDTO>{
 				events.add(eventDto);
 				dto.setEvents(events);
 			}
-			dto.setWavelinePreviewUrl("http://aconcepti.com/images/stream_graph.png"); //TODO replace this dummy image w/ actual calculated waveline
+			
+			dto.setWavelinePreviewUrl("http://aconcepti.com/images/stream_graph.png"); //TODO replaced
 			
 			dto.setFriendshipStatus(ACCEPTED);
 			dtoList.add(dto);

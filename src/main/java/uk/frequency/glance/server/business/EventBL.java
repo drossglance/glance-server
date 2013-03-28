@@ -1,11 +1,22 @@
 package uk.frequency.glance.server.business;
 
+import java.awt.image.RenderedImage;
+import java.io.ByteArrayOutputStream;
+import java.io.IOException;
 import java.util.Date;
 import java.util.List;
+
+import javax.imageio.ImageIO;
 
 import org.hibernate.ObjectNotFoundException;
 
 import uk.frequency.glance.server.business.logic.EventGenerationLogic;
+import uk.frequency.glance.server.business.logic.PresentationUtil;
+import uk.frequency.glance.server.business.logic.waveline.BasicColorPicker;
+import uk.frequency.glance.server.business.logic.waveline.EventDataWavelineAdapter;
+import uk.frequency.glance.server.business.logic.waveline.Waveline;
+import uk.frequency.glance.server.business.logic.waveline.streamgraph.ColorPicker;
+import uk.frequency.glance.server.business.logic.waveline.streamgraph.Layer;
 import uk.frequency.glance.server.data_access.EventDAL;
 import uk.frequency.glance.server.data_access.TraceDAL;
 import uk.frequency.glance.server.data_access.UserDAL;
@@ -40,6 +51,20 @@ public class EventBL extends GenericBL<Event>{
 	
 	public Event findMostRecent(long userId){
 		return eventDal.findMostRecent(userId);
+	}
+	
+	public byte[] generateWaveline(long userId, int width, int height) throws IOException{
+		List<Event> events = findByUser(userId);
+		Layer[] layers = new EventDataWavelineAdapter().buildLayers(events);
+		ColorPicker coloring = new BasicColorPicker(PresentationUtil.WAVELINE_BLUE_SHADES);
+		Waveline waveline = new Waveline(layers, coloring);
+		RenderedImage img = waveline.render(width, height);
+		
+		ByteArrayOutputStream out = new ByteArrayOutputStream();
+		ImageIO.write(img, "png", out);
+		out.flush();
+		
+		return out.toByteArray();
 	}
 	
 	public void onTraceReceived(Trace trace){

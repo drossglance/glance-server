@@ -14,8 +14,7 @@ public class LateOnsetDataSource implements DataSource {
   public Random rnd;
 
   public LateOnsetDataSource() {
-    // seeded, so we can reproduce results
-    this(2);
+    this((int)(Math.random()*Integer.MAX_VALUE));
   }
 
   public LateOnsetDataSource(int seed) {

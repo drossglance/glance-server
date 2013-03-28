@@ -8,7 +8,7 @@ import uk.frequency.glance.server.model.event.EventType;
 import uk.frequency.glance.server.model.event.MoveEvent;
 import uk.frequency.glance.server.model.event.StayEvent;
 
-public class EventDataAdapter {
+public class EventDataWavelineAdapter {
 
 	private static final int SERIES_LENGTH = 20; // length of the time series (x axis). (it's an abstract unity, later translated to time)
 	private int[] index; //used by EventViewActivity to associate X positions in the waveline to events
@@ -27,9 +27,6 @@ public class EventDataAdapter {
 		float[] series1 = new float[SERIES_LENGTH]; // stay
 		float[] series2 = new float[SERIES_LENGTH]; // move
 		float[] series3 = new float[SERIES_LENGTH]; // sleep
-//		Arrays.fill(series1, .1f);
-//		Arrays.fill(series2, .1f);
-//		Arrays.fill(series3, .1f);
 		long begin = events.get(0).getStartTime().getTime();
 		long end = events.get(events.size() - 1).getStartTime().getTime();
 		index = new int[SERIES_LENGTH];

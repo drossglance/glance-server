@@ -30,6 +30,7 @@ public class HibernateSessionRequestFilter implements Filter {
 	 
     private SessionFactory sf;
  
+    @Override
     public void doFilter(ServletRequest request, ServletResponse response, FilterChain chain) throws IOException, ServletException {
  
 //    	/*TRACE*/System.out.println("Request received...");
@@ -68,12 +69,14 @@ public class HibernateSessionRequestFilter implements Filter {
         }
     }
  
+    @Override
     public void init(FilterConfig filterConfig) throws ServletException {
         log.debug("Initializing filter...");
         log.debug("Obtaining SessionFactory from static HibernateUtil singleton");
         sf = HibernateConfig.getSessionFactory();
     }
  
+    @Override
     public void destroy() {}
 
 }

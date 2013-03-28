@@ -1,5 +1,6 @@
 package uk.frequency.glance.server.service;
 
+import java.io.IOException;
 import java.util.ArrayList;
 import java.util.Date;
 import java.util.List;
@@ -8,6 +9,7 @@ import javax.ws.rs.GET;
 import javax.ws.rs.Path;
 import javax.ws.rs.PathParam;
 import javax.ws.rs.Produces;
+import javax.ws.rs.QueryParam;
 import javax.ws.rs.WebApplicationException;
 import javax.ws.rs.core.MediaType;
 import javax.ws.rs.core.Response;
@@ -83,6 +85,21 @@ public class EventSL extends GenericSL<Event, EventDTO>{
 			return dto;
 		}catch(ObjectNotFoundException e){
 			throw new WebApplicationException(Status.NOT_FOUND);
+		}
+	}
+	
+	@GET
+	@Path("/user-{id}/waveline")
+	@Produces("image/png")
+	public Response generateWaveline(
+			@PathParam("id") long userId,
+			@QueryParam("width") int width,
+			@QueryParam("height") int height){
+		try {
+			byte[] out = eventBl.generateWaveline(userId, width, height);
+			return Response.ok(out).build();
+		} catch (IOException e) {
+			throw new WebApplicationException(Status.INTERNAL_SERVER_ERROR);
 		}
 	}
 	

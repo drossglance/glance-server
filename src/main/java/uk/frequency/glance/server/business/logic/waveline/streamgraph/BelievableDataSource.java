@@ -13,8 +13,7 @@ public class BelievableDataSource implements DataSource {
   public Random rnd;
 
   public BelievableDataSource() {
-    // seeded, so we can reproduce results
-    this(2);
+	  this((int)(Math.random()*Integer.MAX_VALUE));
   }
 
   public BelievableDataSource(int seed) {
