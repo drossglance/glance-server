@@ -67,6 +67,10 @@ public class EventViewDTO {
 			dto.subtitle2 = String.format("%s - %s", startStr, endStr);
 		}
 		
+		if(event.getMedia() != null && event.getMedia().size() > 0){
+			dto.imageUrl = event.getMedia().get(0).getUrl();
+		}
+		
 		return dto;
 	}
 	
