@@ -35,7 +35,7 @@ public class EventViewDTO {
 			dto.title = toUpperCase(tell.getLocation().getName());
 		}else if(event instanceof StayEvent){
 			StayEvent stay = (StayEvent)event;
-			dto.preTitle = isHappening? "ARRIVED AT" : "WAS AT";
+			dto.preTitle = isHappening? "ARRIVED AT" : null;
 			dto.title = toUpperCase(stay.getLocation().getName());
 		}else if(event instanceof MoveEvent){
 			MoveEvent move = (MoveEvent)event;
