@@ -8,24 +8,29 @@ import uk.frequency.glance.server.model.user.FriendshipStatus;
 import uk.frequency.glance.server.model.user.UserProfile;
 import uk.frequency.glance.server.transfer.GenericDTO;
 import uk.frequency.glance.server.transfer.event.EventDTO;
+import uk.frequency.glance.server.transfer.event.EventViewDTO;
 
 @XmlRootElement
 @SuppressWarnings("serial")
 public class UserDTO extends GenericDTO{
 
-	String username;
+	public String username;
 	
-	String facebookId;
+	public String facebookId;
 	
-	UserProfile profile;
+	public UserProfile profile;
 	
-	List<Long> eventsIds;
+	public List<Long> eventsIds;
 	
-	List<EventDTO> events;
+	public List<EventDTO> events;
 	
-	FriendshipStatus friendshipStatus;
+	public List<EventViewDTO> eventViews;
 	
-	String wavelinePreviewUrl;
+	public FriendshipStatus friendshipStatus;
+	
+	public int[] wavelineIndex;
+	
+	public String wavelineImageUrl;
 
 	public String getUsername() {
 		return username;
@@ -75,12 +80,20 @@ public class UserDTO extends GenericDTO{
 		this.friendshipStatus = friendshipStatus;
 	}
 
-	public String getWavelinePreviewUrl() {
-		return wavelinePreviewUrl;
+	public int[] getWavelineIndex() {
+		return wavelineIndex;
 	}
 
-	public void setWavelinePreviewUrl(String wavelinePreviewUrl) {
-		this.wavelinePreviewUrl = wavelinePreviewUrl;
+	public void setWavelineIndex(int[] wavelineIndex) {
+		this.wavelineIndex = wavelineIndex;
+	}
+
+	public List<EventViewDTO> getEventViews() {
+		return eventViews;
+	}
+
+	public void setEventViews(List<EventViewDTO> eventViews) {
+		this.eventViews = eventViews;
 	}
 	
 }

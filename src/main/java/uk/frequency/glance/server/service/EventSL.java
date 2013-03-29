@@ -19,6 +19,7 @@ import org.hibernate.ObjectNotFoundException;
 
 import uk.frequency.glance.server.business.EventBL;
 import uk.frequency.glance.server.business.logic.EventScoreLogic;
+import uk.frequency.glance.server.business.logic.waveline.EventDataWavelineAdapter;
 import uk.frequency.glance.server.data_access.util.HibernateConfig;
 import uk.frequency.glance.server.model.Comment;
 import uk.frequency.glance.server.model.event.Event;
@@ -28,10 +29,12 @@ import uk.frequency.glance.server.model.event.StayEvent;
 import uk.frequency.glance.server.model.event.TellEvent;
 import uk.frequency.glance.server.model.user.User;
 import uk.frequency.glance.server.transfer.event.EventDTO;
+import uk.frequency.glance.server.transfer.event.EventViewDTO;
 import uk.frequency.glance.server.transfer.event.ListenEventDTO;
 import uk.frequency.glance.server.transfer.event.MoveEventDTO;
 import uk.frequency.glance.server.transfer.event.StayEventDTO;
 import uk.frequency.glance.server.transfer.event.TellEventDTO;
+import uk.frequency.glance.server.transfer.user.UserDTO;
 
 
 @Path("/event")
@@ -101,6 +104,37 @@ public class EventSL extends GenericSL<Event, EventDTO>{
 		} catch (IOException e) {
 			throw new WebApplicationException(Status.INTERNAL_SERVER_ERROR);
 		}
+	}
+	
+	@GET
+	@Path("/user-{id}/eventFeedPage")
+	@Produces(MediaType.APPLICATION_JSON)
+	public Response eventFeedPage(
+		@PathParam("id") long userId,
+		@QueryParam("wl_width") long width,
+		@QueryParam("wl_height") long height){
+		List<Event> events = eventBl.findByUser(userId);
+		EventDataWavelineAdapter adapter = new EventDataWavelineAdapter();
+		adapter.buildLayers(events);
+		int[] index = adapter.getIndex();
+		String waveUrl = uriInfo.getBaseUriBuilder()
+				.path("event/user-{id}/waveline")
+				.queryParam("width", width)
+				.queryParam("height", height)
+				.build(userId, width, height).toString();
+		
+		List<EventViewDTO> eventDtos = new ArrayList<EventViewDTO>();
+		for(Event event : events){
+			eventDtos.add(EventViewDTO.from(event));
+		}
+		
+		UserDTO dto = new UserDTO();
+		dto.setId(userId);
+		dto.setWavelineIndex(index);
+		dto.wavelineImageUrl = waveUrl;
+		dto.setEventViews(eventDtos);
+		
+		return Response.ok(dto).build();
 	}
 	
 	@Override

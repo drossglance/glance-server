@@ -32,7 +32,7 @@ public class WavelineTest {
 		ColorPicker coloring = new BasicColorPicker(PresentationUtil.WAVELINE_BLUE_SHADES);
 //		Waveline w = new Waveline(layers, coloring);
 		
-		Waveline w = new Waveline(new BelievableDataSource().make(9, 20), coloring);
+		Waveline w = new Waveline(new BelievableDataSource().make(3, 20), coloring);
 		Image image = w.render(720, 243);
 
 		Graphics g = bg.getGraphics();

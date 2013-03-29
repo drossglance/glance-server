@@ -32,5 +32,22 @@ public class TimeUtil {
 		int sec = cal.get(Calendar.SECOND);
 		return (double)sec/(60*60);
 	}
+
+	public static boolean isBeforeToday(Date time){
+		Calendar then = Calendar.getInstance();
+		then.setTime(time);
+		Calendar today = Calendar.getInstance();
+		today.setTime(beginOfToday());
+		return then.before(today);
+	}
+	
+	public static Date beginOfToday(){
+		Calendar begin = Calendar.getInstance();
+		begin.set(Calendar.HOUR_OF_DAY, 0);
+		begin.set(Calendar.MINUTE, 0);
+		begin.set(Calendar.SECOND, 0);
+		begin.set(Calendar.MILLISECOND, 0);
+		return begin.getTime();
+	}
 	
 }
