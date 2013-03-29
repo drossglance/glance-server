@@ -2,6 +2,7 @@ package uk.frequency.glance.server.service;
 
 import java.io.IOException;
 import java.util.ArrayList;
+import java.util.Collections;
 import java.util.Date;
 import java.util.List;
 
@@ -113,7 +114,10 @@ public class EventSL extends GenericSL<Event, EventDTO>{
 		@PathParam("id") long userId,
 		@QueryParam("wl_width") long width,
 		@QueryParam("wl_height") long height){
-		List<Event> events = eventBl.findByUser(userId);
+		
+		List<Event> events = eventBl.findRecent(userId, 50);
+		Collections.reverse(events); //TODO use them in desc order
+		
 		EventDataWavelineAdapter adapter = new EventDataWavelineAdapter();
 		adapter.buildLayers(events);
 		int[] index = adapter.getIndex();

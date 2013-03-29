@@ -11,12 +11,20 @@ import uk.frequency.glance.server.model.event.Event;
 @SuppressWarnings("unchecked")
 public class EventDAL extends GenericDAL<Event>{
 
-	//TODO order by time
-	public List<Event> findByUser(long authorId){
+	public List<Event> findByUser(long userId){
 		Query q = getSession().createQuery("from Event where " +
 				"user.id = :userId " +
 				"order by startTime")
-			.setParameter("userId", authorId);
+			.setParameter("userId", userId);
+		return q.list();
+	}
+	
+	public List<Event> findRecent(long userId, int limit){
+		Query q = getSession().createQuery("from Event where " +
+				"user.id = :userId " +
+				"order by startTime desc")
+			.setParameter("userId", userId)
+			.setMaxResults(limit);
 		return q.list();
 	}
 	

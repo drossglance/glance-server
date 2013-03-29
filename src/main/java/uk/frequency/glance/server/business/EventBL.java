@@ -37,8 +37,11 @@ public class EventBL extends GenericBL<Event>{
 	}
 	
 	public List<Event> findByUser(long userId) throws ObjectNotFoundException {
-		List<Event> list = eventDal.findByUser(userId);
-		return list;
+		return eventDal.findByUser(userId);
+	}
+	
+	public List<Event> findRecent(long userId, int limit){
+		return eventDal.findRecent(userId, limit);
 	}
 
 	public List<Event> findByTimeRange(long userId, Date start, Date end){
