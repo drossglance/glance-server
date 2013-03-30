@@ -35,12 +35,12 @@ public class CommentSL extends GenericSL<Comment, CommentDTO>{
 	@Override
 	protected CommentDTO toDTO(Comment comment) {
 		CommentDTO dto = new CommentDTO();
-		initToDTO(comment, dto);
-		dto.setUserId(comment.getUser().getId());
-		dto.setSubjectId(comment.getSubject().getId());
-		dto.setLocation(comment.getLocation());
-		dto.setMedia(comment.getMedia());
-		dto.setText(comment.getText());
+		dto.initFromEntity(comment);
+		dto.userId = comment.getUser().getId();
+		dto.subjectId = comment.getSubject().getId();
+		dto.location = comment.getLocation();
+		dto.media = comment.getMedia();
+		dto.text = comment.getText();
 		return dto;
 	}
 	
@@ -48,16 +48,16 @@ public class CommentSL extends GenericSL<Comment, CommentDTO>{
 	protected Comment fromDTO(CommentDTO dto) {
 
 		User user = new User();
-		user.setId(dto.getUserId());
+		user.setId(dto.userId);
 		Event event = new Event();
-		event.setId(dto.getSubjectId());
+		event.setId(dto.subjectId);
 		Comment comment = new Comment();
-		initFromDTO(dto, comment);
+		dto.initEntity(comment);
 		comment.setUser(user);
 		comment.setSubject(event);
-		comment.setLocation(dto.getLocation());
-		comment.setMedia(dto.getMedia());
-		comment.setText(dto.getText());
+		comment.setLocation(dto.location);
+		comment.setMedia(dto.media);
+		comment.setText(dto.text);
 		return comment;
 	}
 	

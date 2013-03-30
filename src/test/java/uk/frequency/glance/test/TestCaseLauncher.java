@@ -47,14 +47,14 @@ public class TestCaseLauncher {
 		UserDTO user = createTestUser("testuser");
 		user = (UserDTO) client.postAndPrint(user, "user");
 		
-		List<PositionTraceDTO> traces = loadTraces(fileName, user.getId());
+		List<PositionTraceDTO> traces = loadTraces(fileName, user.id);
 		Collections.sort(traces, new TraceTimeComp());
 		for(PositionTraceDTO trace : traces){
 			Date requestTime = new Date();
 			client.postAndPrint(trace, "trace");
 			Thread.sleep(TIME_BETWEEN_REQUESTS);
 			
-			String path = String.format("event/user-%d/created_after-%d", user.getId(), requestTime.getTime());
+			String path = String.format("event/user-%d/created_after-%d", user.id, requestTime.getTime());
 			List<EventDTO> events = (List<EventDTO>) client.getListAndPrint(path, new TypeToken<List<EventDTO>>(){});
 			verifyEvents(events);
 		}
@@ -71,8 +71,8 @@ public class TestCaseLauncher {
 		UserProfile profile = new UserProfile();
 		profile.setFullName("Test");
 		UserDTO user = new UserDTO();
-		user.setUsername(username);
-		user.setProfile(profile);
+		user.username = username;
+		user.profile = profile;
 		return user;
 	}
 	
@@ -102,18 +102,18 @@ public class TestCaseLauncher {
 		pos.setLat(lat);
 		pos.setLng(lng);
 		PositionTraceDTO trace = new PositionTraceDTO();
-		trace.setPosition(pos);
-		trace.setTime(time);
-		trace.setUserId(user);
+		trace.position = pos;
+		trace.time = time;
+		trace.userId = user;
 		return trace;
 	}
 	
 	static class TraceTimeComp implements Comparator<TraceDTO>{
 		@Override
 		public int compare(TraceDTO o1, TraceDTO o2) {
-			if(o1.getTime() < o2.getTime())
+			if(o1.time < o2.time)
 				return -1;
-			else if(o1.getTime() > o2.getTime())
+			else if(o1.time > o2.time)
 				return 1;
 			else
 				return 0;

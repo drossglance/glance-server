@@ -8,14 +8,6 @@ import uk.frequency.glance.server.model.Location;
 @SuppressWarnings("serial")
 public class StayEventDTO extends EventDTO{
 
-	Location location;
+	public Location location;
 
-	public Location getLocation() {
-		return location;
-	}
-
-	public void setLocation(Location location) {
-		this.location = location;
-	}
-	
 }

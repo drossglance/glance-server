@@ -41,7 +41,7 @@ public class EventUploader {
 		UserDTO user = TestCaseLauncher.createTestUser("testuser1");
 		user = (UserDTO) client.postAndPrint(user, "user");
 		
-		List<EventDTO> events = loadEvents(fileName, user.getId());
+		List<EventDTO> events = loadEvents(fileName, user.id);
 		for(EventDTO event : events){
 			client.post(event, "event");
 		}
@@ -57,7 +57,7 @@ public class EventUploader {
 		String line = reader.readLine();
 		while(line != null){
 			EventDTO event = parseEvent(line, user);
-			event.setUserId(user);
+			event.userId = user;
 			events.add(event);
 			line = reader.readLine();
 		}
@@ -80,40 +80,40 @@ public class EventUploader {
 		EventDTO event;
 		if("STAY".equals(type)){
 			StayEventDTO stay = new StayEventDTO();
-			stay.setLocation(finderStart.getLocation());
-			stay.setEndTime(endTime.getTime());
+			stay.location = finderStart.getLocation();
+			stay.endTime = endTime.getTime();
 			event = stay;
 		}else if("MOVE".equals(type)){
 			MoveEventDTO move = new MoveEventDTO();
-			move.setStartLocation(finderStart.getLocation());
-			move.setEndLocation(finderEnd.getLocation());
-			move.setEndTime(endTime.getTime());
+			move.startLocation = finderStart.getLocation();
+			move.endLocation = finderEnd.getLocation();
+			move.endTime = endTime.getTime();
 			List<Position> trail = new ArrayList<Position>();
-			move.setTrail(trail);
+			move.trail = trail;
 			event = move;
 		}else if("SLEEP".equals(type)){
 			StayEventDTO sleep = new StayEventDTO();
-			sleep.setType(EventType.SLEEP);
-			sleep.setEndTime(endTime.getTime());
-			sleep.setLocation(finderStart.getLocation());
+			sleep.type = EventType.SLEEP;
+			sleep.endTime = endTime.getTime();
+			sleep.location = finderStart.getLocation();
 			event = sleep;
 		}else if("WAKE".equals(type)){
 			StayEventDTO wake = new StayEventDTO();
-			wake.setType(EventType.WAKE);
-			wake.setLocation(finderStart.getLocation());
+			wake.type = EventType.WAKE;
+			wake.location = finderStart.getLocation();
 			event = wake;
 		}else{
 			throw new AssertionError();
 		}
 		
-		event.setStartTime(startTime.getTime());
+		event.startTime = startTime.getTime();
 		
 		List<Media> media = new ArrayList<Media>();
 		Media img = new Media();
 		img.setType(MediaType.IMAGE);
 		img.setUrl(finderStart.getImageUrl());
 		media.add(img);
-		event.setMedia(media);
+		event.media = media;
 		
 		return event;
 	}

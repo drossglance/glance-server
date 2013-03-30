@@ -8,24 +8,8 @@ import uk.frequency.glance.server.model.component.Position;
 @SuppressWarnings("serial")
 public class PositionTraceDTO extends TraceDTO {
 
-	Position position;
+	public Position position;
 	
-	double speed;
+	public double speed;
 
-	public Position getPosition() {
-		return position;
-	}
-
-	public void setPosition(Position position) {
-		this.position = position;
-	}
-
-	public double getSpeed() {
-		return speed;
-	}
-
-	public void setSpeed(double speed) {
-		this.speed = speed;
-	}
-	
 }

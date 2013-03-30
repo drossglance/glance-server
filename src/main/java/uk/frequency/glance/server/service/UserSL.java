@@ -55,7 +55,7 @@ public class UserSL extends GenericSL<User, UserDTO>{
 	@POST
 	@Consumes("application/json")
 	public Response create(UserDTO dto) {
-		if(dto.getUsername() == null && dto.getFacebookId() == null){
+		if(dto.username == null && dto.facebookId == null){
 			throw new MissingFieldException("username or facebookId");
 		}
 		return super.create(dto);
@@ -84,7 +84,7 @@ public class UserSL extends GenericSL<User, UserDTO>{
 		for (User friend : requestsReceived) {
 
 			UserDTO dto = new UserDTO();
-			dto.setId(friend.getId());
+			dto.id = friend.getId();
 			if (!friend.getProfileHistory().isEmpty()) {
 				UserProfile recentProfile = friend.getProfileHistory().get(0);
 				UserProfile profile = new UserProfile();
@@ -92,10 +92,10 @@ public class UserSL extends GenericSL<User, UserDTO>{
 				profile.setMiddleName(recentProfile.getMiddleName());
 				profile.setFullName(recentProfile.getFullName());
 				profile.setImageUrl(recentProfile.getImageUrl());
-				dto.setProfile(profile);
+				dto.profile = profile;
 			}
 
-			dto.setFriendshipStatus(REQUEST_RECEIVED);
+			dto.friendshipStatus = REQUEST_RECEIVED;
 			dtoList.add(dto);
 		}
 		
@@ -103,7 +103,7 @@ public class UserSL extends GenericSL<User, UserDTO>{
 		for(User friend : friends){
 			
 			UserDTO dto = new UserDTO();
-			dto.setId(friend.getId());
+			dto.id = friend.getId();
 			if(!friend.getProfileHistory().isEmpty()){
 				UserProfile recentProfile = friend.getProfileHistory().get(0); 
 				UserProfile profile = new UserProfile();
@@ -111,7 +111,7 @@ public class UserSL extends GenericSL<User, UserDTO>{
 				profile.setMiddleName(recentProfile.getMiddleName());
 				profile.setFullName(recentProfile.getFullName());
 				profile.setImageUrl(recentProfile.getImageUrl());
-				dto.setProfile(profile);
+				dto.profile = profile;
 			}
 			
 			Event recentEvent = eventBl.findMostRecent(friend.getId());
@@ -120,28 +120,28 @@ public class UserSL extends GenericSL<User, UserDTO>{
 				if(recentEvent instanceof StayEvent){
 					StayEvent stay = (StayEvent) recentEvent;
 					StayEventDTO stayDto = new StayEventDTO();
-					stayDto.setStartTime(stay.getStartTime().getTime());
+					stayDto.startTime = stay.getStartTime().getTime();
 					Location location = new Location();
 					location.setName(stay.getLocation().getName());
-					stayDto.setLocation(location);
+					stayDto.location = location;
 					eventDto = stayDto;
 				}else if(recentEvent instanceof MoveEvent){
 					MoveEvent move = (MoveEvent) recentEvent;
 					MoveEventDTO moveDto = new MoveEventDTO();
-					moveDto.setStartTime(move.getStartTime().getTime());
+					moveDto.startTime = move.getStartTime().getTime();
 					Location location = new Location();
 					location.setName(move.getStartLocation().getName());
-					moveDto.setStartLocation(location);
+					moveDto.startLocation = location;
 					eventDto = moveDto;
 				}else{
 					throw new AssertionError();
 				}
 				List<EventDTO> events = new ArrayList<EventDTO>();
 				events.add(eventDto);
-				dto.setEvents(events);
+				dto.events = events;
 			}
 			
-			dto.setFriendshipStatus(ACCEPTED);
+			dto.friendshipStatus = ACCEPTED;
 			dtoList.add(dto);
 		}
 		
@@ -163,17 +163,17 @@ public class UserSL extends GenericSL<User, UserDTO>{
 			if(id == userId) continue;
 			
 			UserDTO dto = new UserDTO();
-			dto.setId(id);
+			dto.id = id;
 			
 			if(friendsips.size() > cur){
 				Friendship friendship = friendsips.get(cur);
 				if (id == friendship.getFriend().getId()) { //assumes friendships is ordered by friends' ids
 					cur++;
-					dto.setFriendshipStatus(friendship.getStatus());
+					dto.friendshipStatus = friendship.getStatus();
 				}
 			}
 			
-			FriendshipStatus status = dto.getFriendshipStatus();
+			FriendshipStatus status = dto.friendshipStatus;
 			if(status == null || status == ACCEPTED || status == REQUEST_SENT || status == DECLINED) {
 				
 				if(!user.getProfileHistory().isEmpty()){
@@ -183,7 +183,7 @@ public class UserSL extends GenericSL<User, UserDTO>{
 					profile.setMiddleName(recentProfile.getMiddleName());
 					profile.setFullName(recentProfile.getFullName());
 					profile.setImageUrl(recentProfile.getImageUrl());
-					dto.setProfile(profile);
+					dto.profile = profile;
 				}
 			
 				dtoList.add(dto);
@@ -199,7 +199,7 @@ public class UserSL extends GenericSL<User, UserDTO>{
 	public List<FriendshipDTO> findFriendships(
 			@PathParam("id") long userId){
 		List<Friendship> entities = userBl.findFriendships(userId);
-		List<FriendshipDTO> dto = listToDTO(entities);
+		List<FriendshipDTO> dto = FriendshipDTO.from(entities);
 		business.flush();
 		return dto;
 	}
@@ -217,7 +217,7 @@ public class UserSL extends GenericSL<User, UserDTO>{
 			if(id == userId) continue;
 			
 			UserDTO dto = new UserDTO();
-			dto.setId(user.getId());
+			dto.id = user.getId();
 			
 			if(!user.getProfileHistory().isEmpty()){
 				UserProfile recentProfile = user.getProfileHistory().get(0); 
@@ -226,7 +226,7 @@ public class UserSL extends GenericSL<User, UserDTO>{
 				profile.setMiddleName(recentProfile.getMiddleName());
 				profile.setFullName(recentProfile.getFullName());
 				profile.setImageUrl(recentProfile.getImageUrl());
-				dto.setProfile(profile);
+				dto.profile = profile;
 			}
 
 			dtoList.add(dto);
@@ -243,7 +243,7 @@ public class UserSL extends GenericSL<User, UserDTO>{
 			@PathParam("id") long userId,
 			@PathParam("friend") long friendId){
 		Friendship entity = userBl.createFriendshipRequest(userId, friendId);
-		FriendshipDTO dto = toDTO(entity);
+		FriendshipDTO dto = FriendshipDTO.from(entity);
 		business.flush();
 		return dto;
 	}
@@ -255,7 +255,7 @@ public class UserSL extends GenericSL<User, UserDTO>{
 			@PathParam("id") long userId,
 			@PathParam("friend") long friendId){
 		Friendship entity = userBl.acceptFriendshipRequest(userId, friendId);
-		FriendshipDTO dto = toDTO(entity);
+		FriendshipDTO dto = FriendshipDTO.from(entity);
 		business.flush();
 		return dto;
 	}
@@ -267,7 +267,7 @@ public class UserSL extends GenericSL<User, UserDTO>{
 			@PathParam("id") long userId,
 			@PathParam("friend") long friendId){
 		Friendship entity = userBl.declineFriendshipRequest(userId, friendId);
-		FriendshipDTO dto = toDTO(entity);
+		FriendshipDTO dto = FriendshipDTO.from(entity);
 		business.flush();
 		return dto;
 	}
@@ -285,22 +285,14 @@ public class UserSL extends GenericSL<User, UserDTO>{
 	@Override
 	protected UserDTO toDTO(User user){
 		UserDTO dto = new UserDTO();
-		initToDTO(user, dto);
+		dto.initFromEntity(user);
 		
-		dto.setUsername(user.getUsername());
-		dto.setFacebookId(user.getFacebookId());
+		dto.username = user.getUsername();
+		dto.facebookId = user.getFacebookId();
 		
 		if(user.getProfileHistory() != null && !user.getProfileHistory().isEmpty()){
-			dto.setProfile(user.getProfileHistory().get(0)); //TODO get most recent profile
+			dto.profile = user.getProfileHistory().get(0); //TODO get most recent profile
 		}
-		
-//		if(user.getEvents() != null){
-//			List<Long> eventIds = new ArrayList<Long>();
-//			for(Event event : user.getEvents()){
-//				eventIds.add(event.getId());
-//			}
-//			dto.setEventsIds(eventIds);
-//		}
 		
 		return dto;
 	}
@@ -308,37 +300,18 @@ public class UserSL extends GenericSL<User, UserDTO>{
 	@Override
 	protected User fromDTO(UserDTO dto) {
 		User user = new User();
-		initFromDTO(dto, user);
+		dto.initEntity(user);
 
-		user.setUsername(dto.getUsername());
-		user.setFacebookId(dto.getFacebookId());
+		user.setUsername(dto.username);
+		user.setFacebookId(dto.facebookId);
 		
-		if (dto.getProfile() != null) {
+		if (dto.profile != null) {
 			List<UserProfile> profiles = new ArrayList<UserProfile>();
-			profiles.add(dto.getProfile());
+			profiles.add(dto.profile);
 			user.setProfileHistory(profiles);
 		}
 
 		return user;
-	}
-	
-	protected FriendshipDTO toDTO(Friendship friendship){
-		FriendshipDTO dto = new FriendshipDTO();
-		initToDTO(friendship, dto);
-		
-		dto.setUserId(friendship.getUser().getId());
-		dto.setFriendId(friendship.getFriend().getId());
-		dto.setStatus(friendship.getStatus());
-		
-		return dto;
-	}
-	
-	protected List<FriendshipDTO> listToDTO(List<Friendship> list){
-		List<FriendshipDTO> dto = new ArrayList<FriendshipDTO>();
-		for(Friendship entity : list){
-			dto.add(toDTO(entity));
-		}
-		return dto;
 	}
 	
 }

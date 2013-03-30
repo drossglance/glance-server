@@ -37,22 +37,22 @@ public class TestDTOFormatter {
 	
 	public static String format(EventDTO event){
 		String str = "EVENT"
-				+ "\t" + event.getId()
-				+ "\t" + event.getType()
-				+ "\t" + format(event.getStartTime())
-				+ "\t" + format(event.getEndTime());
+				+ "\t" + event.id
+				+ "\t" + event.type
+				+ "\t" + format(event.startTime)
+				+ "\t" + format(event.endTime);
 		
 		if(event instanceof StayEventDTO){
 			StayEventDTO stay = (StayEventDTO) event;
-			str += "\t" + stay.getLocation().getName()
-					+ "\t" + stay.getLocation().getAddress();
+			str += "\t" + stay.location.getName()
+					+ "\t" + stay.location.getAddress();
 		}else if(event instanceof MoveEventDTO){
 				MoveEventDTO move = (MoveEventDTO) event;
-				str += "\t" + move.getStartLocation().getName()
-						+ "\t" + move.getStartLocation().getAddress();
-				if(move.getEndLocation() != null){
-					str +=  "\t" + move.getEndLocation().getName()
-							+ "\t" + move.getEndLocation().getAddress();
+				str += "\t" + move.startLocation.getName()
+						+ "\t" + move.startLocation.getAddress();
+				if(move.endLocation != null){
+					str +=  "\t" + move.endLocation.getName()
+							+ "\t" + move.endLocation.getAddress();
 				}
 		} else {
 			throw new AssertionError();
@@ -63,13 +63,13 @@ public class TestDTOFormatter {
 	
 	public static String format(TraceDTO trace){
 		String str = "TRACE"
-				+ "\t" + trace.getId()
-				+ "\t" + trace.getUserId()
-				+ "\t" + format(trace.getTime());
+				+ "\t" + trace.id
+				+ "\t" + trace.userId
+				+ "\t" + format(trace.time);
 		
 		if(trace instanceof PositionTraceDTO){
 			PositionTraceDTO stay = (PositionTraceDTO) trace;
-			str += "\t" + stay.getPosition();
+			str += "\t" + stay.position;
 		} else {
 			throw new AssertionError();
 		}
@@ -79,8 +79,8 @@ public class TestDTOFormatter {
 	
 	public static String format(UserDTO trace){
 		String str = "USER"
-				+ "\t" + trace.getId()
-				+ "\t" + trace.getUsername();
+				+ "\t" + trace.id
+				+ "\t" + trace.username;
 		return str;
 	}
 	

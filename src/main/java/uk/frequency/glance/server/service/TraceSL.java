@@ -47,21 +47,21 @@ public class TraceSL extends GenericSL<Trace, TraceDTO>{
 		if(trace instanceof PositionTrace){
 			PositionTrace pos = (PositionTrace)trace;
 			PositionTraceDTO posDto = new PositionTraceDTO();
-			posDto.setPosition(pos.getPosition());
-			posDto.setSpeed(pos.getSpeed());
+			posDto.position = pos.getPosition();
+			posDto.speed = pos.getSpeed();
 			dto = posDto;
 		}else if(trace instanceof ListenTrace){
 			ListenTrace listen = (ListenTrace)trace;
 			ListenTraceDTO listenDto = new ListenTraceDTO();
-			listenDto.setSongMetadata(listen.getSongMetadata());
+			listenDto.songMetadata = listen.getSongMetadata();
 			dto = listenDto;
 		}else{
 			throw new AssertionError();
 		}
 		
-		initToDTO(trace, dto);
-		dto.setUserId(trace.getUser().getId());
-		dto.setTime(trace.getTime().getTime());
+		dto.initFromEntity(trace);
+		dto.userId = trace.getUser().getId();
+		dto.time = trace.getTime().getTime();
 		return dto;
 	}
 	
@@ -69,27 +69,27 @@ public class TraceSL extends GenericSL<Trace, TraceDTO>{
 	protected Trace fromDTO(TraceDTO dto) {
 
 		User user = new User();
-		user.setId(dto.getUserId());
+		user.setId(dto.userId);
 		
 		Trace trace = null;
 		if(dto instanceof PositionTraceDTO){
 			PositionTraceDTO posDto = (PositionTraceDTO)dto;
 			PositionTrace pos = new PositionTrace();
-			pos.setPosition(posDto.getPosition());
-			pos.setSpeed(posDto.getSpeed());
+			pos.setPosition(posDto.position);
+			pos.setSpeed(posDto.speed);
 			trace = pos;
 		}else if(dto instanceof ListenTraceDTO){
 			ListenTraceDTO listenDto = (ListenTraceDTO)dto;
 			ListenTrace listen = new ListenTrace();
-			listen.setSongMetadata(listenDto.getSongMetadata());
+			listen.setSongMetadata(listenDto.songMetadata);
 			trace = listen;
 		}else{
 			throw new AssertionError();
 		}
 
-		initFromDTO(dto, trace);
+		dto.initEntity(trace);
 		trace.setUser(user);
-		trace.setTime(new Date(dto.getTime()));
+		trace.setTime(new Date(dto.time));
 		
 		return trace;
 	}

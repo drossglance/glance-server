@@ -24,8 +24,8 @@ public class DBDownloader {
 		List<TraceDTO> traces = downloadTraces(userId);
 		for(TraceDTO trace : traces){
 			PositionTraceDTO pos = (PositionTraceDTO)trace;
-			String time = TestDTOFormatter.format(pos.getTime());
-			String line = String.format("%s\t%s", time, pos.getPosition().toString());
+			String time = TestDTOFormatter.format(pos.time);
+			String line = String.format("%s\t%s", time, pos.position.toString());
 			System.out.println(line);
 		}
 		System.out.println("size: " + traces.size());

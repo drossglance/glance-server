@@ -118,28 +118,48 @@ public class EventSL extends GenericSL<Event, EventDTO>{
 		List<Event> events = eventBl.findRecent(userId, 50);
 		Collections.reverse(events); //TODO use them in desc order
 		
-		EventDataWavelineAdapter adapter = new EventDataWavelineAdapter();
-		adapter.buildLayers(events);
-		int[] index = adapter.getIndex();
-		String waveUrl = uriInfo.getBaseUriBuilder()
-				.path("event/user-{id}/waveline")
-				.queryParam("width", width)
-				.queryParam("height", height)
-				.build(userId, width, height).toString();
-		
-		List<EventViewDTO> eventDtos = new ArrayList<EventViewDTO>();
-		for(Event event : events){
-			eventDtos.add(EventViewDTO.from(event));
-		}
-		
-		UserDTO dto = new UserDTO();
-		dto.setId(userId);
-		dto.setWavelineIndex(index);
-		dto.wavelineImageUrl = waveUrl;
-		dto.setEventViews(eventDtos);
-		
-		return Response.ok(dto).build();
+		return eventFeedPage(userId, events, width, height);
 	}
+	
+	@GET
+	@Path("/user-{id}/eventFeedPage-{start}to{end}")
+	@Produces(MediaType.APPLICATION_JSON)
+	public Response eventFeedPage(
+		@PathParam("id") long userId,
+		@PathParam("start") long start,
+		@PathParam("end") long end,
+		@QueryParam("wl_width") long width,
+		@QueryParam("wl_height") long height){
+		
+		List<Event> events = eventBl.findByTimeRange(userId, new Date(start), new Date(end));
+		
+		return eventFeedPage(userId, events, width, height);
+	}
+	
+	private Response eventFeedPage(long userId, List<Event> events, long width, long height){
+			
+			EventDataWavelineAdapter adapter = new EventDataWavelineAdapter();
+			adapter.buildLayers(events);
+			int[] index = adapter.getIndex();
+			String waveUrl = uriInfo.getBaseUriBuilder()
+					.path("event/user-{id}/waveline")
+					.queryParam("width", width)
+					.queryParam("height", height)
+					.build(userId, width, height).toString();
+			
+			List<EventViewDTO> eventDtos = new ArrayList<EventViewDTO>();
+			for(Event event : events){
+				eventDtos.add(EventViewDTO.from(event));
+			}
+			
+			UserDTO dto = new UserDTO();
+			dto.id = userId;
+			dto.wavelineIndex = index;
+			dto.wavelineImageUrl = waveUrl;
+			dto.eventViews = eventDtos;
+			
+			return Response.ok(dto).build();
+		}
 	
 	@Override
 	protected EventDTO toDTO(Event event){
@@ -157,52 +177,52 @@ public class EventSL extends GenericSL<Event, EventDTO>{
 		if(event instanceof StayEvent){
 			StayEvent stay = (StayEvent)event;
 			StayEventDTO stayDto = new StayEventDTO();
-			stayDto.setLocation(stay.getLocation());
+			stayDto.location = stay.getLocation();
 			dto = stayDto;
 		}else if(event instanceof MoveEvent){
 			MoveEvent move = (MoveEvent)event;
 			MoveEventDTO moveDto = new MoveEventDTO();
-			moveDto.setStartLocation(move.getStartLocation());
-			moveDto.setEndLocation(move.getEndLocation());
-			moveDto.setTrail(HibernateConfig.initializeAndUnproxy(move.getTrail()));
+			moveDto.startLocation = move.getStartLocation();
+			moveDto.endLocation = move.getEndLocation();
+			moveDto.trail = HibernateConfig.initializeAndUnproxy(move.getTrail());
 			dto = moveDto;
 		}else if(event instanceof TellEvent){
 			TellEvent tell = (TellEvent)event;
 			TellEventDTO tellDto = new TellEventDTO();
-			tellDto.setLocation(tell.getLocation());
-			tellDto.setText(tell.getText());
+			tellDto.location = tell.getLocation();
+			tellDto.text = tell.getText();
 			dto = tellDto;
 		}else if(event instanceof ListenEvent){
 			ListenEvent listen = (ListenEvent)event;
 			ListenEventDTO listenDto = new ListenEventDTO();
-			listenDto.setSongMetadata(listen.getSongMetadata());
+			listenDto.songMetadata = listen.getSongMetadata();
 			dto = listenDto;
 		}else{
 			throw new AssertionError();
 		}
 		
-		initToDTO(event, dto);
-		dto.setUserId(event.getUser().getId());
-		dto.setType(event.getType());
-		dto.setStartTime(event.getStartTime().getTime());
+		dto.initFromEntity(event);
+		dto.userId = event.getUser().getId();
+		dto.type = event.getType();
+		dto.startTime = event.getStartTime().getTime();
 		if(event.getEndTime() != null){
-			dto.setEndTime(event.getEndTime().getTime());
+			dto.endTime = event.getEndTime().getTime();
 		}
 		
 		if(event.getScore() == null){
 			event.setScore(EventScoreLogic.assignScore(event));
 		}else{
-			dto.setScore(event.getScore());
+			dto.score = event.getScore();
 		}
 		
-		dto.setMedia(event.getMedia());
+		dto.media = event.getMedia();
 		
 		if(event.getParticipants() != null){
 			List<Long> participantIds = new ArrayList<Long>();
 			for(User participant : event.getParticipants()){
 				participantIds.add(participant.getId());
 			}
-			dto.setParticipantIds(participantIds);
+			dto.participantIds = participantIds;
 		}
 		
 		if(event.getComments() != null){
@@ -210,7 +230,7 @@ public class EventSL extends GenericSL<Event, EventDTO>{
 			for(Comment comment : event.getComments()){
 				commentIds.add(comment.getId());
 			}
-			dto.setCommentIds(commentIds);
+			dto.commentIds = commentIds;
 		}
 		
 		return dto;
@@ -219,49 +239,49 @@ public class EventSL extends GenericSL<Event, EventDTO>{
 	public static Event staticFromDTO(EventDTO dto) {
 
 		User user = new User();
-		user.setId(dto.getUserId());
+		user.setId(dto.userId);
 		
 		Event event;
 		if(dto instanceof StayEventDTO){
 			StayEventDTO stayDto = (StayEventDTO)dto;
 			StayEvent stay = new StayEvent();
-			stay.setLocation(stayDto.getLocation());
+			stay.setLocation(stayDto.location);
 			event = stay;
 		}else if(dto instanceof MoveEventDTO){
 			MoveEventDTO moveDto = (MoveEventDTO)dto;
 			MoveEvent move = new MoveEvent();
-			move.setStartLocation(moveDto.getStartLocation());
-			move.setEndLocation(moveDto.getEndLocation());
-			move.setTrail(moveDto.getTrail());
+			move.setStartLocation(moveDto.startLocation);
+			move.setEndLocation(moveDto.endLocation);
+			move.setTrail(moveDto.trail);
 			event = move;
 		}else if(dto instanceof TellEventDTO){
 			TellEventDTO tellDto = (TellEventDTO)dto;
 			TellEvent tell = new TellEvent();
-			tell.setLocation(tellDto.getLocation());
-			tell.setText(tellDto.getText());
+			tell.setLocation(tellDto.location);
+			tell.setText(tellDto.text);
 			event = tell;
 		}else if(dto instanceof ListenEventDTO){
 			ListenEventDTO listenDto = (ListenEventDTO)dto;
 			ListenEvent listen = new ListenEvent();
-			listen.setSongMetadata(listenDto.getSongMetadata());
+			listen.setSongMetadata(listenDto.songMetadata);
 			event = listen;
 		}else{
 			throw new AssertionError();
 		}
 		
-		initFromDTO(dto, event);
+		dto.initEntity(event);
 		event.setUser(user);
-		event.setType(dto.getType());
-		event.setStartTime(new Date(dto.getStartTime()));
-		if(dto.getEndTime() != null){
-			event.setEndTime(new Date(dto.getEndTime()));
+		event.setType(dto.type);
+		event.setStartTime(new Date(dto.startTime));
+		if(dto.endTime != null){
+			event.setEndTime(new Date(dto.endTime));
 		}
-		event.setMedia(dto.getMedia());
-		event.setScore(dto.getScore());
+		event.setMedia(dto.media);
+		event.setScore(dto.score);
 		
-		if(dto.getParticipantIds() != null){
+		if(dto.participantIds != null){
 			List<User> participants = new ArrayList<User>();
-			for(Long id : dto.getParticipantIds()){
+			for(Long id : dto.participantIds){
 				User participant = new User();
 				participant.setId(id);
 				participants.add(participant);
@@ -269,9 +289,9 @@ public class EventSL extends GenericSL<Event, EventDTO>{
 			event.setParticipants(participants);
 		}
 		
-		if(dto.getCommentIds() != null){
+		if(dto.commentIds != null){
 			List<Comment> comments = new ArrayList<Comment>();
-			for(Long id : dto.getCommentIds()){
+			for(Long id : dto.commentIds){
 				Comment comment = new Comment();
 				comment.setId(id);
 				comments.add(comment);

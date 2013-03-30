@@ -9,25 +9,9 @@ import uk.frequency.glance.server.transfer.GenericDTO;
 @SuppressWarnings("serial")
 public abstract class TraceDTO extends GenericDTO {
 
-	long userId;
+	public long userId;
 	
-	long time;
-
-	public long getUserId() {
-		return userId;
-	}
-
-	public void setUserId(long userId) {
-		this.userId = userId;
-	}
-
-	public long getTime() {
-		return time;
-	}
-
-	public void setTime(long time) {
-		this.time = time;
-	}
+	public long time;
 
 	@Override
 	public String toString() {

@@ -2,37 +2,25 @@ package uk.frequency.glance.server.transfer;
 
 import java.io.Serializable;
 
+import uk.frequency.glance.server.model.GenericEntity;
+
 @SuppressWarnings("serial")
 public abstract class GenericDTO implements Serializable {
 
-	Long id;
+	public Long id;
 
-	protected Long creationTime;
+	public Long creationTime;
 
-	protected Long updateTime;
+	public Long updateTime;
+
+	public void initFromEntity(GenericEntity entity){
+		id = entity.getId();
+		creationTime = entity.getCreationTime().getTime();
+		updateTime = entity.getUpdateTime().getTime();
+	}
 	
-	public Long getId() {
-		return id;
+	public void initEntity(GenericEntity entity){
+		entity.setId(id);
 	}
-
-	public void setId(Long id) {
-		this.id = id;
-	}
-
-	public Long getCreationTime() {
-		return creationTime;
-	}
-
-	public void setCreationTime(Long creationTime) {
-		this.creationTime = creationTime;
-	}
-
-	public Long getUpdateTime() {
-		return updateTime;
-	}
-
-	public void setUpdateTime(Long updateTime) {
-		this.updateTime = updateTime;
-	}
-
+	
 }

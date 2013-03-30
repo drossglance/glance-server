@@ -8,24 +8,8 @@ import uk.frequency.glance.server.model.Location;
 @SuppressWarnings("serial")
 public class TellEventDTO extends EventDTO{
 
-	Location location;
+	public Location location;
 	
-	String text;
-
-	public Location getLocation() {
-		return location;
-	}
-
-	public void setLocation(Location location) {
-		this.location = location;
-	}
-
-	public String getText() {
-		return text;
-	}
-
-	public void setText(String text) {
-		this.text = text;
-	}
+	public String text;
 	
 }

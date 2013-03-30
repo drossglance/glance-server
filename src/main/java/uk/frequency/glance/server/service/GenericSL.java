@@ -128,14 +128,4 @@ public abstract class GenericSL<T extends GenericEntity, U extends GenericDTO> {
 	
 	protected abstract T fromDTO(U dto);
 	
-	protected static void initToDTO(GenericEntity entity, GenericDTO dto){
-		dto.setId(entity.getId());
-		dto.setCreationTime(entity.getCreationTime().getTime());
-		dto.setUpdateTime(entity.getUpdateTime().getTime());
-	}
-	
-	protected static void initFromDTO(GenericDTO dto, GenericEntity entity){
-		entity.setId(dto.getId());
-	}
-	
 }

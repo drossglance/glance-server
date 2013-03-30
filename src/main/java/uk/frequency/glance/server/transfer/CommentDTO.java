@@ -12,66 +12,16 @@ import uk.frequency.glance.server.model.component.Media.MediaType;
 @SuppressWarnings("serial")
 public class CommentDTO extends GenericDTO{
 
-	long userId;
+	public long userId;
 	
-	long subjectId;
+	public long subjectId;
 	
-	String text;
+	public String text;
 	
-	Location location;
+	public Location location;
 
-	MediaType mediaType;
+	public MediaType mediaType;
 	
-	List<Media> media;
-
-
-	public long getUserId() {
-		return userId;
-	}
-
-	public void setUserId(long userId) {
-		this.userId = userId;
-	}
-
-	public long getSubjectId() {
-		return subjectId;
-	}
-
-	public void setSubjectId(long eventId) {
-		this.subjectId = eventId;
-	}
-
-	public String getText() {
-		return text;
-	}
-
-	public void setText(String text) {
-		this.text = text;
-	}
-
-	public Location getLocation() {
-		return location;
-	}
-
-	public void setLocation(Location location) {
-		this.location = location;
-	}
-
-	public MediaType getMediaType() {
-		return mediaType;
-	}
-
-	public void setMediaType(MediaType mediaType) {
-		this.mediaType = mediaType;
-	}
-
-	public List<Media> getMedia() {
-		return media;
-	}
-
-	public void setMedia(List<Media> media) {
-		this.media = media;
-	}
-
+	public List<Media> media;
 	
 }

@@ -58,7 +58,7 @@ public class LatLngGeometryUtil {
 	public static List<Position> tracesToPositions(List<PositionTraceDTO> traces){
 		List<Position> pos = new ArrayList<Position>();
 		for (PositionTraceDTO trace : traces) {
-			pos.add(trace.getPosition());
+			pos.add(trace.position);
 		}
 		return pos;
 	}
