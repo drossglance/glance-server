@@ -30,6 +30,7 @@ import uk.frequency.glance.server.model.event.MoveEvent;
 import uk.frequency.glance.server.model.event.StayEvent;
 import uk.frequency.glance.server.model.event.TellEvent;
 import uk.frequency.glance.server.model.user.User;
+import uk.frequency.glance.server.model.user.UserProfile;
 import uk.frequency.glance.server.transfer.event.EventDTO;
 import uk.frequency.glance.server.transfer.event.EventViewDTO;
 import uk.frequency.glance.server.transfer.event.ListenEventDTO;
@@ -159,7 +160,12 @@ public class EventSL extends GenericSL<Event, EventDTO>{
 		UserDTO dto = new UserDTO();
 		dto.id = userId;
 		if(user.getProfileHistory() != null && !user.getProfileHistory().isEmpty()){
-			dto.profile = user.getProfileHistory().get(0); //TODO get most recent profile
+			UserProfile recentProfile = user.getProfileHistory().get(0);
+			dto.profile = new UserProfile();
+			dto.profile.setFirstName(recentProfile.getFirstName());
+			dto.profile.setMiddleName(recentProfile.getMiddleName());
+			dto.profile.setFullName(recentProfile.getFullName());
+			dto.profile.setImageUrl(recentProfile.getImageUrl());
 		}
 		dto.wavelineIndex = index;
 		dto.wavelineImageUrl = waveUrl;
