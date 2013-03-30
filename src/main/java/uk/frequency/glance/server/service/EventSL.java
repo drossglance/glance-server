@@ -19,6 +19,7 @@ import javax.ws.rs.core.Response.Status;
 import org.hibernate.ObjectNotFoundException;
 
 import uk.frequency.glance.server.business.EventBL;
+import uk.frequency.glance.server.business.UserBL;
 import uk.frequency.glance.server.business.logic.EventScoreLogic;
 import uk.frequency.glance.server.business.logic.waveline.EventDataWavelineAdapter;
 import uk.frequency.glance.server.data_access.util.HibernateConfig;
@@ -42,10 +43,12 @@ import uk.frequency.glance.server.transfer.user.UserDTO;
 public class EventSL extends GenericSL<Event, EventDTO>{
 
 	EventBL eventBl;
+	UserBL userBl;
 
 	public EventSL() {
 		super(new EventBL());
 		eventBl = (EventBL)business;
+		userBl = new UserBL();
 	}
 	
 	@GET
@@ -137,29 +140,33 @@ public class EventSL extends GenericSL<Event, EventDTO>{
 	}
 	
 	private Response eventFeedPage(long userId, List<Event> events, long width, long height){
-			
-			EventDataWavelineAdapter adapter = new EventDataWavelineAdapter();
-			adapter.buildLayers(events);
-			int[] index = adapter.getIndex();
-			String waveUrl = uriInfo.getBaseUriBuilder()
-					.path("event/user-{id}/waveline")
-					.queryParam("width", width)
-					.queryParam("height", height)
-					.build(userId, width, height).toString();
-			
-			List<EventViewDTO> eventDtos = new ArrayList<EventViewDTO>();
-			for(Event event : events){
-				eventDtos.add(EventViewDTO.from(event));
-			}
-			
-			UserDTO dto = new UserDTO();
-			dto.id = userId;
-			dto.wavelineIndex = index;
-			dto.wavelineImageUrl = waveUrl;
-			dto.eventViews = eventDtos;
-			
-			return Response.ok(dto).build();
+		User user = userBl.findById(userId);
+	
+		EventDataWavelineAdapter adapter = new EventDataWavelineAdapter();
+		adapter.buildLayers(events);
+		int[] index = adapter.getIndex();
+		String waveUrl = uriInfo.getBaseUriBuilder()
+				.path("event/user-{id}/waveline")
+				.queryParam("width", width)
+				.queryParam("height", height)
+				.build(userId, width, height).toString();
+		
+		List<EventViewDTO> eventDtos = new ArrayList<EventViewDTO>();
+		for(Event event : events){
+			eventDtos.add(EventViewDTO.from(event));
 		}
+		
+		UserDTO dto = new UserDTO();
+		dto.id = userId;
+		if(user.getProfileHistory() != null && !user.getProfileHistory().isEmpty()){
+			dto.profile = user.getProfileHistory().get(0); //TODO get most recent profile
+		}
+		dto.wavelineIndex = index;
+		dto.wavelineImageUrl = waveUrl;
+		dto.eventViews = eventDtos;
+		
+		return Response.ok(dto).build();
+	}
 	
 	@Override
 	protected EventDTO toDTO(Event event){
