@@ -17,8 +17,11 @@ public class TraceBL extends GenericBL<Trace>{
 	}
 	
 	public List<Trace> findByUser(long userId) {
-		List<Trace> list = traceDal.findByUser(userId);
-		return list;
+		return traceDal.findByUser(userId);
+	}
+	
+	public List<Trace> findRecent(long userId){
+		return traceDal.findRecent(userId, 50);
 	}
 	
 	@Override

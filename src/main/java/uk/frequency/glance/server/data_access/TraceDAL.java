@@ -20,6 +20,15 @@ public class TraceDAL extends GenericDAL<Trace>{
 		return q.list();
 	}
 	
+	public List<Trace> findRecent(long userId, int limit){
+		Query q = getSession().createQuery("from Trace where " +
+				"user.id = :userId " +
+				"order by creationTime desc")
+			.setParameter("userId", userId)
+			.setMaxResults(limit);
+		return q.list();
+	}
+	
 	public List<Trace> find(User user, Date start, Date end){
 		Query q = getSession().createQuery("from Trace where " +
 				"user = :user " +

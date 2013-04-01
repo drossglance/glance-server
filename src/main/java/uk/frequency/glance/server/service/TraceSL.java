@@ -32,8 +32,9 @@ public class TraceSL extends GenericSL<Trace, TraceDTO>{
 	@GET
 	@Path("/user-{id}")
 	@Produces(MediaType.APPLICATION_JSON)
-	public List<TraceDTO> findByAuthor(@PathParam("id") long userId) {
-		List<Trace> list = traceBl.findByUser(userId);
+	public List<TraceDTO> findByUser(@PathParam("id") long userId) {
+//		List<Trace> list = traceBl.findByUser(userId);
+		List<Trace> list = traceBl.findRecent(userId);
 		List<TraceDTO> dto = toDTO(list);
 		traceBl.flush();
 		return dto;
