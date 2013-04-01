@@ -1,5 +1,6 @@
-package uk.frequency.glance.server.business.logic;
+package uk.frequency.glance.server.business.logic.event;
 
+import uk.frequency.glance.server.business.logic.TimeUtil;
 import uk.frequency.glance.server.model.event.Event;
 import uk.frequency.glance.server.model.event.EventScore;
 import uk.frequency.glance.server.model.event.EventType;

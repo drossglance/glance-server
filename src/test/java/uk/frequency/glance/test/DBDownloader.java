@@ -1,6 +1,7 @@
 package uk.frequency.glance.test;
 
 import java.util.ArrayList;
+import java.util.Date;
 import java.util.List;
 
 import uk.frequency.glance.server.model.event.Event;
@@ -36,6 +37,16 @@ public class DBDownloader {
 	}
 	
 	public static List<TraceDTO> downloadTraces(long userId){
+		TestClient client = new TestClient(ROOT_URL);
+		String path = String.format("trace/user-%d/", userId);
+		return client.getList(path, new TypeToken<List<TraceDTO>>(){});
+	}
+	
+	public static List<PositionTraceDTO> downloadPositionTraces(long userId, Date begin, Date end){
+		return filterPositionTraces(downloadTraces(userId, begin, end));
+	}
+	
+	public static List<TraceDTO> downloadTraces(long userId, Date begin, Date end){
 		TestClient client = new TestClient(ROOT_URL);
 		String path = String.format("trace/user-%d/", userId);
 		return client.getList(path, new TypeToken<List<TraceDTO>>(){});

@@ -13,8 +13,9 @@ import java.util.List;
 import javax.swing.JFrame;
 import javax.swing.JPanel;
 
-import uk.frequency.glance.server.business.logic.BoundingBox;
-import uk.frequency.glance.server.business.logic.LatLngGeometryUtil;
+import uk.frequency.glance.server.DebugUtil;
+import uk.frequency.glance.server.business.logic.PresentationUtil;
+import uk.frequency.glance.server.business.logic.geometry.LatLngGeometryUtil;
 import uk.frequency.glance.server.business.remote.GoogleStaticMaps;
 import uk.frequency.glance.server.business.remote.RemoteAPIClient;
 import uk.frequency.glance.server.model.component.Position;
@@ -42,14 +43,17 @@ public class PositionTraceDebug {
 	
 	static void showOnMap(List<PositionTraceDTO> traces){
 		List<Position> trail = LatLngGeometryUtil.tracesToPositions(traces);
-		BoundingBox box = BoundingBox.from(trail);
-		Position center = box.findCenter();
-		int zoom = maps.findZoomToContain(box);
-		Rectangle rect = maps.findRectangle(center, zoom);
-		String url = maps.getStreetViewImageUrl(center, zoom);
+//		BoundingBox box = BoundingBox.from(trail);
+//		Position center = box.findCenter();
+//		int zoom = maps.findZoomToContain(box);
+//		Rectangle rect = maps.findRectangle(center, zoom);
+//		String url = maps.getImageUrl(center, zoom);
+		trail = PresentationUtil.cleanTrail(trail);
+		String url = maps.getImageUrl(trail);
 		RemoteAPIClient client = new RemoteAPIClient("");
 		Image map = client.getImage(url);
-		showOnFrame(map, trail, zoom, rect);
+		DebugUtil.showOnFrame(map);
+//		showOnFrame(map, trail, zoom, rect);
 	}
 	
 	static void showOnFrame(JPanel canvas){

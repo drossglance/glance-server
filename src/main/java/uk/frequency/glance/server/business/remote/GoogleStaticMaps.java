@@ -4,9 +4,10 @@ import java.awt.Point;
 import java.awt.Rectangle;
 import java.util.ArrayList;
 import java.util.List;
+import java.util.Locale;
 
-import uk.frequency.glance.server.business.logic.BoundingBox;
-import uk.frequency.glance.server.business.logic.EuclideanGeometryUtil;
+import uk.frequency.glance.server.business.logic.geometry.BoundingBox;
+import uk.frequency.glance.server.business.logic.geometry.EuclideanGeometryUtil;
 import uk.frequency.glance.server.model.component.Position;
 
 public class GoogleStaticMaps {
@@ -21,7 +22,7 @@ public class GoogleStaticMaps {
 		this.height = height;
 	}
 
-	public String getStreetViewImageUrl(double lat, double lng, int zoom){
+	public String getImageUrl(double lat, double lng, int zoom){
 		String url = rootUrl + 
 				"?size=" + width + "x" + height +  
 				"&center=" + lat + "," + lng +
@@ -31,11 +32,11 @@ public class GoogleStaticMaps {
 		return url;
 	}
 	
-	public String getStreetViewImageUrl(Position pos, int zoom){
-		return getStreetViewImageUrl(pos.getLat(), pos.getLng(), zoom);
+	public String getImageUrl(Position pos, int zoom){
+		return getImageUrl(pos.getLat(), pos.getLng(), zoom);
 	}
 	
-	public String getStreetViewImageUrl(List<Position> path){
+	public String getImageUrl(List<Position> path){
 		String url = rootUrl + 
 				"?size=" + width + "x" + height + 
 				"&path=" + locationListString(path) + 
@@ -44,11 +45,11 @@ public class GoogleStaticMaps {
 		return url;
 	}
 	
-	public String getStreetViewImageUrl(BoundingBox bounds){
+	public String getImageUrl(BoundingBox bounds){
 		String url = rootUrl + 
 				"?size=" + width + "x" + height + 
 				"&visible=" + locationListString(bounds) + 
-				"&sensor=false" +
+				"&sensor=f8alse" +
 				"&key="+ key;
 		return url;
 	}
@@ -56,7 +57,7 @@ public class GoogleStaticMaps {
 	private static String locationListString(List<Position> path){
 		StringBuilder s = new StringBuilder();
 		for (Position position : path) {
-			String posStr = String.format("%f,%f|", position.getLat(), position.getLng());
+			String posStr = String.format(Locale.US, "%f,%f|", position.getLat(), position.getLng());
 			s.append(posStr);
 		}
 		s.deleteCharAt(s.length()-1);

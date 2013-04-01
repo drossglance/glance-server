@@ -10,8 +10,8 @@ import javax.imageio.ImageIO;
 
 import org.hibernate.ObjectNotFoundException;
 
-import uk.frequency.glance.server.business.logic.EventGenerationLogic;
 import uk.frequency.glance.server.business.logic.PresentationUtil;
+import uk.frequency.glance.server.business.logic.event.EventGenerationLogic;
 import uk.frequency.glance.server.business.logic.waveline.BasicColorPicker;
 import uk.frequency.glance.server.business.logic.waveline.EventDataWavelineAdapter;
 import uk.frequency.glance.server.business.logic.waveline.Waveline;

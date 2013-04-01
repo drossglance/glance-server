@@ -1,5 +1,6 @@
 package uk.frequency.glance.server.business;
 
+import java.util.Date;
 import java.util.List;
 
 import uk.frequency.glance.server.data_access.TraceDAL;
@@ -22,6 +23,10 @@ public class TraceBL extends GenericBL<Trace>{
 	
 	public List<Trace> findRecent(long userId){
 		return traceDal.findRecent(userId, 50);
+	}
+	
+	public List<Trace> find(long userId, Date begin, Date end){
+		return traceDal.find(userId, begin, end);
 	}
 	
 	@Override

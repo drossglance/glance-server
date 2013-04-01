@@ -1,4 +1,4 @@
-package uk.frequency.glance.server.business.logic;
+package uk.frequency.glance.server.business.logic.geometry;
 
 import java.awt.Point;
 import java.awt.Rectangle;

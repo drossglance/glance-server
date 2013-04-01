@@ -9,7 +9,7 @@ public class GoogleStreetView {
 	static final String imageSize = EventDataFinder.imageSize;
 	static final String key = EventDataFinder.googleAPIsKey;
 	
-	public static String getStreetViewImageUrl(double lat, double lng, int heading){
+	public static String getImageUrl(double lat, double lng, int heading){
 		String url = rootUrl + 
 				"?size=" + imageSize + 
 				"&location=" + lat + ",%20" + lng +
@@ -19,7 +19,7 @@ public class GoogleStreetView {
 		return url;
 	}
 	
-	public static String getStreetViewImageUrl(Position pos){
+	public static String getImageUrl(Position pos){
 		String url = rootUrl + 
 				"?size=" + imageSize + 
 				"&location=" + pos.getLat() + ",%20" + pos.getLng() +

@@ -1,4 +1,4 @@
-package uk.frequency.glance.server.business.logic;
+package uk.frequency.glance.server.business.logic.event;
 
 import java.util.ArrayList;
 import java.util.Date;
@@ -8,6 +8,9 @@ import org.hibernate.Transaction;
 import org.hibernate.exception.ConstraintViolationException;
 
 import uk.frequency.glance.server.DebugUtil;
+import uk.frequency.glance.server.business.logic.TimeUtil;
+import uk.frequency.glance.server.business.logic.geometry.BoundingBox;
+import uk.frequency.glance.server.business.logic.geometry.LatLngGeometryUtil;
 import uk.frequency.glance.server.business.remote.EventDataFinder;
 import uk.frequency.glance.server.data_access.EventDAL;
 import uk.frequency.glance.server.data_access.TraceDAL;

@@ -1,9 +1,15 @@
 package uk.frequency.glance.server;
 
+import java.awt.Dimension;
+import java.awt.Graphics;
+import java.awt.Image;
 import java.io.PrintWriter;
 import java.io.StringWriter;
 import java.text.DateFormat;
 import java.util.Date;
+
+import javax.swing.JFrame;
+import javax.swing.JPanel;
 
 public class DebugUtil {
 
@@ -67,4 +73,24 @@ public class DebugUtil {
 		return DateFormat.getDateInstance(DateFormat.MEDIUM).format(time);
 	}
 
+	@SuppressWarnings("serial")
+	public static void showOnFrame(final Image image) {
+		final int padding = 40;
+		
+		JFrame frame = new JFrame();
+		JPanel pane = new JPanel(){
+			@Override
+			public void paint(Graphics g) {
+				super.paint(g);
+				g.drawImage(image, padding, padding, null); 
+			}
+		};
+		pane.setPreferredSize(new Dimension(image.getWidth(null) + 2*padding, image.getHeight(null) + 2*padding));
+		frame.add(pane);
+		frame.pack();
+		frame.setLocationRelativeTo(null);
+		frame.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
+		frame.setVisible(true);
+	}
+	
 }

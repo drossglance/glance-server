@@ -40,6 +40,19 @@ public class TraceSL extends GenericSL<Trace, TraceDTO>{
 		return dto;
 	}
 	
+	@GET
+	@Path("/user-{id}/{begin}to{end}")
+	@Produces(MediaType.APPLICATION_JSON)
+	public List<TraceDTO> findByUser(
+			@PathParam("id") long userId, 
+			@PathParam("begin") long begin, 
+			@PathParam("end") long end) {
+		List<Trace> list = traceBl.find(userId, new Date(begin), new Date(end));
+		List<TraceDTO> dto = toDTO(list);
+		traceBl.flush();
+		return dto;
+	}
+	
 	@Override
 	protected TraceDTO toDTO(Trace trace) {
 		

@@ -20,7 +20,7 @@ import org.hibernate.ObjectNotFoundException;
 
 import uk.frequency.glance.server.business.EventBL;
 import uk.frequency.glance.server.business.UserBL;
-import uk.frequency.glance.server.business.logic.EventScoreLogic;
+import uk.frequency.glance.server.business.logic.event.EventScoreLogic;
 import uk.frequency.glance.server.business.logic.waveline.EventDataWavelineAdapter;
 import uk.frequency.glance.server.data_access.util.HibernateConfig;
 import uk.frequency.glance.server.model.Comment;

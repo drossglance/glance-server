@@ -29,11 +29,12 @@ public class TraceDAL extends GenericDAL<Trace>{
 		return q.list();
 	}
 	
-	public List<Trace> find(User user, Date start, Date end){
+	public List<Trace> find(long userId, Date start, Date end){
 		Query q = getSession().createQuery("from Trace where " +
-				"user = :user " +
-				"and (time >= :start or time < :end)")
-			.setParameter("user", user)
+				"user.id = :userId " +
+				"and (time >= :start and time < :end) " +
+				"order by time")
+			.setParameter("userId", userId)
 			.setParameter("start", start)
 			.setParameter("end", end);
 		return q.list();
