@@ -9,7 +9,6 @@ import java.util.List;
 import org.hibernate.Transaction;
 import org.hibernate.exception.ConstraintViolationException;
 
-import uk.frequency.glance.server.DebugUtil;
 import uk.frequency.glance.server.business.logic.TimeUtil;
 import uk.frequency.glance.server.business.logic.geometry.BoundingBox;
 import uk.frequency.glance.server.business.logic.geometry.LatLngGeometryUtil;
@@ -18,6 +17,7 @@ import uk.frequency.glance.server.data_access.EventDAL;
 import uk.frequency.glance.server.data_access.TraceDAL;
 import uk.frequency.glance.server.data_access.UserDAL;
 import uk.frequency.glance.server.data_access.util.HibernateConfig;
+import uk.frequency.glance.server.debug.DebugUtil;
 import uk.frequency.glance.server.model.Location;
 import uk.frequency.glance.server.model.component.Position;
 import uk.frequency.glance.server.model.event.Event;

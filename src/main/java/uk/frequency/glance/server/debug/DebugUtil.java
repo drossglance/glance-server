@@ -1,4 +1,4 @@
-package uk.frequency.glance.server;
+package uk.frequency.glance.server.debug;
 
 import java.awt.Dimension;
 import java.awt.Graphics;

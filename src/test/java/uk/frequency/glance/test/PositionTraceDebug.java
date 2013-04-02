@@ -14,11 +14,11 @@ import java.util.List;
 import javax.swing.JFrame;
 import javax.swing.JPanel;
 
-import uk.frequency.glance.server.DebugUtil;
 import uk.frequency.glance.server.business.logic.PresentationUtil;
 import uk.frequency.glance.server.business.logic.geometry.LatLngGeometryUtil;
 import uk.frequency.glance.server.business.remote.GoogleStaticMaps;
 import uk.frequency.glance.server.business.remote.RemoteAPIClient;
+import uk.frequency.glance.server.debug.DebugUtil;
 import uk.frequency.glance.server.model.component.Position;
 import uk.frequency.glance.server.service.EventSL;
 import uk.frequency.glance.server.transfer.event.EventDTO;

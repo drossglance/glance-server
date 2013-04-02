@@ -7,12 +7,12 @@ import java.io.IOException;
 
 import javax.imageio.ImageIO;
 
-import uk.frequency.glance.server.DebugUtil;
 import uk.frequency.glance.server.business.logic.PresentationUtil;
 import uk.frequency.glance.server.business.logic.waveline.BasicColorPicker;
 import uk.frequency.glance.server.business.logic.waveline.Waveline;
 import uk.frequency.glance.server.business.logic.waveline.streamgraph.BelievableDataSource;
 import uk.frequency.glance.server.business.logic.waveline.streamgraph.ColorPicker;
+import uk.frequency.glance.server.debug.DebugUtil;
 
 public class WavelineTest {
 

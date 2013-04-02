@@ -1,5 +1,9 @@
 package uk.frequency.glance.server.business;
 
+import static uk.frequency.glance.server.model.user.FriendshipStatus.ACCEPTED;
+import static uk.frequency.glance.server.model.user.FriendshipStatus.REQUEST_RECEIVED;
+import static uk.frequency.glance.server.model.user.FriendshipStatus.REQUEST_SENT;
+
 import java.util.List;
 
 import org.hibernate.TransientObjectException;
@@ -8,12 +12,11 @@ import org.hibernate.exception.ConstraintViolationException;
 import uk.frequency.glance.server.business.exception.WrongStateException;
 import uk.frequency.glance.server.business.remote.Facebook;
 import uk.frequency.glance.server.data_access.UserDAL;
+import uk.frequency.glance.server.debug.DebugTrace;
 import uk.frequency.glance.server.model.user.EventGenerationInfo;
 import uk.frequency.glance.server.model.user.Friendship;
 import uk.frequency.glance.server.model.user.User;
 import uk.frequency.glance.server.model.user.UserProfile;
-
-import static uk.frequency.glance.server.model.user.FriendshipStatus.*;
 
 public class UserBL extends GenericBL<User>{
 
@@ -170,6 +173,10 @@ public class UserBL extends GenericBL<User>{
 		userDal.removeFriendship(f2);
 		
 		return f;
+	}
+	
+	public void saveDebugTrace(DebugTrace debug){
+		userDal.saveDebugTrace(debug);
 	}
 
 }

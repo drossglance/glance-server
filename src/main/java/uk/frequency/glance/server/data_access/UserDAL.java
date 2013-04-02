@@ -5,6 +5,7 @@ import java.util.List;
 
 import org.hibernate.Query;
 
+import uk.frequency.glance.server.debug.DebugTrace;
 import uk.frequency.glance.server.model.user.EventGenerationInfo;
 import uk.frequency.glance.server.model.user.Friendship;
 import uk.frequency.glance.server.model.user.FriendshipStatus;
@@ -92,5 +93,13 @@ public class UserDAL extends GenericDAL<User>{
 	
 	//USER LOCATION
 	//TODO
+	
+	
+	//DEBUG
+	
+	public void saveDebugTrace(DebugTrace debug){
+		debug.creationTime = new Date();
+		getSession().save(debug);
+	}
 	
 }

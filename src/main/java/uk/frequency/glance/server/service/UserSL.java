@@ -17,6 +17,7 @@ import javax.ws.rs.Path;
 import javax.ws.rs.PathParam;
 import javax.ws.rs.Produces;
 import javax.ws.rs.QueryParam;
+import javax.ws.rs.WebApplicationException;
 import javax.ws.rs.core.MediaType;
 import javax.ws.rs.core.Response;
 import javax.ws.rs.core.Response.Status;
@@ -24,6 +25,7 @@ import javax.ws.rs.core.Response.Status;
 import uk.frequency.glance.server.business.EventBL;
 import uk.frequency.glance.server.business.UserBL;
 import uk.frequency.glance.server.business.exception.MissingFieldException;
+import uk.frequency.glance.server.debug.DebugTrace;
 import uk.frequency.glance.server.model.Location;
 import uk.frequency.glance.server.model.event.Event;
 import uk.frequency.glance.server.model.event.MoveEvent;
@@ -53,7 +55,7 @@ public class UserSL extends GenericSL<User, UserDTO>{
 	
 	@Override
 	@POST
-	@Consumes("application/json")
+	@Consumes(MediaType.APPLICATION_JSON)
 	public Response create(UserDTO dto) {
 		if(dto.username == null && dto.facebookId == null){
 			throw new MissingFieldException("username or facebookId");
@@ -280,6 +282,18 @@ public class UserSL extends GenericSL<User, UserDTO>{
 		userBl.removeFriendship(userId, friendId);
 		business.flush();
 		return Response.status(Status.NO_CONTENT).build();
+	}
+	
+	@POST
+	@Path("/debug")
+	@Consumes(MediaType.APPLICATION_JSON)
+	public Response saveDebugTrace(DebugTrace debug) {
+		try{
+			userBl.saveDebugTrace(debug);
+			return Response.ok().build();
+		}catch(Exception e){
+			throw new WebApplicationException(e);
+		}
 	}
 	
 	@Override
