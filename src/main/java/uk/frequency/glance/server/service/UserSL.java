@@ -6,6 +6,7 @@ import static uk.frequency.glance.server.model.user.FriendshipStatus.REQUEST_REC
 import static uk.frequency.glance.server.model.user.FriendshipStatus.REQUEST_SENT;
 
 import java.util.ArrayList;
+import java.util.Date;
 import java.util.List;
 
 import javax.ws.rs.Consumes;
@@ -25,7 +26,7 @@ import javax.ws.rs.core.Response.Status;
 import uk.frequency.glance.server.business.EventBL;
 import uk.frequency.glance.server.business.UserBL;
 import uk.frequency.glance.server.business.exception.MissingFieldException;
-import uk.frequency.glance.server.debug.DebugTrace;
+import uk.frequency.glance.server.debug.LogEntry;
 import uk.frequency.glance.server.model.Location;
 import uk.frequency.glance.server.model.event.Event;
 import uk.frequency.glance.server.model.event.MoveEvent;
@@ -285,12 +286,45 @@ public class UserSL extends GenericSL<User, UserDTO>{
 	}
 	
 	@POST
-	@Path("/debug")
+	@Path("/log")
 	@Consumes(MediaType.APPLICATION_JSON)
-	public Response saveDebugTrace(DebugTrace debug) {
+	public Response saveLogEntry(LogEntry debug) {
 		try{
-			userBl.saveDebugTrace(debug);
+			userBl.saveLogEntry(debug);
 			return Response.ok().build();
+		}catch(Exception e){
+			throw new WebApplicationException(e);
+		}
+	}
+	
+	@GET
+	@Path("/log")
+	@Produces(MediaType.APPLICATION_JSON)
+	public List<LogEntry> findLogEntries(
+			@QueryParam("after") Long start) {
+		try{
+			if(start != null){
+				return userBl.findAllLogEntriesAfter(new Date(start));
+			}else{
+				return userBl.findAllLogEntries();
+			}
+		}catch(Exception e){
+			throw new WebApplicationException(e);
+		}
+	}
+	
+	@GET
+	@Path("{id}/log")
+	@Produces(MediaType.APPLICATION_JSON)
+	public List<LogEntry> findLogEntries(
+			@PathParam("id") long userId,
+			@QueryParam("after") Long start) {
+		try{
+			if(start != null){
+				return userBl.findLogEntriesAfter(userId, new Date(start));
+			}else{
+				return userBl.findLogEntries(userId);
+			}
 		}catch(Exception e){
 			throw new WebApplicationException(e);
 		}

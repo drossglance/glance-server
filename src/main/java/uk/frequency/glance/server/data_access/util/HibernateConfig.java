@@ -9,7 +9,7 @@ import org.hibernate.proxy.HibernateProxy;
 import org.hibernate.service.ServiceRegistry;
 import org.hibernate.service.ServiceRegistryBuilder;
 
-import uk.frequency.glance.server.debug.DebugTrace;
+import uk.frequency.glance.server.debug.LogEntry;
 import uk.frequency.glance.server.model.Comment;
 import uk.frequency.glance.server.model.GenericEntity;
 import uk.frequency.glance.server.model.Location;
@@ -61,7 +61,7 @@ public class HibernateConfig {
 				.addAnnotatedClass(UserExpression.class)
 				.addAnnotatedClass(Comment.class)
 				.addAnnotatedClass(Media.class)
-				.addAnnotatedClass(DebugTrace.class);
+				.addAnnotatedClass(LogEntry.class);
 			
 			
 //			new SchemaExport(config).create(true, true);

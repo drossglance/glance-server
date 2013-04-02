@@ -4,6 +4,7 @@ import static uk.frequency.glance.server.model.user.FriendshipStatus.ACCEPTED;
 import static uk.frequency.glance.server.model.user.FriendshipStatus.REQUEST_RECEIVED;
 import static uk.frequency.glance.server.model.user.FriendshipStatus.REQUEST_SENT;
 
+import java.util.Date;
 import java.util.List;
 
 import org.hibernate.TransientObjectException;
@@ -12,7 +13,7 @@ import org.hibernate.exception.ConstraintViolationException;
 import uk.frequency.glance.server.business.exception.WrongStateException;
 import uk.frequency.glance.server.business.remote.Facebook;
 import uk.frequency.glance.server.data_access.UserDAL;
-import uk.frequency.glance.server.debug.DebugTrace;
+import uk.frequency.glance.server.debug.LogEntry;
 import uk.frequency.glance.server.model.user.EventGenerationInfo;
 import uk.frequency.glance.server.model.user.Friendship;
 import uk.frequency.glance.server.model.user.User;
@@ -175,8 +176,24 @@ public class UserBL extends GenericBL<User>{
 		return f;
 	}
 	
-	public void saveDebugTrace(DebugTrace debug){
-		userDal.saveDebugTrace(debug);
+	public void saveLogEntry(LogEntry debug){
+		userDal.saveLogEntry(debug);
+	}
+	
+	public List<LogEntry> findAllLogEntries(){
+        return userDal.findAllLogEntries(); 
+	}
+	
+	public List<LogEntry> findLogEntries(long userId){
+        return userDal.findLogEntry(userId); 
+	}
+	
+	public List<LogEntry> findAllLogEntriesAfter(Date time){
+		return userDal.findAllLogEntriesAfter(time); 
+	}
+	
+	public List<LogEntry> findLogEntriesAfter(long userId, Date time){
+		return userDal.findLogEntriesAfter(userId, time);
 	}
 
 }

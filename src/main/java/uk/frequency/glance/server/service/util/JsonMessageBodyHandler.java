@@ -7,6 +7,7 @@ import java.io.OutputStream;
 import java.io.OutputStreamWriter;
 import java.lang.annotation.Annotation;
 import java.lang.reflect.Type;
+import java.util.Date;
 
 import javax.ws.rs.Consumes;
 import javax.ws.rs.Produces;
@@ -53,14 +54,15 @@ public final class JsonMessageBodyHandler implements MessageBodyWriter<Object>, 
 	
 	public static Gson buildGson(){
 		GsonBuilder builder = new GsonBuilder();
-		builder.registerTypeAdapter(TraceDTO.class, JsonHierarchyTypeAdapter.getTraceInstance());
-		builder.registerTypeAdapter(PositionTraceDTO.class, JsonHierarchyTypeAdapter.getTraceInstance());
-		builder.registerTypeAdapter(ListenTraceDTO.class, JsonHierarchyTypeAdapter.getTraceInstance());
-		builder.registerTypeAdapter(EventDTO.class, JsonHierarchyTypeAdapter.getEventInstance());
-		builder.registerTypeAdapter(StayEventDTO.class, JsonHierarchyTypeAdapter.getEventInstance());
-		builder.registerTypeAdapter(MoveEventDTO.class, JsonHierarchyTypeAdapter.getEventInstance());
-		builder.registerTypeAdapter(TellEventDTO.class, JsonHierarchyTypeAdapter.getEventInstance());
-		builder.registerTypeAdapter(ListenEventDTO.class, JsonHierarchyTypeAdapter.getEventInstance());
+		builder.registerTypeAdapter(TraceDTO.class, JsonHierarchySerializer.getTraceInstance());
+		builder.registerTypeAdapter(PositionTraceDTO.class, JsonHierarchySerializer.getTraceInstance());
+		builder.registerTypeAdapter(ListenTraceDTO.class, JsonHierarchySerializer.getTraceInstance());
+		builder.registerTypeAdapter(EventDTO.class, JsonHierarchySerializer.getEventInstance());
+		builder.registerTypeAdapter(StayEventDTO.class, JsonHierarchySerializer.getEventInstance());
+		builder.registerTypeAdapter(MoveEventDTO.class, JsonHierarchySerializer.getEventInstance());
+		builder.registerTypeAdapter(TellEventDTO.class, JsonHierarchySerializer.getEventInstance());
+		builder.registerTypeAdapter(ListenEventDTO.class, JsonHierarchySerializer.getEventInstance());
+		builder.registerTypeAdapter(Date.class, new JsonDateSerializer());
 		return builder.create();
 	}
 

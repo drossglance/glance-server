@@ -22,14 +22,14 @@ import com.google.gson.JsonParseException;
 import com.google.gson.JsonSerializationContext;
 import com.google.gson.JsonSerializer;
 
-public class JsonHierarchyTypeAdapter<T> implements JsonSerializer<T>, JsonDeserializer<T> {
+public class JsonHierarchySerializer<T> implements JsonSerializer<T>, JsonDeserializer<T> {
 
 	final static String CLASS_PROPERTY = "@class";
 	private Gson gson = new Gson();
 	private Map<String, Class<? extends T>> map;
 	private Map<Class<? extends T>, String> unmap;
 
-	public JsonHierarchyTypeAdapter(Map<String, Class<? extends T>> map, Map<Class<? extends T>, String> backMap) {
+	public JsonHierarchySerializer(Map<String, Class<? extends T>> map, Map<Class<? extends T>, String> backMap) {
 		super();
 		this.map = map;
 		this.unmap = backMap;
@@ -61,7 +61,7 @@ public class JsonHierarchyTypeAdapter<T> implements JsonSerializer<T>, JsonDeser
 		return obj;
 	}
 
-	public static JsonHierarchyTypeAdapter<EventDTO> getEventInstance() {
+	public static JsonHierarchySerializer<EventDTO> getEventInstance() {
 		Map<String, Class<? extends EventDTO>> map = new HashMap<String, Class<? extends EventDTO>>();
 		map.put("TELL_EVENT", TellEventDTO.class);
 		map.put("STAY_EVENT", StayEventDTO.class);
@@ -72,17 +72,17 @@ public class JsonHierarchyTypeAdapter<T> implements JsonSerializer<T>, JsonDeser
 		unmap.put(StayEventDTO.class, "STAY_EVENT");
 		unmap.put(MoveEventDTO.class, "MOVE_EVENT");
 		unmap.put(ListenEventDTO.class, "LISTEN_EVENT");
-		return new JsonHierarchyTypeAdapter<EventDTO>(map, unmap);
+		return new JsonHierarchySerializer<EventDTO>(map, unmap);
 	}
 
-	public static JsonHierarchyTypeAdapter<TraceDTO> getTraceInstance() {
+	public static JsonHierarchySerializer<TraceDTO> getTraceInstance() {
 		Map<String, Class<? extends TraceDTO>> map = new HashMap<String, Class<? extends TraceDTO>>();
 		map.put("POSITION_TRACE", PositionTraceDTO.class);
 		map.put("LISTEN_TRACE", ListenTraceDTO.class);
 		Map<Class<? extends TraceDTO>, String> unmap = new HashMap<Class<? extends TraceDTO>, String>();
 		unmap.put(PositionTraceDTO.class, "POSITION_TRACE");
 		unmap.put(ListenTraceDTO.class, "LISTEN_TRACE");
-		return new JsonHierarchyTypeAdapter<TraceDTO>(map, unmap);
+		return new JsonHierarchySerializer<TraceDTO>(map, unmap);
 	}
 
 }

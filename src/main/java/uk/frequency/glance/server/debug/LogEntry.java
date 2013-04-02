@@ -8,7 +8,7 @@ import javax.persistence.GenerationType;
 import javax.persistence.Id;
 
 @Entity
-public class DebugTrace {
+public class LogEntry {
 
 	@Id
 	@GeneratedValue(strategy=GenerationType.TABLE) //TODO create different generators for each hierarchy
@@ -18,8 +18,8 @@ public class DebugTrace {
 	
 	public long userId;
 
-	public long time;
+	public Date time;
 
-	public String message;
+	public String text;
 
 }

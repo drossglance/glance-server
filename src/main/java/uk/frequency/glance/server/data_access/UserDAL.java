@@ -5,7 +5,7 @@ import java.util.List;
 
 import org.hibernate.Query;
 
-import uk.frequency.glance.server.debug.DebugTrace;
+import uk.frequency.glance.server.debug.LogEntry;
 import uk.frequency.glance.server.model.user.EventGenerationInfo;
 import uk.frequency.glance.server.model.user.Friendship;
 import uk.frequency.glance.server.model.user.FriendshipStatus;
@@ -97,9 +97,40 @@ public class UserDAL extends GenericDAL<User>{
 	
 	//DEBUG
 	
-	public void saveDebugTrace(DebugTrace debug){
-		debug.creationTime = new Date();
-		getSession().save(debug);
+	public void saveLogEntry(LogEntry log){
+		log.creationTime = new Date();
+		getSession().save(log);
 	}
 	
+	public List<LogEntry> findAllLogEntries(){
+		Query q = getSession().createQuery("from LogEntry d " +
+				"order by d.time desc");
+        return (List<LogEntry>)q.list(); 
+	}
+	
+	public List<LogEntry> findLogEntry(long userId){
+		Query q = getSession().createQuery("from LogEntry d where " +
+				"d.userId = :userId " + 
+				"order by d.time desc")
+				.setParameter("userId", userId);
+        return (List<LogEntry>)q.list(); 
+	}
+	
+	public List<LogEntry> findAllLogEntriesAfter(Date time){
+		Query q = getSession().createQuery("from LogEntry d where " +
+				"d.time >= :time " + 
+				"order by d.time desc")
+				.setParameter("time", time);
+        return (List<LogEntry>)q.list(); 
+	}
+	
+	public List<LogEntry> findLogEntriesAfter(long userId, Date time){
+		Query q = getSession().createQuery("from LogEntry d where " +
+				"d.userId = :userId " +
+				"and d.time >= :time " + 
+				"order by d.time desc")
+				.setParameter("userId", userId)
+				.setParameter("time", time);
+        return (List<LogEntry>)q.list(); 
+	}
 }
