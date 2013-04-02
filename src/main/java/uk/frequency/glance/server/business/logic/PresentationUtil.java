@@ -10,7 +10,10 @@ import java.util.Locale;
 
 import static uk.frequency.glance.server.business.logic.geometry.LatLngGeometryUtil.*;
 import static uk.frequency.glance.server.business.logic.TimeUtil.*;
+import uk.frequency.glance.server.business.logic.event.EventGenerationLogic;
+import uk.frequency.glance.server.business.remote.GoogleStaticMaps;
 import uk.frequency.glance.server.model.component.Position;
+import uk.frequency.glance.server.model.event.MoveEvent;
 
 public class PresentationUtil {
 
@@ -85,8 +88,9 @@ public class PresentationUtil {
 	}
 
 	public static List<Position> cleanTrail(List<Position> trail) {
-		final double STEP = metersToDegrees(100); // min distance between each step in the trail
+		final double STEP = EventGenerationLogic.BIG_RADIUS; // min distance between each step in the trail
 		List<Position> cleanTrail = new ArrayList<Position>();
+
 		cleanTrail.add(trail.get(0));
 		for (Position p : trail) {
 			Position last = cleanTrail.get(cleanTrail.size() - 1);
@@ -94,10 +98,28 @@ public class PresentationUtil {
 				cleanTrail.add(p);
 			}
 		}
-		if(!cleanTrail.get(cleanTrail.size()-1).equals(trail.get(trail.size()-1))){
-			cleanTrail.add(trail.get(trail.size()-1));
+		
+		//add last position
+		Position lastOriginal = trail.get(trail.size()-1);
+		Position lastClean = cleanTrail.get(cleanTrail.size()-1);
+		if(!lastClean.equals(lastOriginal)){
+			cleanTrail.add(lastOriginal);
+			if(distance(lastClean, lastOriginal) < STEP && cleanTrail.size() > 2){
+				cleanTrail.remove(cleanTrail.size()-2);
+			}
 		}
+		
 		return cleanTrail;
+	}
+	
+	public static String moveEventMapImageUrl(MoveEvent move){
+		List<Position> markers = new ArrayList<Position>();
+		markers.add(move.getStartLocation().getPosition());
+		if(move.getEndLocation() != null){
+			markers.add(move.getEndLocation().getPosition());
+		}
+		List<Position> cleanedTrail = cleanTrail(move.getTrail());
+		return new GoogleStaticMaps(200, 200).getImageUrl(markers, cleanedTrail);
 	}
 
 }

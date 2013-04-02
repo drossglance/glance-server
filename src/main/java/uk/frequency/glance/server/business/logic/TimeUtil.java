@@ -1,10 +1,15 @@
 package uk.frequency.glance.server.business.logic;
 
+import java.text.DateFormat;
+import java.text.ParseException;
+import java.text.SimpleDateFormat;
 import java.util.Calendar;
 import java.util.Date;
 
 public class TimeUtil {
 
+	private static final DateFormat TIMESTAMP = new SimpleDateFormat("yyyy/MM/dd hh:mm:ss");
+	
 	public static Date add(Date time, int miliseconds){
 		Calendar cal = Calendar.getInstance();
 		cal.setTime(time);
@@ -50,4 +55,11 @@ public class TimeUtil {
 		return begin.getTime();
 	}
 	
+	public static Date parse(String str){
+		try {
+			return TIMESTAMP.parse(str);
+		} catch (ParseException e) {
+			return null;
+		}
+	}
 }

@@ -1,5 +1,7 @@
 package uk.frequency.glance.server.business.logic.event;
 
+import static uk.frequency.glance.server.business.logic.PresentationUtil.moveEventMapImageUrl;
+
 import java.util.ArrayList;
 import java.util.Date;
 import java.util.List;
@@ -17,8 +19,6 @@ import uk.frequency.glance.server.data_access.TraceDAL;
 import uk.frequency.glance.server.data_access.UserDAL;
 import uk.frequency.glance.server.data_access.util.HibernateConfig;
 import uk.frequency.glance.server.model.Location;
-import uk.frequency.glance.server.model.component.Media;
-import uk.frequency.glance.server.model.component.Media.MediaType;
 import uk.frequency.glance.server.model.component.Position;
 import uk.frequency.glance.server.model.event.Event;
 import uk.frequency.glance.server.model.event.EventScore;
@@ -39,10 +39,10 @@ public class EventGenerationLogic extends Thread {
 	TraceDAL traceDal;
 	UserDAL userDal;
 
-	private static final int TIME_WINDOW = 2 * 60 * 1000; //(in miliseconds) time window in which recent traces are evaluated
-	private static final double BIG_RADIUS = LatLngGeometryUtil.metersToDegrees(50); //more tolerant for detecting stability
-	private static final double SMALL_RADIUS = LatLngGeometryUtil.metersToDegrees(20); //more tolerant for detecting movement
-	private static final double TELEPORT_DISTANCE = 10 * BIG_RADIUS; //min distance to alow a "teleport" change from one stay event to another
+	public static final int TIME_WINDOW = 2 * 60 * 1000; //(in miliseconds) time window in which recent traces are evaluated
+	public static final double BIG_RADIUS = LatLngGeometryUtil.metersToDegrees(50); //more tolerant for detecting stability
+	public static final double SMALL_RADIUS = LatLngGeometryUtil.metersToDegrees(20); //more tolerant for detecting movement
+	public static final double TELEPORT_DISTANCE = 10 * BIG_RADIUS; //min distance to alow a "teleport" change from one stay event to another
 //	private static final int MAX_TRACE_TIME_GAP = 30 * 60 * 1000; //max time without receiving traces, for which a previous stay event is considered to be connected to the traces received after the gap
 
 	public EventGenerationLogic(Trace currentTrace, EventDAL eventDal, TraceDAL traceDal, UserDAL userDal) {
@@ -152,7 +152,7 @@ public class EventGenerationLogic extends Thread {
 
 			}else if (currentEvent instanceof MoveEvent) {
 				MoveEvent move = ((MoveEvent) currentEvent);
-				move.getTrail().add(currentTrace.getPosition());
+				updateMoveEvent(move, currentTrace.getPosition());
 				
 				if(recent.isStable){
 					
@@ -189,15 +189,12 @@ public class EventGenerationLogic extends Thread {
 		Location location = finder.getLocation();
 		String imageUrl = finder.getImageUrl();
 
-		Media media = new Media();
-		media.setType(MediaType.IMAGE);
-		media.setUrl(imageUrl);
 		StayEvent event = new StayEvent();
 		event.setType(EventType.STAY);
 		event.setUser(user);
 		event.setStartTime(start);
 		event.setLocation(location);
-		event.setMedia(media);
+		event.setSingleImage(imageUrl);
 		event.setScore(new EventScore());
 		return event;
 	}
@@ -210,20 +207,17 @@ public class EventGenerationLogic extends Thread {
 	
 	private MoveEvent createMoveEvent(User user, EventDataFinder finder, Date start) {
 		Location location = finder.getLocation();
-		String imageUrl = finder.getImageUrl();
-		return createMoveEvent(user, location, imageUrl, start);
+//		String imageUrl = finder.getImageUrl();
+		return createMoveEvent(user, location, start);
 	}
 	
 	private MoveEvent createMoveEvent(User user, StayEvent stay, Date start) {
 		Location location = stay.getLocation();
-		String imageUrl = stay.getMedia().get(0).getUrl();
-		return createMoveEvent(user, location, imageUrl, start);
+//		String imageUrl = stay.getMedia().get(0).getUrl();
+		return createMoveEvent(user, location, start);
 	}
 	
-	private MoveEvent createMoveEvent(User user, Location location, String imageUrl, Date start) {
-		Media media = new Media();
-		media.setType(MediaType.IMAGE);
-		media.setUrl(imageUrl);
+	private MoveEvent createMoveEvent(User user, Location location, Date start) {
 		List<Position> trail = new ArrayList<Position>();
 		trail.add(location.getPosition());
 		MoveEvent event = new MoveEvent();
@@ -232,8 +226,11 @@ public class EventGenerationLogic extends Thread {
 		event.setStartTime(start);
 		event.setStartLocation(location);
 		event.setTrail(trail);
-		event.setMedia(media);
 		event.setScore(new EventScore());
+		
+		String imageUrl = moveEventMapImageUrl(event);
+		event.setSingleImage(imageUrl);
+		
 		return event;
 	}
 
@@ -242,6 +239,15 @@ public class EventGenerationLogic extends Thread {
 		event.setEndLocation(location);
 		EventScore score = EventScoreLogic.assignScore(event);
 		event.setScore(score);
+		
+		String imageUrl = moveEventMapImageUrl(event);
+		event.setSingleImage(imageUrl);
+	}
+	
+	private void updateMoveEvent(MoveEvent event, Position position){
+		event.getTrail().add(position);
+		String imageUrl = moveEventMapImageUrl(event);
+		event.setSingleImage(imageUrl);
 	}
 	
 	private class RecentTraces{

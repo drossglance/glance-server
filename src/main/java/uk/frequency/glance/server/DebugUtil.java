@@ -73,11 +73,15 @@ public class DebugUtil {
 		return DateFormat.getDateInstance(DateFormat.MEDIUM).format(time);
 	}
 
+	public static void showOnFrame(final Image image){
+		showOnFrame(image, null);
+	}
+	
 	@SuppressWarnings("serial")
-	public static void showOnFrame(final Image image) {
+	public static void showOnFrame(final Image image, String title) {
 		final int padding = 40;
 		
-		JFrame frame = new JFrame();
+		JFrame frame = new JFrame(title);
 		JPanel pane = new JPanel(){
 			@Override
 			public void paint(Graphics g) {

@@ -44,7 +44,7 @@ public class TestCaseLauncher {
 	}
 	
 	static void runTestCase(String fileName) throws IOException, ParseException, InterruptedException{
-		UserDTO user = createTestUser("testuser");
+		UserDTO user = createTestUser("testuser1");
 		user = (UserDTO) client.postAndPrint(user, "user");
 		
 		List<PositionTraceDTO> traces = loadTraces(fileName, user.id);

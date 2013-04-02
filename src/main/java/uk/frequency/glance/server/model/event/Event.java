@@ -19,6 +19,7 @@ import org.hibernate.annotations.Proxy;
 import uk.frequency.glance.server.model.Comment;
 import uk.frequency.glance.server.model.UserExpression;
 import uk.frequency.glance.server.model.component.Media;
+import uk.frequency.glance.server.model.component.Media.MediaType;
 import uk.frequency.glance.server.model.user.User;
 
 @Entity
@@ -47,6 +48,13 @@ public class Event extends UserExpression {
 	@OneToMany(mappedBy = "subject")
 	List<Comment> comments;
 
+	public void setSingleImage(String imageUrl){
+		Media media = new Media();
+		media.setType(MediaType.IMAGE);
+		media.setUrl(imageUrl);
+		setMedia(media);
+	}
+	
 	public EventType getType() {
 		return type;
 	}

@@ -8,6 +8,7 @@ import java.awt.Graphics2D;
 import java.awt.Image;
 import java.awt.Point;
 import java.awt.Rectangle;
+import java.util.ArrayList;
 import java.util.List;
 
 import javax.swing.JFrame;
@@ -19,6 +20,10 @@ import uk.frequency.glance.server.business.logic.geometry.LatLngGeometryUtil;
 import uk.frequency.glance.server.business.remote.GoogleStaticMaps;
 import uk.frequency.glance.server.business.remote.RemoteAPIClient;
 import uk.frequency.glance.server.model.component.Position;
+import uk.frequency.glance.server.service.EventSL;
+import uk.frequency.glance.server.transfer.event.EventDTO;
+import uk.frequency.glance.server.transfer.event.EventViewDTO;
+import uk.frequency.glance.server.transfer.event.MoveEventDTO;
 import uk.frequency.glance.server.transfer.trace.PositionTraceDTO;
 
 @SuppressWarnings("serial")
@@ -29,7 +34,10 @@ public class PositionTraceDebug {
 	static GoogleStaticMaps maps = new GoogleStaticMaps(width, height);
 	
 	public static void main(String[] args) {
-		List<PositionTraceDTO> traces = DBDownloader.downloadPositionTraces(1);
+//		List<PositionTraceDTO> traces = DBDownloader.downloadPositionTraces(1);
+//		Date begin = parse("2013/03/27 00:00:00");
+//		Date end = parse("2013/04/01 00:00:00");
+//		List<PositionTraceDTO> traces = DBDownloader.downloadPositionTraces(1, begin, end);
 		
 //		int pace = 100;
 //		for (int i = 0; i < traces.size(); i+=pace) {
@@ -38,10 +46,34 @@ public class PositionTraceDebug {
 //			showOnMap(part);
 //		}
 		
-		showOnMap(traces);
+//		showOnMap(traces);
+		
+		
+		List<EventDTO> events = DBDownloader.downloadEvents(1);
+		for(EventDTO event : events){
+			if(event instanceof MoveEventDTO){
+				MoveEventDTO move = (MoveEventDTO) event;
+				showTrailOnMap(move);
+			}
+		}
+		
 	}
 	
-	static void showOnMap(List<PositionTraceDTO> traces){
+	static void showTrailOnMap(MoveEventDTO move){
+		List<Position> trail = PresentationUtil.cleanTrail(move.trail);
+		List<Position> markers = new ArrayList<Position>();
+		markers.add(move.startLocation.getPosition());
+		if(move.endLocation != null){
+			markers.add(move.endLocation.getPosition());
+		}
+		String url = maps.getImageUrl(markers, trail);
+		RemoteAPIClient client = new RemoteAPIClient("");
+		Image map = client.getImage(url);
+		EventViewDTO view = EventViewDTO.from(EventSL.staticFromDTO(move));
+		DebugUtil.showOnFrame(map, view.preTitle + " " + view.title);
+	}
+	
+	static void showTracesOnMap(List<PositionTraceDTO> traces){
 		List<Position> trail = LatLngGeometryUtil.tracesToPositions(traces);
 //		BoundingBox box = BoundingBox.from(trail);
 //		Position center = box.findCenter();
@@ -71,12 +103,6 @@ public class PositionTraceDebug {
 		showOnFrame(canvas);
 	}
 	
-	static void showOnFrame(Image image){
-		JPanel canvas = new Canvas(image);
-		canvas.setPreferredSize(new Dimension(image.getWidth(null), image.getHeight(null)));
-		showOnFrame(canvas);
-	}
-	
 	static class Canvas extends JPanel{
 		
 		Image image;
@@ -92,10 +118,6 @@ public class PositionTraceDebug {
 //			this.rect = EuclidianGeometryUtil.findRectangle(this.trail);
 		}
 		
-		public Canvas(Image image){
-			this.image = image;
-		}
-
 		@Override
 		public void paint(Graphics g) {
 			super.paint(g);

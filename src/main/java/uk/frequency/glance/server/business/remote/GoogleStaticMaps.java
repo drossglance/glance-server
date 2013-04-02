@@ -45,6 +45,16 @@ public class GoogleStaticMaps {
 		return url;
 	}
 	
+	public String getImageUrl(List<Position> markers, List<Position> path){
+		String url = rootUrl + 
+				"?size=" + width + "x" + height +
+				"&markers=" + locationListString(markers) + 
+				"&path=" + locationListString(path) + 
+				"&sensor=false" +
+				"&key="+ key;
+		return url;
+	}
+	
 	public String getImageUrl(BoundingBox bounds){
 		String url = rootUrl + 
 				"?size=" + width + "x" + height + 

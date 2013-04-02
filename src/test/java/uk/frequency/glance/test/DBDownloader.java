@@ -48,7 +48,7 @@ public class DBDownloader {
 	
 	public static List<TraceDTO> downloadTraces(long userId, Date begin, Date end){
 		TestClient client = new TestClient(ROOT_URL);
-		String path = String.format("trace/user-%d/", userId);
+		String path = String.format("trace/user-%d/%sto%s", userId, begin.getTime(), end.getTime());
 		return client.getList(path, new TypeToken<List<TraceDTO>>(){});
 	}
 	
