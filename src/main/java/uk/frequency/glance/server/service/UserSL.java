@@ -5,6 +5,7 @@ import static uk.frequency.glance.server.model.user.FriendshipStatus.DECLINED;
 import static uk.frequency.glance.server.model.user.FriendshipStatus.REQUEST_RECEIVED;
 import static uk.frequency.glance.server.model.user.FriendshipStatus.REQUEST_SENT;
 
+import java.net.URI;
 import java.util.ArrayList;
 import java.util.Date;
 import java.util.List;
@@ -291,7 +292,10 @@ public class UserSL extends GenericSL<User, UserDTO>{
 	public Response saveLogEntry(LogEntry debug) {
 		try{
 			userBl.saveLogEntry(debug);
-			return Response.ok().build();
+			URI uri = uriInfo.getAbsolutePathBuilder().path("{index}").build(debug.id);
+			business.flush();
+			return Response.created(uri).
+					entity(debug).build();
 		}catch(Exception e){
 			throw new WebApplicationException(e);
 		}

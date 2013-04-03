@@ -62,4 +62,8 @@ public class TimeUtil {
 			return null;
 		}
 	}
+	
+	public static int hoursToMiliseconds(int hours){
+		return hours*60*60*1000;
+	}
 }
