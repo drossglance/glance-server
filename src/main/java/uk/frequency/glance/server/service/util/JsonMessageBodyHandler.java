@@ -25,6 +25,7 @@ import uk.frequency.glance.server.transfer.event.StayEventDTO;
 import uk.frequency.glance.server.transfer.event.TellEventDTO;
 import uk.frequency.glance.server.transfer.trace.ListenTraceDTO;
 import uk.frequency.glance.server.transfer.trace.PositionTraceDTO;
+import uk.frequency.glance.server.transfer.trace.SleepTraceDTO;
 import uk.frequency.glance.server.transfer.trace.TraceDTO;
 
 import com.google.gson.Gson;
@@ -57,6 +58,7 @@ public final class JsonMessageBodyHandler implements MessageBodyWriter<Object>, 
 		builder.registerTypeAdapter(TraceDTO.class, JsonHierarchySerializer.getTraceInstance());
 		builder.registerTypeAdapter(PositionTraceDTO.class, JsonHierarchySerializer.getTraceInstance());
 		builder.registerTypeAdapter(ListenTraceDTO.class, JsonHierarchySerializer.getTraceInstance());
+		builder.registerTypeAdapter(SleepTraceDTO.class, JsonHierarchySerializer.getTraceInstance());
 		builder.registerTypeAdapter(EventDTO.class, JsonHierarchySerializer.getEventInstance());
 		builder.registerTypeAdapter(StayEventDTO.class, JsonHierarchySerializer.getEventInstance());
 		builder.registerTypeAdapter(MoveEventDTO.class, JsonHierarchySerializer.getEventInstance());

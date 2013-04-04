@@ -12,10 +12,12 @@ import javax.ws.rs.core.MediaType;
 import uk.frequency.glance.server.business.TraceBL;
 import uk.frequency.glance.server.model.trace.ListenTrace;
 import uk.frequency.glance.server.model.trace.PositionTrace;
+import uk.frequency.glance.server.model.trace.SleepTrace;
 import uk.frequency.glance.server.model.trace.Trace;
 import uk.frequency.glance.server.model.user.User;
 import uk.frequency.glance.server.transfer.trace.ListenTraceDTO;
 import uk.frequency.glance.server.transfer.trace.PositionTraceDTO;
+import uk.frequency.glance.server.transfer.trace.SleepTraceDTO;
 import uk.frequency.glance.server.transfer.trace.TraceDTO;
 
 
@@ -69,6 +71,11 @@ public class TraceSL extends GenericSL<Trace, TraceDTO>{
 			ListenTraceDTO listenDto = new ListenTraceDTO();
 			listenDto.songMetadata = listen.getSongMetadata();
 			dto = listenDto;
+		}else if(trace instanceof SleepTrace){
+			SleepTrace sleep = (SleepTrace)trace;
+			SleepTraceDTO sleepDto = new SleepTraceDTO();
+			sleepDto.begin = sleep.isBegin();
+			dto = sleepDto;
 		}else{
 			throw new AssertionError();
 		}
@@ -97,6 +104,11 @@ public class TraceSL extends GenericSL<Trace, TraceDTO>{
 			ListenTrace listen = new ListenTrace();
 			listen.setSongMetadata(listenDto.songMetadata);
 			trace = listen;
+		}else if(dto instanceof SleepTraceDTO){
+			SleepTraceDTO sleepDto = (SleepTraceDTO)dto;
+			SleepTrace sleep = new SleepTrace();
+			sleep.setBegin(sleepDto.begin);
+			trace = sleep;
 		}else{
 			throw new AssertionError();
 		}

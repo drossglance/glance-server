@@ -8,6 +8,7 @@ import java.util.Date;
 
 import uk.frequency.glance.server.business.logic.TimeUtil;
 import uk.frequency.glance.server.model.event.Event;
+import uk.frequency.glance.server.model.event.EventType;
 import uk.frequency.glance.server.model.event.ListenEvent;
 import uk.frequency.glance.server.model.event.MoveEvent;
 import uk.frequency.glance.server.model.event.StayEvent;
@@ -35,8 +36,14 @@ public class EventViewDTO {
 			dto.title = toUpperCase(tell.getLocation().getName());
 		}else if(event instanceof StayEvent){
 			StayEvent stay = (StayEvent)event;
-			dto.preTitle = isHappening? "ARRIVED AT" : null;
-			dto.title = toUpperCase(stay.getLocation().getName());
+			if(event.getType() == EventType.SLEEP){
+				dto.title = "SLEEPING";
+			}else if(event.getType() == EventType.WAKE){
+				dto.title = "WOKE UP";
+			}else{
+				dto.preTitle = isHappening? "ARRIVED AT" : null;
+				dto.title = toUpperCase(stay.getLocation().getName());
+			}
 		}else if(event instanceof MoveEvent){
 			MoveEvent move = (MoveEvent)event;
 			if(isHappening){

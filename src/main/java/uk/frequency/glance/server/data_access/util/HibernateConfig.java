@@ -24,6 +24,7 @@ import uk.frequency.glance.server.model.event.StayEvent;
 import uk.frequency.glance.server.model.event.TellEvent;
 import uk.frequency.glance.server.model.trace.ListenTrace;
 import uk.frequency.glance.server.model.trace.PositionTrace;
+import uk.frequency.glance.server.model.trace.SleepTrace;
 import uk.frequency.glance.server.model.trace.Trace;
 import uk.frequency.glance.server.model.user.EventGenerationInfo;
 import uk.frequency.glance.server.model.user.Friendship;
@@ -52,6 +53,7 @@ public class HibernateConfig {
 				.addAnnotatedClass(Trace.class)
 				.addAnnotatedClass(PositionTrace.class)
 				.addAnnotatedClass(ListenTrace.class)
+				.addAnnotatedClass(SleepTrace.class)
 				.addAnnotatedClass(Event.class)
 				.addAnnotatedClass(StayEvent.class)
 				.addAnnotatedClass(MoveEvent.class)

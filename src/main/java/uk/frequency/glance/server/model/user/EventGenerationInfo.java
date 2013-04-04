@@ -36,7 +36,11 @@ public class EventGenerationInfo {
 	
 	@LazyToOne(LazyToOneOption.FALSE)
 	@OneToOne
-	Event currentEvent;
+	Event currentPositionEvent;
+	
+	@LazyToOne(LazyToOneOption.FALSE)
+	@OneToOne
+	Event currentSleepEvent;
 	
 	@LazyToOne(LazyToOneOption.FALSE)
 	@OneToOne
@@ -58,12 +62,20 @@ public class EventGenerationInfo {
 		this.lastEvent = lastEvent;
 	}
 
-	public Event getCurrentEvent() {
-		return currentEvent;
+	public Event getCurrentPositionEvent() {
+		return currentPositionEvent;
 	}
 
-	public void setCurrentEvent(Event currentEvent) {
-		this.currentEvent = currentEvent;
+	public void setCurrentPositionEvent(Event currentPositionEvent) {
+		this.currentPositionEvent = currentPositionEvent;
+	}
+
+	public Event getCurrentSleepEvent() {
+		return currentSleepEvent;
+	}
+
+	public void setCurrentSleepEvent(Event currentSleepEvent) {
+		this.currentSleepEvent = currentSleepEvent;
 	}
 
 	public PositionTrace getLastPositionTrace() {

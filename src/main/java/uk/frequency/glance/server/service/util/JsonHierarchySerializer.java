@@ -11,6 +11,7 @@ import uk.frequency.glance.server.transfer.event.StayEventDTO;
 import uk.frequency.glance.server.transfer.event.TellEventDTO;
 import uk.frequency.glance.server.transfer.trace.ListenTraceDTO;
 import uk.frequency.glance.server.transfer.trace.PositionTraceDTO;
+import uk.frequency.glance.server.transfer.trace.SleepTraceDTO;
 import uk.frequency.glance.server.transfer.trace.TraceDTO;
 
 import com.google.gson.Gson;
@@ -79,9 +80,11 @@ public class JsonHierarchySerializer<T> implements JsonSerializer<T>, JsonDeseri
 		Map<String, Class<? extends TraceDTO>> map = new HashMap<String, Class<? extends TraceDTO>>();
 		map.put("POSITION_TRACE", PositionTraceDTO.class);
 		map.put("LISTEN_TRACE", ListenTraceDTO.class);
+		map.put("SLEEP_TRACE", SleepTraceDTO.class);
 		Map<Class<? extends TraceDTO>, String> unmap = new HashMap<Class<? extends TraceDTO>, String>();
 		unmap.put(PositionTraceDTO.class, "POSITION_TRACE");
 		unmap.put(ListenTraceDTO.class, "LISTEN_TRACE");
+		unmap.put(SleepTraceDTO.class, "SLEEP_TRACE");
 		return new JsonHierarchySerializer<TraceDTO>(map, unmap);
 	}
 
