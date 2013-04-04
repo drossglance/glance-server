@@ -44,7 +44,7 @@ public class EventGenerationLogic extends Thread {
 			handleTrace();
 			tr.commit();
 		}catch(ConstraintViolationException e){
-			//probably  traces with repeated time
+			//probably traces with repeated time
 			System.err.println(e.getMessage());
 			if (tr.isActive()) {
 				tr.rollback();

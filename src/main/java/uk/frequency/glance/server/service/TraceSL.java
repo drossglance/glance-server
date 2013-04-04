@@ -75,6 +75,7 @@ public class TraceSL extends GenericSL<Trace, TraceDTO>{
 			SleepTrace sleep = (SleepTrace)trace;
 			SleepTraceDTO sleepDto = new SleepTraceDTO();
 			sleepDto.begin = sleep.isBegin();
+			sleepDto.position = sleep.getPosition();
 			dto = sleepDto;
 		}else{
 			throw new AssertionError();
@@ -108,6 +109,7 @@ public class TraceSL extends GenericSL<Trace, TraceDTO>{
 			SleepTraceDTO sleepDto = (SleepTraceDTO)dto;
 			SleepTrace sleep = new SleepTrace();
 			sleep.setBegin(sleepDto.begin);
+			sleep.setPosition(sleepDto.position);
 			trace = sleep;
 		}else{
 			throw new AssertionError();

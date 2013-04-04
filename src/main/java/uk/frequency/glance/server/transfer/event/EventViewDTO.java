@@ -71,7 +71,11 @@ public class EventViewDTO {
 			Date end = event.getEndTime();
 			String startStr = timeText(start);
 			String endStr = timeText(end);
-			dto.subtitle2 = String.format("%s - %s", startStr, endStr);
+			if(startStr.equals(endStr)){
+				dto.subtitle2 = startStr;
+			}else{
+				dto.subtitle2 = String.format("%s - %s", startStr, endStr);
+			}
 		}
 		
 		if(event.getMedia() != null && event.getMedia().size() > 0){

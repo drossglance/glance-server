@@ -35,7 +35,9 @@ public class TimeUtil {
 		Calendar cal = Calendar.getInstance();
 		cal.setTime(time);
 		int sec = cal.get(Calendar.SECOND);
-		return (double)sec/(60*60);
+		int min = cal.get(Calendar.MINUTE);
+		int hour = cal.get(Calendar.HOUR_OF_DAY);
+		return hour + (double)min/60 + (double)sec/(60*60);
 	}
 
 	public static boolean isBeforeToday(Date time){
