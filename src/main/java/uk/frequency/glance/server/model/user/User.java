@@ -52,6 +52,7 @@ public class User extends GenericEntity{
 	@OneToOne(mappedBy="user")
 	EventGenerationInfo eventGenerationInfo;
 	
+	@Cascade(value=CascadeType.DELETE)
 	@OneToMany(mappedBy="user")
 	List<Friendship> friendships;
 	
