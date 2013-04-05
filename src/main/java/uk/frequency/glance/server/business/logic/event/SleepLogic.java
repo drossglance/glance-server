@@ -4,6 +4,7 @@ import java.util.Date;
 
 import uk.frequency.glance.server.business.remote.EventDataFinder;
 import uk.frequency.glance.server.data_access.EventDAL;
+import uk.frequency.glance.server.data_access.StaticResourcesLoader;
 import uk.frequency.glance.server.data_access.TraceDAL;
 import uk.frequency.glance.server.data_access.UserDAL;
 import uk.frequency.glance.server.model.Location;
@@ -53,7 +54,7 @@ public class SleepLogic extends Thread {
 				eventDal.save(newEvent);
 				genInfo.setCurrentSleepEvent(newEvent);
 			}else{
-				System.err.println("WARNING: attempting to close innexistent sleep event."); //FIXME shouldn't happend
+				System.err.println("WARNING: attempting to close innexistent sleep event."); //FIXME shouldn't happen
 				throw new AssertionError();
 			}
 		}
@@ -62,7 +63,7 @@ public class SleepLogic extends Thread {
 	}
 	
 	private Event createSleepEvent(User user, Date start, Location location){
-		String imageUrl = "http://cdn.ebaumsworld.com/mediaFiles/picture/1984035/81487125.jpg"; //TODO pick from fixed set of sleep images on server
+		String imageUrl = StaticResourcesLoader.getImageUrl("sleep", genInfo.getSleepStaticImageIndex());
 		
 		StayEvent event = new StayEvent();
 		event.setType(EventType.SLEEP);
@@ -81,7 +82,7 @@ public class SleepLogic extends Thread {
 	}
 	
 	private Event createWakeEvent(User user, Date time, Location location){
-		String imageUrl = "http://janeannethorne.files.wordpress.com/2013/02/sunshine.jpg"; //TODO pick from fixed set of sleep images on server
+		String imageUrl = StaticResourcesLoader.getImageUrl("wake", genInfo.getWakeStaticImageIndex());
 		
 		StayEvent event = new StayEvent();
 		event.setType(EventType.WAKE);

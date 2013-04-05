@@ -46,6 +46,10 @@ public class EventGenerationInfo {
 	@OneToOne
 	PositionTrace lastPositionTrace;
 
+	Integer sleepStaticImageIndex = 0;
+	
+	Integer wakeStaticImageIndex = 0;
+	
 	public User getUser() {
 		return user;
 	}
@@ -84,6 +88,22 @@ public class EventGenerationInfo {
 
 	public void setLastPositionTrace(PositionTrace lastPositionTrace) {
 		this.lastPositionTrace = lastPositionTrace;
+	}
+
+	public Integer getSleepStaticImageIndex() {
+		return sleepStaticImageIndex;
+	}
+
+	public void setSleepStaticImageIndex(Integer sleepStaticImageIndex) {
+		this.sleepStaticImageIndex = sleepStaticImageIndex;
+	}
+
+	public Integer getWakeStaticImageIndex() {
+		return wakeStaticImageIndex;
+	}
+
+	public void setWakeStaticImageIndex(Integer wakeStaticImageIndex) {
+		this.wakeStaticImageIndex = wakeStaticImageIndex;
 	}
 
 	@Override

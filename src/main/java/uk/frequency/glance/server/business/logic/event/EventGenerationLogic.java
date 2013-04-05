@@ -26,7 +26,7 @@ public class EventGenerationLogic extends Thread {
 	public static final int TIME_WINDOW = 2 * 60 * 1000; //(in miliseconds) time window in which recent traces are evaluated
 	public static final double BIG_RADIUS = LatLngGeometryUtil.metersToDegrees(50); //more tolerant for detecting stability
 	public static final double SMALL_RADIUS = LatLngGeometryUtil.metersToDegrees(20); //more tolerant for detecting movement
-	public static final double TELEPORT_DISTANCE = 10 * BIG_RADIUS; //min distance to alow a "teleport" change from one stay event to another
+	public static final double TELEPORT_DISTANCE = 10 * BIG_RADIUS; //min distance to allow a "teleport" change from one stay event to another
 //	private static final int MAX_TRACE_TIME_GAP = 30 * 60 * 1000; //max time without receiving traces, for which a previous stay event is considered to be connected to the traces received after the gap
 
 	public EventGenerationLogic(Trace currentTrace, EventDAL eventDal, TraceDAL traceDal, UserDAL userDal) {
