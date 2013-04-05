@@ -39,8 +39,10 @@ public class SleepLogic extends Thread {
 		if(currentTrace.isBegin()){
 			Position pos = currentTrace.getPosition();
 			EventDataFinder finder = new EventDataFinder(pos);
+			int index = genInfo.getSleepStaticImageIndex();
+			genInfo.setSleepStaticImageIndex(index+1);
 			
-			Event newEvent = createSleepEvent(user, new Date(), finder.getLocation());
+			Event newEvent = createSleepEvent(user, new Date(), finder.getLocation(), index);
 			eventDal.save(newEvent);
 			genInfo.setCurrentSleepEvent(newEvent);
 		}else{
@@ -50,7 +52,9 @@ public class SleepLogic extends Thread {
 				eventDal.save(currentEvent);
 				genInfo.setCurrentSleepEvent(currentEvent);
 				
-				Event newEvent = createWakeEvent(user, new Date(), currentEvent.getLocation());
+				int index = genInfo.getWakeStaticImageIndex();
+				genInfo.setWakeStaticImageIndex(index+1);
+				Event newEvent = createWakeEvent(user, new Date(), currentEvent.getLocation(), index);
 				eventDal.save(newEvent);
 				genInfo.setCurrentSleepEvent(newEvent);
 			}else{
@@ -62,8 +66,8 @@ public class SleepLogic extends Thread {
 		userDal.merge(genInfo);
 	}
 	
-	private Event createSleepEvent(User user, Date start, Location location){
-		String imageUrl = StaticResourcesLoader.getImageUrl("sleep", genInfo.getSleepStaticImageIndex());
+	private Event createSleepEvent(User user, Date start, Location location, int imageIndex){
+		String imageUrl = StaticResourcesLoader.getImageUrl("sleep", imageIndex);
 		
 		StayEvent event = new StayEvent();
 		event.setType(EventType.SLEEP);
@@ -81,8 +85,8 @@ public class SleepLogic extends Thread {
 		event.setScore(score);
 	}
 	
-	private Event createWakeEvent(User user, Date time, Location location){
-		String imageUrl = StaticResourcesLoader.getImageUrl("wake", genInfo.getWakeStaticImageIndex());
+	private Event createWakeEvent(User user, Date time, Location location, int imageIndex){
+		String imageUrl = StaticResourcesLoader.getImageUrl("wake", imageIndex);
 		
 		StayEvent event = new StayEvent();
 		event.setType(EventType.WAKE);
