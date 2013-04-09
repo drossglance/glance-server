@@ -25,20 +25,18 @@ import javax.ws.rs.core.Response;
 import javax.ws.rs.core.Response.Status;
 
 import uk.frequency.glance.server.business.EventBL;
+import uk.frequency.glance.server.business.TraceBL;
 import uk.frequency.glance.server.business.UserBL;
 import uk.frequency.glance.server.business.exception.MissingFieldException;
+import uk.frequency.glance.server.business.logic.PresentationUtil;
+import uk.frequency.glance.server.business.remote.EventDataFinder;
 import uk.frequency.glance.server.debug.LogEntry;
 import uk.frequency.glance.server.model.Location;
-import uk.frequency.glance.server.model.event.Event;
-import uk.frequency.glance.server.model.event.MoveEvent;
-import uk.frequency.glance.server.model.event.StayEvent;
+import uk.frequency.glance.server.model.trace.PositionTrace;
 import uk.frequency.glance.server.model.user.Friendship;
 import uk.frequency.glance.server.model.user.FriendshipStatus;
 import uk.frequency.glance.server.model.user.User;
 import uk.frequency.glance.server.model.user.UserProfile;
-import uk.frequency.glance.server.transfer.event.EventDTO;
-import uk.frequency.glance.server.transfer.event.MoveEventDTO;
-import uk.frequency.glance.server.transfer.event.StayEventDTO;
 import uk.frequency.glance.server.transfer.user.FriendshipDTO;
 import uk.frequency.glance.server.transfer.user.UserDTO;
 
@@ -48,11 +46,13 @@ public class UserSL extends GenericSL<User, UserDTO>{
 
 	UserBL userBl;
 	EventBL eventBl;
+	TraceBL traceBl;
 
 	public UserSL() {
 		super(new UserBL());
 		userBl = (UserBL)business;
 		eventBl = new EventBL();
+		traceBl = new TraceBL();
 	}
 	
 	@Override
@@ -118,32 +118,12 @@ public class UserSL extends GenericSL<User, UserDTO>{
 				dto.profile = profile;
 			}
 			
-			Event recentEvent = eventBl.findMostRecent(friend.getId());
-			if(recentEvent != null){
-				EventDTO eventDto;
-				if(recentEvent instanceof StayEvent){
-					StayEvent stay = (StayEvent) recentEvent;
-					StayEventDTO stayDto = new StayEventDTO();
-					stayDto.startTime = stay.getStartTime().getTime();
-					Location location = new Location();
-					location.setName(stay.getLocation().getName());
-					stayDto.location = location;
-					eventDto = stayDto;
-				}else if(recentEvent instanceof MoveEvent){
-					MoveEvent move = (MoveEvent) recentEvent;
-					MoveEventDTO moveDto = new MoveEventDTO();
-					moveDto.startTime = move.getStartTime().getTime();
-					Location location = new Location();
-					location.setName(move.getStartLocation().getName());
-					moveDto.startLocation = location;
-					eventDto = moveDto;
-				}else{
-					throw new AssertionError();
-				}
-				List<EventDTO> events = new ArrayList<EventDTO>();
-				events.add(eventDto);
-				dto.events = events;
-			}
+			PositionTrace trace = traceBl.findMostRecentPositionTrace(userId);
+			if(trace != null){
+				Location location = new EventDataFinder(trace.getPosition()).getLocation();
+				dto.recentLocationName = location.getName();
+				dto.recentLocationTime = PresentationUtil.timeText(trace.getTime());
+			} 
 			
 			dto.friendshipStatus = ACCEPTED;
 			dtoList.add(dto);
