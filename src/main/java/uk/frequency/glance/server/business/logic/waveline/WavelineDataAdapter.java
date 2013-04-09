@@ -23,55 +23,55 @@ public class WavelineDataAdapter {
 		float[] series2 = new float[SERIES_LENGTH]; // move
 		float[] series3 = new float[SERIES_LENGTH]; // sleep
 		index = new int[SERIES_LENGTH];
-		long begin = 0;
-		long end = 0;
+
 		if (events.size() > 1) {
-			begin = events.get(0).getStartTime().getTime();
-			end = events.get(events.size() - 1).getStartTime().getTime();
-		}
+			long begin = events.get(0).getStartTime().getTime();
+			long end = events.get(events.size() - 1).getStartTime().getTime();
 		
-		//load the time series and index
-		for (int i = 0; i < events.size(); i++) {
-			Event event = events.get(i);
-			Long startTime = event.getStartTime().getTime();
-			Long endTime = event.getEndTime() == null ? startTime : event.getEndTime().getTime();
-			if (endTime == null) {
-				endTime = end;
-			}
-			int startPos = (int) ((startTime - begin) * (SERIES_LENGTH - 1) / (end - begin)); //casting is safe because 0 <= result <= seriesLenght
-			int endPos = (int) ((endTime - begin) * (SERIES_LENGTH - 1) / (end - begin));
-			
-			//value attribution based on event score
-			int score = (int) Math.round(event.getScore().getRelevance());
-			if (event instanceof StayEvent) {
-				if (event.getType() == EventType.SLEEP) {
-					for (int j = startPos; j < endPos; j++) {
-						series3[j] += score;
+			//load the time series and index
+			for (int i = 0; i < events.size(); i++) {
+				Event event = events.get(i);
+				Long startTime = event.getStartTime().getTime();
+				Long endTime = event.getEndTime() == null ? startTime : event.getEndTime().getTime();
+				if (endTime == null) {
+					endTime = end;
+				}
+				int startPos = (int) ((startTime - begin) * (SERIES_LENGTH - 1) / (end - begin)); //casting is safe because 0 <= result <= seriesLenght
+				int endPos = (int) ((endTime - begin) * (SERIES_LENGTH - 1) / (end - begin));
+				
+				//value attribution based on event score
+				int score = (int) Math.round(event.getScore().getRelevance());
+				if (event instanceof StayEvent) {
+					if (event.getType() == EventType.SLEEP) {
+						for (int j = startPos; j < endPos; j++) {
+							series3[j] += score;
+						}
+					} else if (event.getType() == EventType.WAKE) {
+						series3[startPos] += score;
+					} else {
+						for (int j = startPos; j < endPos; j++) {
+							series1[j] += score;
+						}
 					}
-				} else if (event.getType() == EventType.WAKE) {
-					series3[startPos] += score;
-				} else {
+				} else if (event instanceof MoveEvent) {
 					for (int j = startPos; j < endPos; j++) {
-						series1[j] += score;
+						series2[j] += score;
 					}
 				}
-			} else if (event instanceof MoveEvent) {
-				for (int j = startPos; j < endPos; j++) {
-					series2[j] += score;
-				}
+				
+				index[startPos] = i;
 			}
 			
-			index[startPos] = i;
-		}
-		
-		//fill empty indexes with next value in the left
-		int lastIndex = 0;
-		for(int i=0; i<SERIES_LENGTH; i++){
-			if(index[i] == 0){
-				index[i] = lastIndex;
-			}else{
-				lastIndex = index[i];
+			//fill empty indexes with next value in the left
+			int lastIndex = 0;
+			for(int i=0; i<SERIES_LENGTH; i++){
+				if(index[i] == 0){
+					index[i] = lastIndex;
+				}else{
+					lastIndex = index[i];
+				}
 			}
+		
 		}
 
 		//prepare to return

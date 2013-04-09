@@ -144,7 +144,7 @@ public class EventSL extends GenericSL<Event, EventDTO>{
 		@QueryParam("wl_height") long height){
 		
 		List<Event> events = eventBl.findRecent(userId, 50);
-		Collections.reverse(events); //TODO use them in desc order
+		Collections.reverse(events); //TODO use them in desc order so we can use limit in SQL
 		
 		String waveUrl = uriInfo.getBaseUriBuilder()
 				.path("event/user-{id}/waveline")

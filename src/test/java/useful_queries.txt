@@ -21,7 +21,7 @@ delete from trace;
 //CLEAN ALL TRACES OLDER THAN DATE
 WITH t as (select id from trace where time < '2013-03-20 20:30')
 delete from event_generation_info where last_position_trace in t;
-delete from position_trace  where id in t;
+delete from position_trace where id in t;
 delete from trace where id in t;
 
 //CLEAN ALL EVENTS OLDER THAN DATE
@@ -31,3 +31,11 @@ delete from stay_event where id in e;
 delete from move_event_trail where move_event in e;
 delete from move_event where id in e;
 delete from event where id in e;
+
+//DELETE EVENTS BY USER
+delete from event_media where event in (select id from event where user_id = 32768);
+delete from stay_event where id in (select id from event where user_id = 32768);
+delete from move_event_trail where move_event in (select id from event where user_id = 32768);
+delete from move_event where id in (select id from event where user_id = 32768);
+delete from event where id in (select id from event where user_id = 32768);
+update event_generation_info set last_event=null, current_position_event=null, current_sleep_event=null where user_id=32768
