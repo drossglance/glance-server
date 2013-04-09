@@ -19,9 +19,11 @@ import javax.ws.rs.core.Response.Status;
 import org.hibernate.ObjectNotFoundException;
 
 import uk.frequency.glance.server.business.EventBL;
+import uk.frequency.glance.server.business.TraceBL;
 import uk.frequency.glance.server.business.UserBL;
 import uk.frequency.glance.server.business.logic.event.EventScoreLogic;
 import uk.frequency.glance.server.business.logic.waveline.WavelineDataAdapter;
+import uk.frequency.glance.server.business.remote.EventDataFinder;
 import uk.frequency.glance.server.data_access.util.HibernateConfig;
 import uk.frequency.glance.server.model.Comment;
 import uk.frequency.glance.server.model.Location;
@@ -30,6 +32,7 @@ import uk.frequency.glance.server.model.event.ListenEvent;
 import uk.frequency.glance.server.model.event.MoveEvent;
 import uk.frequency.glance.server.model.event.StayEvent;
 import uk.frequency.glance.server.model.event.TellEvent;
+import uk.frequency.glance.server.model.trace.PositionTrace;
 import uk.frequency.glance.server.model.user.User;
 import uk.frequency.glance.server.model.user.UserProfile;
 import uk.frequency.glance.server.transfer.event.EventDTO;
@@ -46,11 +49,13 @@ public class EventSL extends GenericSL<Event, EventDTO>{
 
 	EventBL eventBl;
 	UserBL userBl;
+	TraceBL traceBl;
 
 	public EventSL() {
 		super(new EventBL());
 		eventBl = (EventBL)business;
 		userBl = new UserBL();
+		traceBl = new TraceBL();
 	}
 	
 	@GET
@@ -193,9 +198,12 @@ public class EventSL extends GenericSL<Event, EventDTO>{
 			dto.profile.setImageUrl(recentProfile.getImageUrl());
 		}
 		
-		Location location = userBl.findMostRecentLocation(userId);
-		if(location != null){
-			dto.currentLocationName = location.getName(); 
+		
+		PositionTrace trace = traceBl.findMostRecentPositionTrace(userId);
+		if(trace != null){
+			Location location = new EventDataFinder(trace.getPosition()).getLocation();
+			dto.recentLocationName = location.getName();
+			dto.recentLocationTime = trace.getTime().getTime();
 		}
 		
 		dto.wavelineIndex = index;

@@ -32,6 +32,8 @@ public class UserDTO extends GenericDTO{
 	
 	public String wavelineImageUrl;
 	
-	public String currentLocationName;
+	public String recentLocationName;
+	
+	public long recentLocationTime;
 
 }

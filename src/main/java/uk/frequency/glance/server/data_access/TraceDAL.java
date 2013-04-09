@@ -38,7 +38,7 @@ public class TraceDAL extends GenericDAL<Trace>{
 		return (Trace)q.uniqueResult();
 	}
 	
-	public PositionTrace findMostRecentPosition(long userId){
+	public PositionTrace findMostRecentPositionTrace(long userId){
 		getSession().createQuery("select max(t2.time) from PositionTrace t2 where " +
 				"t2.user.id = :userId").setParameter("userId", userId).uniqueResult();
 		
