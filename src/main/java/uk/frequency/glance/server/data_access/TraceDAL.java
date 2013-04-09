@@ -29,6 +29,27 @@ public class TraceDAL extends GenericDAL<Trace>{
 		return q.list();
 	}
 	
+	public Trace findMostRecent(long userId){
+		Query q = getSession().createQuery("from Trace t where " +
+				"t.user.id = :userId " +
+				"and t.time = (select max(t2.time) from Trace t2 where " +
+				"t2.user.id = :userId)")
+			.setParameter("userId", userId);
+		return (Trace)q.uniqueResult();
+	}
+	
+	public PositionTrace findMostRecentPosition(long userId){
+		getSession().createQuery("select max(t2.time) from PositionTrace t2 where " +
+				"t2.user.id = :userId").setParameter("userId", userId).uniqueResult();
+		
+		Query q = getSession().createQuery("from PositionTrace t where " +
+				"t.user.id = :userId " +
+				"and t.time = (select max(t2.time) from PositionTrace t2 where " +
+				"t2.user.id = :userId)")
+			.setParameter("userId", userId);
+		return (PositionTrace)q.uniqueResult();
+	}
+	
 	public List<Trace> find(long userId, Date start, Date end){
 		Query q = getSession().createQuery("from Trace where " +
 				"user.id = :userId " +

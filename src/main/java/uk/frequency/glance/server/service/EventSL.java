@@ -24,6 +24,7 @@ import uk.frequency.glance.server.business.logic.event.EventScoreLogic;
 import uk.frequency.glance.server.business.logic.waveline.WavelineDataAdapter;
 import uk.frequency.glance.server.data_access.util.HibernateConfig;
 import uk.frequency.glance.server.model.Comment;
+import uk.frequency.glance.server.model.Location;
 import uk.frequency.glance.server.model.event.Event;
 import uk.frequency.glance.server.model.event.ListenEvent;
 import uk.frequency.glance.server.model.event.MoveEvent;
@@ -191,6 +192,12 @@ public class EventSL extends GenericSL<Event, EventDTO>{
 			dto.profile.setFullName(recentProfile.getFullName());
 			dto.profile.setImageUrl(recentProfile.getImageUrl());
 		}
+		
+		Location location = userBl.findMostRecentLocation(userId);
+		if(location != null){
+			dto.currentLocationName = location.getName(); 
+		}
+		
 		dto.wavelineIndex = index;
 		dto.wavelineImageUrl = waveUrl;
 		dto.eventViews = eventDtos;

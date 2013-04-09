@@ -11,9 +11,14 @@ import org.hibernate.TransientObjectException;
 import org.hibernate.exception.ConstraintViolationException;
 
 import uk.frequency.glance.server.business.exception.WrongStateException;
+import uk.frequency.glance.server.business.remote.EventDataFinder;
 import uk.frequency.glance.server.business.remote.Facebook;
+import uk.frequency.glance.server.data_access.TraceDAL;
 import uk.frequency.glance.server.data_access.UserDAL;
 import uk.frequency.glance.server.debug.LogEntry;
+import uk.frequency.glance.server.model.Location;
+import uk.frequency.glance.server.model.component.Position;
+import uk.frequency.glance.server.model.trace.PositionTrace;
 import uk.frequency.glance.server.model.user.EventGenerationInfo;
 import uk.frequency.glance.server.model.user.Friendship;
 import uk.frequency.glance.server.model.user.User;
@@ -22,10 +27,12 @@ import uk.frequency.glance.server.model.user.UserProfile;
 public class UserBL extends GenericBL<User>{
 
 	UserDAL userDal;
+	TraceDAL traceDal;
 
 	public UserBL() {
 		super(new UserDAL());
 		userDal = (UserDAL)dal;
+		traceDal = new TraceDAL();
 	}
 	
 	public User facebookLogin(String facebookId, String accessToken){
@@ -174,6 +181,16 @@ public class UserBL extends GenericBL<User>{
 		userDal.removeFriendship(f2);
 		
 		return f;
+	}
+	
+	public Location findMostRecentLocation(long userId){
+		PositionTrace trace = traceDal.findMostRecentPosition(userId);
+		if(trace != null){
+			Position pos = trace.getPosition();
+			return new EventDataFinder(pos).getLocation();
+		}else{
+			return null;
+		}
 	}
 	
 	public void saveLogEntry(LogEntry debug){
