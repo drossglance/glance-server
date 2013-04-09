@@ -2,13 +2,10 @@ package uk.frequency.glance.server.business.logic.event;
 
 import java.util.Date;
 
-import uk.frequency.glance.server.business.remote.EventDataFinder;
 import uk.frequency.glance.server.data_access.EventDAL;
 import uk.frequency.glance.server.data_access.StaticResourcesLoader;
 import uk.frequency.glance.server.data_access.TraceDAL;
 import uk.frequency.glance.server.data_access.UserDAL;
-import uk.frequency.glance.server.model.Location;
-import uk.frequency.glance.server.model.component.Position;
 import uk.frequency.glance.server.model.event.Event;
 import uk.frequency.glance.server.model.event.EventScore;
 import uk.frequency.glance.server.model.event.EventType;
@@ -37,12 +34,10 @@ public class SleepLogic extends Thread {
 		User user = genInfo.getUser();
 		
 		if(currentTrace.isBegin()){
-			Position pos = currentTrace.getPosition();
-			EventDataFinder finder = new EventDataFinder(pos);
 			int index = genInfo.getSleepStaticImageIndex();
 			genInfo.setSleepStaticImageIndex(index+1);
 			
-			Event newEvent = createSleepEvent(user, new Date(), finder.getLocation(), index);
+			Event newEvent = createSleepEvent(user, new Date(), index);
 			eventDal.save(newEvent);
 			genInfo.setCurrentSleepEvent(newEvent);
 		}else{
@@ -54,7 +49,7 @@ public class SleepLogic extends Thread {
 				
 				int index = genInfo.getWakeStaticImageIndex();
 				genInfo.setWakeStaticImageIndex(index+1);
-				Event newEvent = createWakeEvent(user, new Date(), currentEvent.getLocation(), index);
+				Event newEvent = createWakeEvent(user, new Date(), index);
 				eventDal.save(newEvent);
 				genInfo.setCurrentSleepEvent(newEvent);
 			}else{
@@ -66,14 +61,13 @@ public class SleepLogic extends Thread {
 		userDal.merge(genInfo);
 	}
 	
-	private Event createSleepEvent(User user, Date start, Location location, int imageIndex){
+	private Event createSleepEvent(User user, Date start, int imageIndex){
 		String imageUrl = StaticResourcesLoader.getImageUrl("sleep", imageIndex);
 		
 		StayEvent event = new StayEvent();
 		event.setType(EventType.SLEEP);
 		event.setUser(user);
 		event.setStartTime(start);
-		event.setLocation(location);
 		event.setSingleImage(imageUrl);
 		event.setScore(new EventScore());
 		return event;
@@ -85,7 +79,7 @@ public class SleepLogic extends Thread {
 		event.setScore(score);
 	}
 	
-	private Event createWakeEvent(User user, Date time, Location location, int imageIndex){
+	private Event createWakeEvent(User user, Date time, int imageIndex){
 		String imageUrl = StaticResourcesLoader.getImageUrl("wake", imageIndex);
 		
 		StayEvent event = new StayEvent();
@@ -93,7 +87,6 @@ public class SleepLogic extends Thread {
 		event.setUser(user);
 		event.setStartTime(time);
 		event.setEndTime(time);
-		event.setLocation(location);
 		event.setSingleImage(imageUrl);
 		event.setScore(new EventScore());
 		return event;
