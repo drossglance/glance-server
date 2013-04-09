@@ -34,6 +34,6 @@ public class UserDTO extends GenericDTO{
 	
 	public String recentLocationName;
 	
-	public long recentLocationTime;
+	public String recentLocationTime;
 
 }

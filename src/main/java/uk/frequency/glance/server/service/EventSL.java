@@ -21,6 +21,7 @@ import org.hibernate.ObjectNotFoundException;
 import uk.frequency.glance.server.business.EventBL;
 import uk.frequency.glance.server.business.TraceBL;
 import uk.frequency.glance.server.business.UserBL;
+import uk.frequency.glance.server.business.logic.PresentationUtil;
 import uk.frequency.glance.server.business.logic.event.EventScoreLogic;
 import uk.frequency.glance.server.business.logic.waveline.WavelineDataAdapter;
 import uk.frequency.glance.server.business.remote.EventDataFinder;
@@ -203,7 +204,7 @@ public class EventSL extends GenericSL<Event, EventDTO>{
 		if(trace != null){
 			Location location = new EventDataFinder(trace.getPosition()).getLocation();
 			dto.recentLocationName = location.getName();
-			dto.recentLocationTime = trace.getTime().getTime();
+			dto.recentLocationTime = PresentationUtil.timeText(trace.getTime());
 		}
 		
 		dto.wavelineIndex = index;
