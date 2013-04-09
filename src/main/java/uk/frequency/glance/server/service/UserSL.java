@@ -118,7 +118,7 @@ public class UserSL extends GenericSL<User, UserDTO>{
 				dto.profile = profile;
 			}
 			
-			PositionTrace trace = traceBl.findMostRecentPositionTrace(userId);
+			PositionTrace trace = traceBl.findMostRecentPositionTrace(friend.getId());
 			if(trace != null){
 				Location location = new EventDataFinder(trace.getPosition()).getLocation();
 				dto.recentLocationName = location.getName();
