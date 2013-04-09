@@ -12,6 +12,7 @@ import javax.persistence.OneToMany;
 
 import org.hibernate.annotations.Cascade;
 import org.hibernate.annotations.CascadeType;
+import org.hibernate.annotations.Index;
 import org.hibernate.annotations.LazyCollection;
 import org.hibernate.annotations.LazyCollectionOption;
 import org.hibernate.annotations.Proxy;
@@ -29,6 +30,7 @@ public class Event extends UserExpression {
 
 	EventType type;
 	
+	@Index(name="time_index")
 	Date startTime;
 	
 	Date endTime;
