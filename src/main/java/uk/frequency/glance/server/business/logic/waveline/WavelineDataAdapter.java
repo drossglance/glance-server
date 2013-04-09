@@ -8,7 +8,7 @@ import uk.frequency.glance.server.model.event.EventType;
 import uk.frequency.glance.server.model.event.MoveEvent;
 import uk.frequency.glance.server.model.event.StayEvent;
 
-public class EventDataWavelineAdapter {
+public class WavelineDataAdapter {
 
 	private static final int SERIES_LENGTH = 20; // length of the time series (x axis). (it's an abstract unity, later translated to time)
 	private int[] index; //used by EventViewActivity to associate X positions in the waveline to events

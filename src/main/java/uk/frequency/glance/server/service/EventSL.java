@@ -21,7 +21,7 @@ import org.hibernate.ObjectNotFoundException;
 import uk.frequency.glance.server.business.EventBL;
 import uk.frequency.glance.server.business.UserBL;
 import uk.frequency.glance.server.business.logic.event.EventScoreLogic;
-import uk.frequency.glance.server.business.logic.waveline.EventDataWavelineAdapter;
+import uk.frequency.glance.server.business.logic.waveline.WavelineDataAdapter;
 import uk.frequency.glance.server.data_access.util.HibernateConfig;
 import uk.frequency.glance.server.model.Comment;
 import uk.frequency.glance.server.model.event.Event;
@@ -112,6 +112,23 @@ public class EventSL extends GenericSL<Event, EventDTO>{
 	}
 	
 	@GET
+	@Path("/user-{id}/waveline-{begin}to{end}")
+	@Produces("image/png")
+	public Response generateWaveline(
+			@PathParam("id") long userId,
+			@PathParam("begin") long begin,
+			@PathParam("end") long end,
+			@QueryParam("width") int width,
+			@QueryParam("height") int height){
+		try {
+			byte[] out = eventBl.generateWaveline(userId, begin, end, width, height);
+			return Response.ok(out).build();
+		} catch (IOException e) {
+			throw new WebApplicationException(Status.INTERNAL_SERVER_ERROR);
+		}
+	}
+	
+	@GET
 	@Path("/user-{id}/eventFeedPage")
 	@Produces(MediaType.APPLICATION_JSON)
 	public Response eventFeedPage(
@@ -122,7 +139,13 @@ public class EventSL extends GenericSL<Event, EventDTO>{
 		List<Event> events = eventBl.findRecent(userId, 50);
 		Collections.reverse(events); //TODO use them in desc order
 		
-		return eventFeedPage(userId, events, width, height);
+		String waveUrl = uriInfo.getBaseUriBuilder()
+				.path("event/user-{id}/waveline")
+				.queryParam("width", width)
+				.queryParam("height", height)
+				.build(userId).toString();
+		
+		return eventFeedPage(userId, events, waveUrl);
 	}
 	
 	@GET
@@ -137,20 +160,21 @@ public class EventSL extends GenericSL<Event, EventDTO>{
 		
 		List<Event> events = eventBl.findByTimeRange(userId, new Date(start), new Date(end));
 		
-		return eventFeedPage(userId, events, width, height);
-	}
-	
-	private Response eventFeedPage(long userId, List<Event> events, long width, long height){
-		User user = userBl.findById(userId);
-	
-		EventDataWavelineAdapter adapter = new EventDataWavelineAdapter();
-		adapter.buildLayers(events);
-		int[] index = adapter.getIndex();
 		String waveUrl = uriInfo.getBaseUriBuilder()
-				.path("event/user-{id}/waveline")
+				.path("event/user-{id}/waveline-{begin}to{end}")
 				.queryParam("width", width)
 				.queryParam("height", height)
-				.build(userId, width, height).toString();
+				.build(userId, start, end).toString();
+		
+		return eventFeedPage(userId, events, waveUrl);
+	}
+	
+	private Response eventFeedPage(long userId, List<Event> events, String waveUrl){
+		User user = userBl.findById(userId);
+	
+		WavelineDataAdapter adapter = new WavelineDataAdapter();
+		adapter.buildLayers(events);
+		int[] index = adapter.getIndex();
 		
 		List<EventViewDTO> eventDtos = new ArrayList<EventViewDTO>();
 		for(Event event : events){

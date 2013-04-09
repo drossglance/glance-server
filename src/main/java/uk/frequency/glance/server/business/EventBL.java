@@ -13,8 +13,8 @@ import org.hibernate.ObjectNotFoundException;
 import uk.frequency.glance.server.business.logic.PresentationUtil;
 import uk.frequency.glance.server.business.logic.event.EventGenerationLogic;
 import uk.frequency.glance.server.business.logic.waveline.BasicColorPicker;
-import uk.frequency.glance.server.business.logic.waveline.EventDataWavelineAdapter;
-import uk.frequency.glance.server.business.logic.waveline.Waveline;
+import uk.frequency.glance.server.business.logic.waveline.WavelineDataAdapter;
+import uk.frequency.glance.server.business.logic.waveline.WavelineRenderer;
 import uk.frequency.glance.server.business.logic.waveline.streamgraph.ColorPicker;
 import uk.frequency.glance.server.business.logic.waveline.streamgraph.Layer;
 import uk.frequency.glance.server.data_access.EventDAL;
@@ -58,9 +58,18 @@ public class EventBL extends GenericBL<Event>{
 	
 	public byte[] generateWaveline(long userId, int width, int height) throws IOException{
 		List<Event> events = findByUser(userId);
-		Layer[] layers = new EventDataWavelineAdapter().buildLayers(events);
+		return generateWaveline(events, width, height);
+	}
+	
+	public byte[] generateWaveline(long userId, long begin, long end, int width, int height) throws IOException{
+		List<Event> events = findByTimeRange(userId, new Date(begin), new Date(end));
+		return generateWaveline(events, width, height);
+	}
+	
+	public byte[] generateWaveline(List<Event> events, int width, int height) throws IOException{
+		Layer[] layers = new WavelineDataAdapter().buildLayers(events);
 		ColorPicker coloring = new BasicColorPicker(PresentationUtil.WAVELINE_BLUE_SHADES);
-		Waveline waveline = new Waveline(layers, coloring);
+		WavelineRenderer waveline = new WavelineRenderer(layers, coloring);
 		RenderedImage img = waveline.render(width, height);
 		
 		ByteArrayOutputStream out = new ByteArrayOutputStream();

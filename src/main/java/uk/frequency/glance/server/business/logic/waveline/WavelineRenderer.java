@@ -22,7 +22,7 @@ import uk.frequency.glance.server.business.logic.waveline.streamgraph.LayerSort;
 import uk.frequency.glance.server.business.logic.waveline.streamgraph.NoLayerSort;
 import uk.frequency.glance.server.business.logic.waveline.streamgraph.StreamLayout;
 
-public class Waveline {
+public class WavelineRenderer {
 
 	private static final int SMOOTHNESS = 20; //how many points are added in-between the actual data
 	private static final Color SHADOW_BEGIN = new Color(0, 0, 0, .2f);
@@ -38,7 +38,7 @@ public class Waveline {
 	private int minX, maxX, dX;
 	private float minY, maxY, dY;
 	
-	public Waveline(Layer[] layers, ColorPicker coloring){
+	public WavelineRenderer(Layer[] layers, ColorPicker coloring){
 		this.layers = layers;
 		this.ordering = new NoLayerSort();
 		this.layout = new StreamLayout();
