@@ -18,18 +18,17 @@ public class WavelineDataAdapter {
 	 */
 	public Layer[] buildLayers(List<Event> events) {
 
-		// deal with trivial cases
-		if (events.size() <= 1) {
-			return new Layer[3];
-		}
-
 		// initialize
 		float[] series1 = new float[SERIES_LENGTH]; // stay
 		float[] series2 = new float[SERIES_LENGTH]; // move
 		float[] series3 = new float[SERIES_LENGTH]; // sleep
-		long begin = events.get(0).getStartTime().getTime();
-		long end = events.get(events.size() - 1).getStartTime().getTime();
 		index = new int[SERIES_LENGTH];
+		long begin = 0;
+		long end = 0;
+		if (events.size() > 1) {
+			begin = events.get(0).getStartTime().getTime();
+			end = events.get(events.size() - 1).getStartTime().getTime();
+		}
 		
 		//load the time series and index
 		for (int i = 0; i < events.size(); i++) {
