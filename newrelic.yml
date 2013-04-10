@@ -13,7 +13,7 @@ common: &default_settings
   # account.  This key binds your Agent's data to your account in the
   # New Relic service.
 
-  license_key: fa9c2387af777bd524a7f30e9ae896d73c1c28f9
+  license_key: '<%= ENV["NEW_RELIC_LICENSE_KEY"] %>'
 
   # Agent Enabled
   # Use this setting to force the agent to run or not run.
@@ -44,7 +44,7 @@ common: &default_settings
   # app_name: My Application;My Application 2
   # This setting is required.
 
-  app_name: glance-server
+  app_name: '<%= ENV["NEW_RELIC_APP_NAME"] %>'
 
   # The agent uses its own log file to keep its logging separate from
   # that of your application.  Specify the log level here.  This
@@ -300,15 +300,15 @@ common: &default_settings
 
 development:
   <<: *default_settings
-  app_name: My Application (Development)
+  app_name: '<%= ENV["NEW_RELIC_APP_NAME"] %>'
 
 test:
   <<: *default_settings
-  app_name: My Application (Test)
+  app_name: '<%= ENV["NEW_RELIC_APP_NAME"] %>'
 
 production:
   <<: *default_settings
 
 staging:
   <<: *default_settings
-  app_name: My Application (Staging)
+  app_name: '<%= ENV["NEW_RELIC_APP_NAME"] %>'
