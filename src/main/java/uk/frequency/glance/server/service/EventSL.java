@@ -1,5 +1,10 @@
 package uk.frequency.glance.server.service;
 
+import static uk.frequency.glance.server.business.logic.PresentationUtil.timePastTextDayPrecision;
+import static uk.frequency.glance.server.business.logic.PresentationUtil.timeText;
+import static uk.frequency.glance.server.business.logic.PresentationUtil.toUpperCase;
+import static uk.frequency.glance.server.business.logic.TimeUtil.isBeforeToday;
+
 import java.io.IOException;
 import java.util.ArrayList;
 import java.util.Collections;
@@ -21,7 +26,6 @@ import org.hibernate.ObjectNotFoundException;
 import uk.frequency.glance.server.business.EventBL;
 import uk.frequency.glance.server.business.TraceBL;
 import uk.frequency.glance.server.business.UserBL;
-import uk.frequency.glance.server.business.logic.PresentationUtil;
 import uk.frequency.glance.server.business.logic.event.EventScoreLogic;
 import uk.frequency.glance.server.business.logic.waveline.WavelineDataAdapter;
 import uk.frequency.glance.server.business.remote.EventDataFinder;
@@ -43,7 +47,6 @@ import uk.frequency.glance.server.transfer.event.MoveEventDTO;
 import uk.frequency.glance.server.transfer.event.StayEventDTO;
 import uk.frequency.glance.server.transfer.event.TellEventDTO;
 import uk.frequency.glance.server.transfer.user.UserDTO;
-
 
 @Path("/event")
 public class EventSL extends GenericSL<Event, EventDTO>{
@@ -221,8 +224,14 @@ public class EventSL extends GenericSL<Event, EventDTO>{
 		PositionTrace trace = traceBl.findMostRecentPositionTrace(userId);
 		if(trace != null){
 			Location location = new EventDataFinder(trace.getPosition()).getLocation();
-			dto.recentLocationName = location.getName();
-			dto.recentLocationTime = PresentationUtil.timeText(trace.getTime());
+			dto.recentLocationName = toUpperCase(location.getName());
+			
+			String timeStr = "";
+			if(isBeforeToday(trace.getTime())){
+				timeStr = timePastTextDayPrecision(trace.getTime()) + " ";
+			}
+			timeStr += timeText(trace.getTime());
+			dto.recentLocationTime = timeStr;
 		}
 		
 		dto.wavelineIndex = index;
