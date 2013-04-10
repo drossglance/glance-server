@@ -13,7 +13,7 @@ common: &default_settings
   # account.  This key binds your Agent's data to your account in the
   # New Relic service.
 
-  license_key: my_license_key
+  license_key: fa9c2387af777bd524a7f30e9ae896d73c1c28f9
 
   # Agent Enabled
   # Use this setting to force the agent to run or not run.
@@ -44,7 +44,7 @@ common: &default_settings
   # app_name: My Application;My Application 2
   # This setting is required.
 
-  app_name: My Application
+  app_name: glance-server
 
   # The agent uses its own log file to keep its logging separate from
   # that of your application.  Specify the log level here.  This

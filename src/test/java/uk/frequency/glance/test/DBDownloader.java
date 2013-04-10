@@ -4,6 +4,7 @@ import java.util.ArrayList;
 import java.util.Date;
 import java.util.List;
 
+import uk.frequency.glance.server.business.logic.TimeUtil;
 import uk.frequency.glance.server.model.event.Event;
 import uk.frequency.glance.server.service.EventSL;
 import uk.frequency.glance.server.transfer.event.EventDTO;
@@ -17,12 +18,14 @@ public class DBDownloader {
 	private static final String ROOT_URL = "http://glance-server.herokuapp.com/services/";
 
 	public static void main(String[] args) {
-		downloadTracesAndPrintForDebug(1);
+		Date begin = TimeUtil.parse("2013/04/10 00:00:00");
+		Date end = TimeUtil.parse("2013/05/10 00:00:00");
+		downloadTracesAndPrintForDebug(1, begin, end);
 //		downloadAndPrintJson("user");
 	}
 	
-	static void downloadTracesAndPrintForDebug(long userId){
-		List<TraceDTO> traces = downloadTraces(userId);
+	static void downloadTracesAndPrintForDebug(long userId, Date begin, Date end){
+		List<PositionTraceDTO> traces = downloadPositionTraces(userId, begin, end);
 		for(TraceDTO trace : traces){
 			PositionTraceDTO pos = (PositionTraceDTO)trace;
 			String time = TestDTOFormatter.format(pos.time);

@@ -33,9 +33,10 @@ delete from move_event where id in e;
 delete from event where id in e;
 
 //DELETE EVENTS BY USER
-delete from event_media where event in (select id from event where user_id = 32768);
-delete from stay_event where id in (select id from event where user_id = 32768);
-delete from move_event_trail where move_event in (select id from event where user_id = 32768);
-delete from move_event where id in (select id from event where user_id = 32768);
-delete from event where id in (select id from event where user_id = 32768);
-update event_generation_info set last_event=null, current_position_event=null, current_sleep_event=null where user_id=32768;
+WITH u as (select 0 as id)
+delete from event_media where event in (select id from event where user_id = u.id);
+delete from stay_event where id in (select id from event where user_id = u.id);
+delete from move_event_trail where move_event in (select id from event where user_id = u.id);
+delete from move_event where id in (select id from event where user_id = u.id);
+delete from event where id in (select id from event where user_id = u.id);
+update event_generation_info set last_event=null, current_position_event=null, current_sleep_event=null where user_id=u.id;
