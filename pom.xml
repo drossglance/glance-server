@@ -81,6 +81,19 @@
 			<artifactId>restfb</artifactId>
 			<version>1.6.12</version>
 		</dependency>
+
+		<dependency>
+			<groupId>org.apache.commons</groupId>
+			<artifactId>commons-math3</artifactId>
+			<version>3.1.1</version>
+		</dependency>
+		
+		<!-- Heroku plugin to monitor memory usage -->
+		<dependency>
+			<groupId>com.newrelic.agent.java</groupId>
+			<artifactId>newrelic-agent</artifactId>
+			<version>2.16.0</version>
+		</dependency>
 		
 		<!-- TODO: clean this later (use log4j) -->
 		<dependency>
@@ -89,11 +102,7 @@
 			<version>1.1.1</version>
 		</dependency>
 
-		<dependency>
-			<groupId>org.apache.commons</groupId>
-			<artifactId>commons-math3</artifactId>
-			<version>3.1.1</version>
-		</dependency>
+
 	</dependencies>
 
 	<build>
@@ -103,6 +112,7 @@
 				<artifactId>maven-dependency-plugin</artifactId>
 				<version>2.4</version>
 				<executions>
+				    
 					<execution>
 						<id>copy-dependencies</id>
 						<phase>package</phase>
@@ -110,13 +120,27 @@
 							<goal>copy-dependencies</goal>
 						</goals>
 					</execution>
+	
+					<execution>
+						<id>copy-new-relic</id>
+						<phase>package</phase>
+						<goals>
+							<goal>copy-dependencies</goal>
+						</goals>
+						<configuration>
+							<includeGroupIds>com.newrelic.agent.java</includeGroupIds>
+							<includeArtifactIds>newrelic-agent</includeArtifactIds>
+							<stripVersion>true</stripVersion>
+						</configuration>
+					</execution>
+	
 				</executions>
 			</plugin>
 		</plugins>
-
+	
 		<pluginManagement>
 			<plugins>
-
+	
 				<!-- M2Eclipse Compatibility -->
 				<plugin>
 					<groupId>org.eclipse.m2e</groupId>
@@ -144,5 +168,6 @@
 				</plugin>
 			</plugins>
 		</pluginManagement>
+	
 	</build>
 </project>

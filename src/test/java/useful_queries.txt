@@ -38,4 +38,4 @@ delete from stay_event where id in (select id from event where user_id = 32768);
 delete from move_event_trail where move_event in (select id from event where user_id = 32768);
 delete from move_event where id in (select id from event where user_id = 32768);
 delete from event where id in (select id from event where user_id = 32768);
-update event_generation_info set last_event=null, current_position_event=null, current_sleep_event=null where user_id=32768
+update event_generation_info set last_event=null, current_position_event=null, current_sleep_event=null where user_id=32768;

@@ -77,14 +77,20 @@ public class EventSL extends GenericSL<Event, EventDTO>{
 	@GET
 	@Produces(MediaType.APPLICATION_JSON)
 	@Path("/user-{id}/{start}to{end}")
-	public List<EventDTO> findByUserAndTimeRange(
+	public Response findByUserAndTimeRange(
 			@PathParam("id") long userId,
 			@PathParam("start") long start,
 			@PathParam("end") long end) {
-		List<Event> list = eventBl.findByTimeRange(userId, new Date(start), new Date(end)); 
-		List<EventDTO> dto = toDTO(list);
-		eventBl.flush();
-		return dto;
+		try {
+		
+			List<Event> list = eventBl.findByTimeRange(userId, new Date(start), new Date(end)); 
+			List<EventDTO> dto = toDTO(list);
+			eventBl.flush();
+			return Response.ok(dto).build();
+		
+		} catch (ObjectNotFoundException e) {
+			return Response.status(Status.NOT_FOUND).build();
+		}
 	}
 	
 	@GET
@@ -143,16 +149,22 @@ public class EventSL extends GenericSL<Event, EventDTO>{
 		@QueryParam("wl_width") long width,
 		@QueryParam("wl_height") long height){
 		
-		List<Event> events = eventBl.findRecent(userId, 50);
-		Collections.reverse(events); //TODO use them in desc order so we can use limit in SQL
-		
-		String waveUrl = uriInfo.getBaseUriBuilder()
-				.path("event/user-{id}/waveline")
-				.queryParam("width", width)
-				.queryParam("height", height)
-				.build(userId).toString();
-		
-		return eventFeedPage(userId, events, waveUrl);
+		try{
+			
+			List<Event> events = eventBl.findRecent(userId, 50);
+			Collections.reverse(events); //TODO use them in desc order so we can use limit in SQL
+			
+			String waveUrl = uriInfo.getBaseUriBuilder()
+					.path("event/user-{id}/waveline")
+					.queryParam("width", width)
+					.queryParam("height", height)
+					.build(userId).toString();
+			
+			return eventFeedPage(userId, events, waveUrl);
+			
+		}catch (ObjectNotFoundException e){
+			return Response.status(Status.NOT_FOUND).build();
+		}
 	}
 	
 	@GET
@@ -165,15 +177,21 @@ public class EventSL extends GenericSL<Event, EventDTO>{
 		@QueryParam("wl_width") long width,
 		@QueryParam("wl_height") long height){
 		
-		List<Event> events = eventBl.findByTimeRange(userId, new Date(start), new Date(end));
+		try{
+			
+			List<Event> events = eventBl.findByTimeRange(userId, new Date(start), new Date(end));
+			
+			String waveUrl = uriInfo.getBaseUriBuilder()
+					.path("event/user-{id}/waveline-{begin}to{end}")
+					.queryParam("width", width)
+					.queryParam("height", height)
+					.build(userId, start, end).toString();
+			
+			return eventFeedPage(userId, events, waveUrl);
 		
-		String waveUrl = uriInfo.getBaseUriBuilder()
-				.path("event/user-{id}/waveline-{begin}to{end}")
-				.queryParam("width", width)
-				.queryParam("height", height)
-				.build(userId, start, end).toString();
-		
-		return eventFeedPage(userId, events, waveUrl);
+		}catch (ObjectNotFoundException e){
+			return Response.status(Status.NOT_FOUND).build();
+		}
 	}
 	
 	private Response eventFeedPage(long userId, List<Event> events, String waveUrl){
