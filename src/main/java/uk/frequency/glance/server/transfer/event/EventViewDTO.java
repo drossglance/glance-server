@@ -37,8 +37,6 @@ public class EventViewDTO {
 		}else if(event instanceof StayEvent){
 			StayEvent stay = (StayEvent)event;
 			if(event.getType() == EventType.SLEEP){
-				dto.title = "SLEEPING";
-			}else if(event.getType() == EventType.WAKE){
 				dto.title = "WOKE UP";
 			}else{
 				dto.preTitle = isHappening? "ARRIVED AT" : null;
