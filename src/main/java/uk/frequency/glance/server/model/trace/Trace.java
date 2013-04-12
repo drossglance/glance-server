@@ -18,7 +18,7 @@ import uk.frequency.glance.server.model.UserExpression;
 @Table(uniqueConstraints={
 	@UniqueConstraint(columnNames={"user_id", "time"})
 })
-public abstract class Trace extends UserExpression {
+public class Trace extends UserExpression {
 
 	Date time;
 

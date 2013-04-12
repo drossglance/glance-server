@@ -38,9 +38,9 @@ public class GenericDAL<T extends GenericEntity> {
         return findByCriteria(Restrictions.gt("creationTime", time));
     }
  
-    public List<T> findAllOrderById() {
+    public List<T> findAllOrderByCreationTime() {
     	return getSession().createCriteria(entityClass)
-    			.addOrder(Property.forName("id").asc())
+    			.addOrder(Property.forName("creationTime").desc())
     			.list();
     }
     

@@ -74,7 +74,7 @@ public class TraceSL extends GenericSL<Trace, TraceDTO>{
 		}else if(trace instanceof SleepTrace){
 			SleepTrace sleep = (SleepTrace)trace;
 			SleepTraceDTO sleepDto = new SleepTraceDTO();
-			sleepDto.begin = sleep.isBegin();
+			sleepDto.begin = sleep.getBegin().getTime();
 			dto = sleepDto;
 		}else{
 			throw new AssertionError();
@@ -107,7 +107,7 @@ public class TraceSL extends GenericSL<Trace, TraceDTO>{
 		}else if(dto instanceof SleepTraceDTO){
 			SleepTraceDTO sleepDto = (SleepTraceDTO)dto;
 			SleepTrace sleep = new SleepTrace();
-			sleep.setBegin(sleepDto.begin);
+			sleep.setBegin(new Date(sleepDto.begin));
 			trace = sleep;
 		}else{
 			throw new AssertionError();

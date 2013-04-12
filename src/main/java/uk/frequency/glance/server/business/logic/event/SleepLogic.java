@@ -30,65 +30,30 @@ public class SleepLogic extends Thread {
 	}
 
 	public void handleTrace(SleepTrace currentTrace) {
-		
+		int index = genInfo.getSleepStaticImageIndex();
 		User user = genInfo.getUser();
+		Date begin = currentTrace.getBegin();
+		Date end = currentTrace.getTime();
 		
-		if(currentTrace.isBegin()){
-			int index = genInfo.getSleepStaticImageIndex();
-			genInfo.setSleepStaticImageIndex(index+1);
-			
-			Event newEvent = createSleepEvent(user, new Date(), index);
-			eventDal.save(newEvent);
-			genInfo.setCurrentSleepEvent(newEvent);
-		}else{
-			StayEvent currentEvent = (StayEvent) genInfo.getCurrentSleepEvent();
-			if(currentEvent != null && currentEvent.getType() == EventType.SLEEP){
-				closeSleepEvent(currentEvent, new Date());
-				eventDal.save(currentEvent);
-				genInfo.setCurrentSleepEvent(currentEvent);
-				
-				int index = genInfo.getWakeStaticImageIndex();
-				genInfo.setWakeStaticImageIndex(index+1);
-				Event newEvent = createWakeEvent(user, new Date(), index);
-				eventDal.save(newEvent);
-				genInfo.setCurrentSleepEvent(newEvent);
-			}else{
-				System.err.println("WARNING: attempting to close innexistent sleep event."); //FIXME shouldn't happen
-				throw new AssertionError();
-			}
-		}
+		Event newEvent = createSleepEvent(user, begin, end, index);
+		eventDal.save(newEvent);
 		
+		genInfo.setSleepStaticImageIndex(index+1);
 		userDal.merge(genInfo);
 	}
 	
-	private Event createSleepEvent(User user, Date start, int imageIndex){
+	private Event createSleepEvent(User user, Date begin, Date end, int imageIndex){
 		String imageUrl = StaticResourcesLoader.getImageUrl("sleep", imageIndex);
 		
 		StayEvent event = new StayEvent();
 		event.setType(EventType.SLEEP);
 		event.setUser(user);
-		event.setStartTime(start);
+		event.setStartTime(begin);
+		event.setEndTime(begin);
 		event.setSingleImage(imageUrl);
-		event.setScore(new EventScore());
-		return event;
-	}
-	
-	private void closeSleepEvent(StayEvent event, Date end){
-		event.setEndTime(end);
+		
 		EventScore score = EventScoreLogic.assignScore(event);
 		event.setScore(score);
-	}
-	
-	private Event createWakeEvent(User user, Date time, int imageIndex){
-		String imageUrl = StaticResourcesLoader.getImageUrl("wake", imageIndex);
-		
-		StayEvent event = new StayEvent();
-		event.setType(EventType.WAKE);
-		event.setUser(user);
-		event.setStartTime(time);
-		event.setEndTime(time);
-		event.setSingleImage(imageUrl);
-		event.setScore(new EventScore());
 		return event;
 	}
 	

@@ -1,18 +1,20 @@
 package uk.frequency.glance.server.model.trace;
 
+import java.util.Date;
+
 import javax.persistence.Entity;
 
 @Entity
 public class SleepTrace extends Trace {
 
-	Boolean begin; //false means it's end
-	
-	public Boolean isBegin() {
+	Date begin;
+
+	public Date getBegin() {
 		return begin;
 	}
 
-	public void setBegin(Boolean begin) {
+	public void setBegin(Date begin) {
 		this.begin = begin;
 	}
-
+	
 }
