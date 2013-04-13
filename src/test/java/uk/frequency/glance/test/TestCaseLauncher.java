@@ -24,8 +24,8 @@ import com.google.gson.reflect.TypeToken;
 public class TestCaseLauncher {
 
 	static final String DIR = "src/test/java/test_cases";
-	static final String DATE_FORMAT = "HH:mm:ss:S";
-//	static final String DATE_FORMAT = "HH:mm:ss";
+	public static final String TIME_FORMAT = "HH:mm:ss:S";
+	public static final String DATE_FORMAT = "yyyy/MM/dd HH:mm:ss:S";
 	static final int TIME_BETWEEN_REQUESTS = 3000;
 	
 	static String ROOT_URL = "http://localhost:8080/services/";
@@ -34,18 +34,17 @@ public class TestCaseLauncher {
 
 	public static void main(String[] args) {
 		try {
-//			runTestCase("fionn_03-22");
-			runTestCase("victor_03-25_move");
-//			runTestCase("test");
-//			runTestCase("case_1");
+			runTestCase("victor_04-13");
 		} catch (Exception e) {
 			e.printStackTrace();
 		}
 	}
 	
 	static void runTestCase(String fileName) throws IOException, ParseException, InterruptedException{
-		UserDTO user = createTestUser("testuser1");
+		UserDTO user = createTestUser("testuser2");
 		user = (UserDTO) client.postAndPrint(user, "user");
+//		UserDTO user = new UserDTO();
+//		user.id = 1L;
 		
 		List<PositionTraceDTO> traces = loadTraces(fileName, user.id);
 		Collections.sort(traces, new TraceTimeComp());

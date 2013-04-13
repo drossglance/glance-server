@@ -21,7 +21,10 @@ import uk.frequency.glance.server.data_access.EventDAL;
 import uk.frequency.glance.server.data_access.TraceDAL;
 import uk.frequency.glance.server.data_access.UserDAL;
 import uk.frequency.glance.server.model.event.Event;
+import uk.frequency.glance.server.model.event.EventType;
+import uk.frequency.glance.server.model.event.StayEvent;
 import uk.frequency.glance.server.model.trace.Trace;
+import uk.frequency.glance.server.model.user.User;
 
 public class EventBL extends GenericBL<Event>{
 
@@ -81,6 +84,16 @@ public class EventBL extends GenericBL<Event>{
 	
 	public void onTraceReceived(Trace trace){
 		new EventGenerationLogic(trace, eventDal, traceDal, userDal).start();
+	}
+	
+	public void onUserCreated(User user){
+		StayEvent join = new StayEvent();
+		join.setType(EventType.JOIN);
+		join.setStartTime(user.getCreationTime());
+		join.setEndTime(user.getCreationTime());
+		join.setSingleImage(user.getProfileHistory().get(0).getImageUrl());
+		join.setUser(user);
+		eventDal.save(join);
 	}
 	
 }

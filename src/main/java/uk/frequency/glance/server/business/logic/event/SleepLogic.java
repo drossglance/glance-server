@@ -49,7 +49,7 @@ public class SleepLogic extends Thread {
 		event.setType(EventType.SLEEP);
 		event.setUser(user);
 		event.setStartTime(begin);
-		event.setEndTime(begin);
+		event.setEndTime(end);
 		event.setSingleImage(imageUrl);
 		
 		EventScore score = EventScoreLogic.assignScore(event);

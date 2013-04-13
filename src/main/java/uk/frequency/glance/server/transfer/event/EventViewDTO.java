@@ -3,6 +3,7 @@ package uk.frequency.glance.server.transfer.event;
 import static uk.frequency.glance.server.business.logic.PresentationUtil.timePastTextDayPrecision;
 import static uk.frequency.glance.server.business.logic.PresentationUtil.timeText;
 import static uk.frequency.glance.server.business.logic.PresentationUtil.toUpperCase;
+import static uk.frequency.glance.server.business.logic.PresentationUtil.dateText;
 
 import java.util.Date;
 
@@ -38,6 +39,9 @@ public class EventViewDTO {
 			StayEvent stay = (StayEvent)event;
 			if(event.getType() == EventType.SLEEP){
 				dto.title = "WOKE UP";
+			}else if(event.getType() == EventType.JOIN){
+				dto.preTitle = "JOINED";
+				dto.title = "GLANCE";
 			}else{
 				dto.preTitle = isHappening? "ARRIVED AT" : null;
 				dto.title = toUpperCase(stay.getLocation().getName());
@@ -59,20 +63,25 @@ public class EventViewDTO {
 			throw new AssertionError();
 		}
 
+		
 		Date start = event.getStartTime();
-		if(TimeUtil.isBeforeToday(start)){
-			dto.subtitle1 = timePastTextDayPrecision(start); 
-		}
-		if(isHappening){
-			dto.subtitle2 = timeText(start);
+		if(event instanceof StayEvent && event.getType() == EventType.JOIN){
+			dto.subtitle2 = dateText(start);
 		}else{
-			Date end = event.getEndTime();
-			String startStr = timeText(start);
-			String endStr = timeText(end);
-			if(startStr.equals(endStr)){
-				dto.subtitle2 = startStr;
+			if(TimeUtil.isBeforeToday(start)){
+				dto.subtitle1 = timePastTextDayPrecision(start); 
+			}
+			if(isHappening){
+				dto.subtitle2 = timeText(start);
 			}else{
-				dto.subtitle2 = String.format("%s - %s", startStr, endStr);
+				Date end = event.getEndTime();
+				String startStr = timeText(start);
+				String endStr = timeText(end);
+				if(startStr.equals(endStr)){
+					dto.subtitle2 = startStr;
+				}else{
+					dto.subtitle2 = String.format("%s - %s", startStr, endStr);
+				}
 			}
 		}
 		

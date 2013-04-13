@@ -18,8 +18,8 @@ public class DBDownloader {
 	private static final String ROOT_URL = "http://glance-server.herokuapp.com/services/";
 
 	public static void main(String[] args) {
-		Date begin = TimeUtil.parse("2013/04/10 00:00:00");
-		Date end = TimeUtil.parse("2013/05/10 00:00:00");
+		Date begin = TimeUtil.parse("2013/04/13 13:00:00");
+		Date end = TimeUtil.parse("2013/04/14 00:00:00");
 		downloadTracesAndPrintForDebug(1, begin, end);
 //		downloadAndPrintJson("user");
 	}

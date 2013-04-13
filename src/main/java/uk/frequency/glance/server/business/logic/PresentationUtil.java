@@ -86,6 +86,30 @@ public class PresentationUtil {
 	public static String timeText(Date time) {
 		return timeFormat.format(time);
 	}
+	
+	public static String dateText(Date time){
+		String str = new SimpleDateFormat("MMMM d, yyyy").format(time);
+//		String str = new SimpleDateFormat("d").format(time);
+//		str += dayOfMonthSuffix(Integer.valueOf(str));
+//		str += " of ";
+//		str += new SimpleDateFormat("MMMM yyyy").format(time);
+		return str;
+	}
+	
+	public static String dayOfMonthSuffix(final int day) {
+	    if(day < 1 || day > 31){
+	    	return "";
+	    }
+	    if (day >= 11 && day <= 13) {
+	        return "th";
+	    }
+	    switch (day % 10) {
+	        case 1:  return "st";
+	        case 2:  return "nd";
+	        case 3:  return "rd";
+	        default: return "th";
+	    }
+	}
 
 	public static List<Position> cleanTrail(List<Position> trail) {
 		final double STEP = EventGenerationLogic.BIG_RADIUS; // min distance between each step in the trail

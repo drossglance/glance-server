@@ -13,12 +13,7 @@ delete from stay_event where id=e.id;
 delete from move_event where id=e.id;
 delete from event where id=e.id;
 		
-//CLEAN ALL TRACES
-delete from event_generation_info;
-delete from positin_trace;
-delete from trace;
-
-//CLEAN ALL TRACES OLDER THAN DATE
+//DELETE ALL TRACES OLDER THAN DATE
 WITH t as (select id from trace where time < '2013-03-20 20:30')
 delete from event_generation_info where last_position_trace in t;
 delete from position_trace where id in t;
@@ -32,10 +27,23 @@ delete from move_event_trail where move_event in e;
 delete from move_event where id in e;
 delete from event where id in e;
 
+//DELETE TRACES BY USER
+delete from position_trace where id in (select id from trace where user_id = 1);
+delete from sleep_trace where id in (select id from trace where user_id = 1);
+delete from listen_trace where id in (select id from trace where user_id = 1);
+delete from trace where id in (select id from trace where user_id = 1);
+
 //DELETE EVENTS BY USER
-delete from event_media where event in (select id from event where user_id = 32768);
-delete from stay_event where id in (select id from event where user_id = 32768);
-delete from move_event_trail where move_event in (select id from event where user_id = 32768);
-delete from move_event where id in (select id from event where user_id = 32768);
-delete from event where id in (select id from event where user_id = 32768);
-update event_generation_info set last_event=null, current_position_event=null, current_sleep_event=null where user_id=32768;
+delete from event_media where event in (select id from event where user_id = 1);
+delete from stay_event where id in (select id from event where user_id = 1);
+delete from move_event_trail where move_event in (select id from event where user_id = 1);
+delete from move_event where id in (select id from event where user_id = 1);
+delete from event where id in (select id from event where user_id = 1);
+update event_generation_info set last_event=null, current_position_event=null, current_sleep_event=null where user_id=1;
+
+//DELETE USER
+delete from event_generation_info where user_id=1;
+//delete traces and events
+delete from friendship where user_id=1 or friend_id=1;
+delete from user_profile_history where user_id=1;
+delete from tb_user where id=1;

@@ -12,9 +12,11 @@ import uk.frequency.glance.server.transfer.trace.PositionTraceDTO;
 import uk.frequency.glance.server.transfer.trace.TraceDTO;
 import uk.frequency.glance.server.transfer.user.UserDTO;
 
+@SuppressWarnings("unused")
 public class TestDTOFormatter {
 
-	private static DateFormat dateFormat = new SimpleDateFormat("HH:mm:ss:S");
+	private static DateFormat timeFormat = new SimpleDateFormat(TestCaseLauncher.TIME_FORMAT);
+	private static DateFormat dateFormat = new SimpleDateFormat(TestCaseLauncher.DATE_FORMAT);
 
 	public static String format(Long time){
 		if(time == null){

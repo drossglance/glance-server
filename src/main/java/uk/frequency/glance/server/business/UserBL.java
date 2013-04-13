@@ -24,11 +24,13 @@ public class UserBL extends GenericBL<User>{
 
 	UserDAL userDal;
 	TraceDAL traceDal;
+	EventBL eventBl;
 
 	public UserBL() {
 		super(new UserDAL());
 		userDal = (UserDAL)dal;
 		traceDal = new TraceDAL();
+		eventBl = new EventBL();
 	}
 	
 	public User facebookLogin(String facebookId, String accessToken){
@@ -54,6 +56,7 @@ public class UserBL extends GenericBL<User>{
 			userDal.save(gen);
 			user.setEventGenerationInfo(gen);
 		}
+		eventBl.onUserCreated(user);
 		return user;
 	}
 	
