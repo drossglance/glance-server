@@ -60,10 +60,14 @@ public class UserBL extends GenericBL<User>{
 		return user;
 	}
 	
-	public List<Friendship> findFriendships(long userId){
+	public List<User> findOthersOrderedById(long excludedUserId){
+		return userDal.findOthersOrderedById(excludedUserId);
+	}
+	
+	public List<Friendship> findFriendshipsOrderedByFriendId(long userId){
 		User user = new User();
 		user.setId(userId);
-		return userDal.findFriendships(user);
+		return userDal.findFriendshipsOrderedByFriendId(user);
 	}
 	
 

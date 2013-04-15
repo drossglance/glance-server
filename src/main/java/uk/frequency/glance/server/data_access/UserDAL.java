@@ -54,7 +54,15 @@ public class UserDAL extends GenericDAL<User>{
         return entity;
     }
 	
-	public List<Friendship> findFriendships(User user) {
+	public List<User> findOthersOrderedById(long excludedUserId){
+		Query q = getSession().createQuery("from User u where " +
+				"u.id != :id " +
+				"order by u.id")
+				.setParameter("id", excludedUserId);
+		return (List<User>)q.list();
+	}
+	
+	public List<Friendship> findFriendshipsOrderedByFriendId(User user) {
 		Query q = getSession().createQuery("from Friendship f where " +
 				"f.user = :user " +
 				"order by f.friend.id")

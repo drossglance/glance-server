@@ -138,13 +138,12 @@ public class UserSL extends GenericSL<User, UserDTO>{
 	@Path("/{id}/addFriendsPage")
 	public List<UserDTO> buildAddFriendsPage(
 			@PathParam("id") long userId){
-		List<User> entities = userBl.findAll();
+		List<User> entities = userBl.findOthersOrderedById(userId);
 		List<UserDTO> dtoList = new ArrayList<UserDTO>();
-		List<Friendship> friendsips = userBl.findFriendships(userId);
+		List<Friendship> friendsips = userBl.findFriendshipsOrderedByFriendId(userId);
 		int cur = 0;
 		for(User user : entities){
 			long id = user.getId();
-			if(id == userId) continue;
 			
 			UserDTO dto = new UserDTO();
 			dto.id = id;
@@ -182,7 +181,7 @@ public class UserSL extends GenericSL<User, UserDTO>{
 	@Path("/{id}/friendship")
 	public List<FriendshipDTO> findFriendships(
 			@PathParam("id") long userId){
-		List<Friendship> entities = userBl.findFriendships(userId);
+		List<Friendship> entities = userBl.findFriendshipsOrderedByFriendId(userId);
 		List<FriendshipDTO> dto = FriendshipDTO.from(entities);
 		business.flush();
 		return dto;
