@@ -25,19 +25,19 @@ public class WavelineDataAdapter {
 		index = new int[SERIES_LENGTH];
 
 		if (events.size() > 1) {
-			long begin = events.get(0).getStartTime().getTime();
-			long end = events.get(events.size() - 1).getStartTime().getTime();
+			long overallBegin = findEarliestTime(events);
+			long overallEnd = findLatestTime(events);
 		
 			//load the time series and index
 			for (int i = 0; i < events.size(); i++) {
 				Event event = events.get(i);
-				Long startTime = event.getStartTime().getTime();
-				Long endTime = event.getEndTime() == null ? startTime : event.getEndTime().getTime();
-				if (endTime == null) {
-					endTime = end;
+				Long start = event.getStartTime().getTime();
+				Long end = event.getEndTime() == null ? start : event.getEndTime().getTime();
+				if (end == null) {
+					end = overallEnd;
 				}
-				int startPos = (int) ((startTime - begin) * (SERIES_LENGTH - 1) / (end - begin)); //casting is safe because 0 <= result <= seriesLenght
-				int endPos = (int) ((endTime - begin) * (SERIES_LENGTH - 1) / (end - begin));
+				int startPos = (int) ((start - overallBegin) * (SERIES_LENGTH - 1) / (overallEnd - overallBegin)); //casting is safe because 0 <= result <= seriesLenght
+				int endPos = (int) ((end - overallBegin) * (SERIES_LENGTH - 1) / (overallEnd - overallBegin));
 				
 				//value attribution based on event score
 				int score = (int) Math.round(event.getScore().getRelevance());
@@ -82,6 +82,28 @@ public class WavelineDataAdapter {
 		return layers;
 	}
 	
+	public long findEarliestTime(List<Event> events){
+		long min = Long.MAX_VALUE;
+		for (int i = 0; i < events.size(); i++) {
+			long time = events.get(i).getStartTime().getTime();
+			if(time < min){
+				min = time;
+			}
+		}
+		return min;
+	}
+	
+	public long findLatestTime(List<Event> events){
+		long max = Long.MIN_VALUE;
+		for (int i = 0; i < events.size(); i++) {
+			Event event = events.get(i);
+			long time = event.getEndTime() != null ? event.getEndTime().getTime() : event.getStartTime().getTime();
+			if(time > max){
+				max = time;
+			}
+		}
+		return max;
+	}
 
 	public int[] getIndex() {
 		return index;
