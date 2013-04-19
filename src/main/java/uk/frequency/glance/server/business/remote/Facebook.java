@@ -35,7 +35,6 @@ public class Facebook {
 		profile.setFirstName(fbUser.getFirstName());
 		profile.setGender(fbUser.getGender());
 		profile.setHometown(fbUser.getHometownName());
-		fbUser.getLanguages();
 		profile.setLocale(fbUser.getLocale());
 		profile.setMiddleName(fbUser.getMiddleName());
 		profile.setFullName(fbUser.getName());
@@ -47,6 +46,11 @@ public class Facebook {
 		
 		String profileImgUrl = String.format("https://graph.facebook.com/%s/picture?type=large", fbUser.getUsername());
 		profile.setImageUrl(profileImgUrl);
+		
+//		String loc = fbUser.getLocation().getName();
+//		com.restfb.types.Location fbLocation = client.fetchObject(loc, com.restfb.types.Location.class);
+		
+//		fbUser.getLanguages();
 		
 //		Page page = client.fetchObject("me", Page.class);
 //		profile.setImageUrl(page.getPicture());

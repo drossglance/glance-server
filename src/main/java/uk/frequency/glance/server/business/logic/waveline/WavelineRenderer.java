@@ -42,6 +42,7 @@ public class WavelineRenderer {
 		this.layers = layers;
 		this.ordering = new NoLayerSort();
 		this.layout = new StreamLayout();
+//		this.layout = new StackLayout();
 //		this.layout = new MinimizedWiggleLayout();
 //		this.layout = new ThemeRiverLayout();
 //		this.coloring = new RandomColorPicker();

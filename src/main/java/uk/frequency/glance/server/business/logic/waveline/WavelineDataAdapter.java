@@ -46,7 +46,7 @@ public class WavelineDataAdapter {
 						for (int j = startPos; j < endPos; j++) {
 							series3[j] += score;
 						}
-					} else if (event.getType() == EventType.WAKE) {
+					} else if (event.getType() == EventType.JOIN) {
 						series3[startPos] += score;
 					} else {
 						for (int j = startPos; j < endPos; j++) {

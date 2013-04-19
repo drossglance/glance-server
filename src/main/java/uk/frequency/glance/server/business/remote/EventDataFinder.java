@@ -13,12 +13,12 @@ public class EventDataFinder {
 	static final int imageMaxHeight = 200;
 	static final int searchRadius = 100;
 	
-//	public static void main(String[] args) {
-//		Position p = new Position();
-//		p.setLat(51.552873);
-//		p.setLng(-0.08287);
-//		new EventDataFinder(p);
-//	}
+	public static void main(String[] args) {
+		Position p = new Position();
+		p.setLat(51.514204);
+		p.setLng(-0.141824);
+		new EventDataFinder(p);
+	}
 	
 	Location location;
 	String imageUrl;
