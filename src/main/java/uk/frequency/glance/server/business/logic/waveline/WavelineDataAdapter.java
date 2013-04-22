@@ -39,6 +39,12 @@ public class WavelineDataAdapter {
 				int startPos = (int) ((start - overallBegin) * (SERIES_LENGTH - 1) / (overallEnd - overallBegin)); //casting is safe because 0 <= result <= seriesLenght
 				int endPos = (int) ((end - overallBegin) * (SERIES_LENGTH - 1) / (overallEnd - overallBegin));
 				
+				//exceptional state handling
+				if(event.getScore() == null) {
+					System.err.println("FIXME: event without score (id=" + event.getId() + ")");
+					continue; 
+				}
+				
 				//value attribution based on event score
 				int score = (int) Math.round(event.getScore().getRelevance());
 				if (event instanceof StayEvent) {

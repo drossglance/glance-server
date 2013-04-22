@@ -14,8 +14,8 @@ public class EventScoreLogic {
 			StayEvent stay = (StayEvent) event;
 			if(stay.getType() == EventType.SLEEP){
 				return sleepScore(stay);
-			}else if(stay.getType() == EventType.WAKE){
-				return wakeScore(stay);
+			}else if(stay.getType() == EventType.JOIN){
+				return joinScore(stay);
 			}else{
 				return stayScore(stay);
 			}
@@ -55,6 +55,10 @@ public class EventScoreLogic {
 	}
 	
 	private static EventScore sleepScore(StayEvent event){
+		if(event.getType() != EventType.SLEEP){
+			throw new AssertionError();
+		}
+		
 		double hours = TimeUtil.getDurationInHours(event.getStartTime(), event.getEndTime());
 		EventScore score = new EventScore();
 		if(hours < 3){
@@ -71,22 +75,13 @@ public class EventScoreLogic {
 		return score;
 	}
 	
-	private static EventScore wakeScore(StayEvent event){
-		double hours = TimeUtil.getHoursInTheDay(event.getStartTime());
-		EventScore score = new EventScore();
-		if(hours < 5){
-			score.setRelevance(0f);
-		}else if(hours < 6){
-			score.setRelevance(3f);
-		}else if(hours < 7){
-			score.setRelevance(2.75f);
-		}else if(hours < 8){
-			score.setRelevance(2.5f);
-		}else if(hours < 9){
-			score.setRelevance(2.25f);
-		}else{
-			score.setRelevance(2f);
+	private static EventScore joinScore(StayEvent event){
+		if(event.getType() != EventType.JOIN){
+			throw new AssertionError();
 		}
+		
+		EventScore score = new EventScore();
+		score.setRelevance(5f);
 		return score;
 	}
 	

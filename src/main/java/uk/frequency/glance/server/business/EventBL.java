@@ -12,6 +12,7 @@ import org.hibernate.ObjectNotFoundException;
 
 import uk.frequency.glance.server.business.logic.PresentationUtil;
 import uk.frequency.glance.server.business.logic.event.EventGenerationLogic;
+import uk.frequency.glance.server.business.logic.event.EventScoreLogic;
 import uk.frequency.glance.server.business.logic.waveline.BasicColorPicker;
 import uk.frequency.glance.server.business.logic.waveline.WavelineDataAdapter;
 import uk.frequency.glance.server.business.logic.waveline.WavelineRenderer;
@@ -93,6 +94,7 @@ public class EventBL extends GenericBL<Event>{
 		join.setEndTime(user.getCreationTime());
 		join.setSingleImage(user.getProfileHistory().get(0).getImageUrl());
 		join.setUser(user);
+		join.setScore(EventScoreLogic.assignScore(join));
 		eventDal.save(join);
 	}
 	

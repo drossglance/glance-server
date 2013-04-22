@@ -71,8 +71,18 @@ public class UserSL extends GenericSL<User, UserDTO>{
 	public UserDTO facebookLogin(
 			@QueryParam("fbId") String facebookId,
 			@QueryParam("token") String accessToken){
+		
 		User user = userBl.facebookLogin(facebookId, accessToken);
+		boolean isNewUser = (user == null);
+		if(isNewUser){
+			user = userBl.registerFacebookUser(facebookId, accessToken);
+		}
+		
 		UserDTO dto = toDTO(user);
+		if(isNewUser){
+			dto.isFirstLogin = isNewUser;
+		}
+		
 		business.flush();
 		return dto;
 	}

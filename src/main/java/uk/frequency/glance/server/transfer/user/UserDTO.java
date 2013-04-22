@@ -35,5 +35,7 @@ public class UserDTO extends GenericDTO{
 	public String recentLocationName;
 	
 	public String recentLocationTime;
+	
+	public Boolean isFirstLogin;
 
 }
