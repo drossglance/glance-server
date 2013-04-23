@@ -1,13 +1,10 @@
 package uk.frequency.glance.server.transfer.event;
 
-import static uk.frequency.glance.server.business.logic.PresentationUtil.timePastTextDayPrecision;
-import static uk.frequency.glance.server.business.logic.PresentationUtil.timeText;
-import static uk.frequency.glance.server.business.logic.PresentationUtil.toUpperCase;
-import static uk.frequency.glance.server.business.logic.PresentationUtil.dateText;
+import static uk.frequency.glance.server.business.logic.PresentationUtil.*;
+import static uk.frequency.glance.server.business.logic.TimeUtil.*;
 
 import java.util.Date;
 
-import uk.frequency.glance.server.business.logic.TimeUtil;
 import uk.frequency.glance.server.model.event.Event;
 import uk.frequency.glance.server.model.event.EventType;
 import uk.frequency.glance.server.model.event.ListenEvent;
@@ -38,9 +35,11 @@ public class EventViewDTO {
 		}else if(event instanceof StayEvent){
 			StayEvent stay = (StayEvent)event;
 			if(event.getType() == EventType.SLEEP){
-				dto.title = "WOKE UP";
+				String userName = event.getUser().getProfile().getFirstName();
+				dto.title = toUpperCase(userName) + " IS AWAKE";
 			}else if(event.getType() == EventType.JOIN){
-				dto.preTitle = "JOINED";
+				String userName = event.getUser().getProfile().getFirstName();
+				dto.preTitle = toUpperCase(userName) + " JOINED";
 				dto.title = "GLANCE";
 			}else{
 				dto.preTitle = isHappening? "ARRIVED AT" : null;
@@ -49,12 +48,13 @@ public class EventViewDTO {
 		}else if(event instanceof MoveEvent){
 			MoveEvent move = (MoveEvent)event;
 			if(isHappening){
-				dto.preTitle = "LEFT";
-				dto.title = toUpperCase(move.getStartLocation().getName());
+				dto.preTitle = "TRAVELING";
+				dto.title = "JUST LEFT " + toUpperCase(move.getStartLocation().getName());
 			}else{
 				String originStr = toUpperCase(move.getStartLocation().getName());
-				dto.preTitle = String.format("%s TO", originStr);
-				dto.title = toUpperCase(move.getEndLocation().getName());
+				String destStr = toUpperCase(move.getEndLocation().getName());
+				dto.preTitle = String.format("TRAVELLED FROM %s", originStr);
+				dto.title = String.format("TO %s", destStr);
 			}
 		}else if(event instanceof ListenEvent){
 			ListenEvent listen = (ListenEvent)event;
@@ -65,20 +65,27 @@ public class EventViewDTO {
 
 		
 		Date start = event.getStartTime();
+		Date end = event.getEndTime();
 		if(event instanceof StayEvent && event.getType() == EventType.JOIN){
 			dto.subtitle2 = dateText(start);
+		}else if(event instanceof StayEvent && event.getType() == EventType.JOIN){
+			int duration = (int)getDurationInHours(start, end);
+			dto.subtitle1 = timeText(end);
+			dto.subtitle2 = String.format("Slept for %d hours", duration);
 		}else{
-			if(TimeUtil.isBeforeToday(start)){
+			if(isBeforeToday(start)){
 				dto.subtitle1 = timePastTextDayPrecision(start); 
 			}
 			if(isHappening){
 				dto.subtitle2 = timeText(start);
 			}else{
-				Date end = event.getEndTime();
 				String startStr = timeText(start);
 				String endStr = timeText(end);
 				if(startStr.equals(endStr)){
 					dto.subtitle2 = startStr;
+				}else if(!isInSameDay(start, end)){
+					dto.subtitle1 = String.format("%s, %s", timePastTextDayPrecision(start), startStr); 
+					dto.subtitle2 = String.format("%s, %s", timePastTextDayPrecision(end), endStr);
 				}else{
 					dto.subtitle2 = String.format("%s - %s", startStr, endStr);
 				}

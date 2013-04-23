@@ -88,11 +88,11 @@ public class PresentationUtil {
 	}
 	
 	public static String dateText(Date time){
-		String str = new SimpleDateFormat("MMMM d, yyyy").format(time);
-//		String str = new SimpleDateFormat("d").format(time);
-//		str += dayOfMonthSuffix(Integer.valueOf(str));
-//		str += " of ";
-//		str += new SimpleDateFormat("MMMM yyyy").format(time);
+//		String str = new SimpleDateFormat("MMMM d, yyyy").format(time);
+		String str = new SimpleDateFormat("d").format(time);
+		str += dayOfMonthSuffix(Integer.valueOf(str));
+		str += " of ";
+		str += new SimpleDateFormat("MMMM, yyyy").format(time);
 		return str;
 	}
 	

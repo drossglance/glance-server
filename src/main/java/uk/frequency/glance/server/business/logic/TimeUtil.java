@@ -57,6 +57,20 @@ public class TimeUtil {
 		return begin.getTime();
 	}
 	
+	public static Date getBeginOfDay(Date time){
+		Calendar cal = Calendar.getInstance();
+		cal.setTime(time);
+		cal.set(Calendar.HOUR_OF_DAY, 0);
+		cal.set(Calendar.MINUTE, 0);
+		cal.set(Calendar.SECOND, 0);
+		cal.set(Calendar.MILLISECOND, 0);
+		return cal.getTime();
+	}
+	
+	public static boolean isInSameDay(Date time1, Date time2){
+		return getBeginOfDay(time1).getTime() == getBeginOfDay(time2).getTime();
+	}
+	
 	public static Date parse(String str){
 		try {
 			return TIMESTAMP.parse(str);

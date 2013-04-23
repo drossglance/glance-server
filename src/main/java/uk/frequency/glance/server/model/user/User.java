@@ -83,13 +83,20 @@ public class User extends GenericEntity{
 		this.settings = settings;
 	}
 	
-
 	public List<UserProfile> getProfileHistory() {
 		return profileHistory;
 	}
 
 	public void setProfileHistory(List<UserProfile> profileHistory) {
 		this.profileHistory = profileHistory;
+	}
+	
+	public UserProfile getProfile(){
+		if(profileHistory != null && !profileHistory.isEmpty()){
+			return profileHistory.get(0);
+		}else{
+			return null;
+		}
 	}
 	
 	public void setProfile(UserProfile... profile){
