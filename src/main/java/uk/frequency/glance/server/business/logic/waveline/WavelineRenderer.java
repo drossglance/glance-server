@@ -20,7 +20,7 @@ import uk.frequency.glance.server.business.logic.waveline.streamgraph.Layer;
 import uk.frequency.glance.server.business.logic.waveline.streamgraph.LayerLayout;
 import uk.frequency.glance.server.business.logic.waveline.streamgraph.LayerSort;
 import uk.frequency.glance.server.business.logic.waveline.streamgraph.NoLayerSort;
-import uk.frequency.glance.server.business.logic.waveline.streamgraph.StreamLayout;
+import uk.frequency.glance.server.business.logic.waveline.streamgraph.StackLayout;
 
 public class WavelineRenderer {
 
@@ -41,8 +41,8 @@ public class WavelineRenderer {
 	public WavelineRenderer(Layer[] layers, ColorPicker coloring){
 		this.layers = layers;
 		this.ordering = new NoLayerSort();
-		this.layout = new StreamLayout();
-//		this.layout = new StackLayout();
+//		this.layout = new StreamLayout();
+		this.layout = new StackLayout();
 //		this.layout = new MinimizedWiggleLayout();
 //		this.layout = new ThemeRiverLayout();
 //		this.coloring = new RandomColorPicker();
@@ -84,8 +84,8 @@ public class WavelineRenderer {
 		g.setRenderingHint(KEY_ANTIALIASING, VALUE_ANTIALIAS_ON);
 		g.setRenderingHint(KEY_INTERPOLATION, VALUE_INTERPOLATION_BICUBIC);
 		
-		drawShadow(g, width, height, 1.3f, 0, false); //fading upwards
-		drawShadow(g, width, height, 1.3f, 50f, true); //fading downwards
+//		drawShadow(g, width, height, 1.3f, 0, false); //fading upwards
+//		drawShadow(g, width, height, 1.3f, 50f, true); //fading downwards
 		
 		// paint each layer of the graph as a polygon
 		for (int i = 0; i < numLayers; ++i) {
