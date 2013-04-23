@@ -70,7 +70,7 @@ public class PositionTraceDebug {
 		RemoteAPIClient client = new RemoteAPIClient("");
 		Image map = client.getImage(url);
 		EventViewDTO view = EventViewDTO.from(EventSL.staticFromDTO(move));
-		DebugUtil.showOnFrame(map, view.preTitle + " " + view.title);
+		DebugUtil.showOnFrame(map, view.lines[0] + " " + view.lines[1]);
 	}
 	
 	static void showTracesOnMap(List<PositionTraceDTO> traces){

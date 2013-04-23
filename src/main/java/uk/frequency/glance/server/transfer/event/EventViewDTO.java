@@ -17,48 +17,43 @@ public class EventViewDTO {
 
 	public String imageUrl;
 	
-	public String preTitle;
-	
-	public String title;
-	
-	public String subtitle1;
-	
-	public String subtitle2;
+	public String[] lines; 
 
 	public static EventViewDTO from(Event event){
 		boolean isHappening = event.getEndTime() == null;
 		
 		EventViewDTO dto = new EventViewDTO();
+		dto.lines = new String[4];
 		if(event instanceof TellEvent){
 			TellEvent tell = (TellEvent)event;
-			dto.title = toUpperCase(tell.getLocation().getName());
+			dto.lines[1] = toUpperCase(tell.getLocation().getName());
 		}else if(event instanceof StayEvent){
 			StayEvent stay = (StayEvent)event;
 			if(event.getType() == EventType.SLEEP){
 				String userName = event.getUser().getProfile().getFirstName();
-				dto.title = toUpperCase(userName) + " IS AWAKE";
+				dto.lines[1] = toUpperCase(userName) + " IS AWAKE";
 			}else if(event.getType() == EventType.JOIN){
 				String userName = event.getUser().getProfile().getFirstName();
-				dto.preTitle = toUpperCase(userName) + " JOINED";
-				dto.title = "GLANCE";
+				dto.lines[0] = toUpperCase(userName) + " JOINED";
+				dto.lines[1] = "GLANCE";
 			}else{
-				dto.preTitle = isHappening? "ARRIVED AT" : null;
-				dto.title = toUpperCase(stay.getLocation().getName());
+				dto.lines[0] = isHappening? "ARRIVED AT" : null;
+				dto.lines[1] = toUpperCase(stay.getLocation().getName());
 			}
 		}else if(event instanceof MoveEvent){
 			MoveEvent move = (MoveEvent)event;
 			if(isHappening){
-				dto.preTitle = "TRAVELING FROM";
-				dto.title = toUpperCase(move.getStartLocation().getName());
+				dto.lines[0] = "TRAVELING FROM";
+				dto.lines[1] = toUpperCase(move.getStartLocation().getName());
 			}else{
 				String originStr = toUpperCase(move.getStartLocation().getName());
 				String destStr = toUpperCase(move.getEndLocation().getName());
-				dto.preTitle = String.format("%s", originStr);
-				dto.title = String.format("%s", destStr);
+				dto.lines[0] = String.format("%s", originStr);
+				dto.lines[1] = String.format("%s", destStr);
 			}
 		}else if(event instanceof ListenEvent){
 			ListenEvent listen = (ListenEvent)event;
-			dto.title = toUpperCase(listen.getSongMetadata());
+			dto.lines[1] = toUpperCase(listen.getSongMetadata());
 		}else{
 			throw new AssertionError();
 		}
@@ -67,27 +62,27 @@ public class EventViewDTO {
 		Date start = event.getStartTime();
 		Date end = event.getEndTime();
 		if(event instanceof StayEvent && event.getType() == EventType.JOIN){
-			dto.subtitle2 = dateText(start);
+			dto.lines[3] = dateText(start);
 		}else if(event instanceof StayEvent && event.getType() == EventType.JOIN){
 			int duration = (int)getDurationInHours(start, end);
-			dto.subtitle1 = timeText(end);
-			dto.subtitle2 = String.format("Slept for %d hours", duration);
+			dto.lines[2] = timeText(end);
+			dto.lines[3] = String.format("Slept for %d hours", duration);
 		}else{
 			if(isBeforeToday(start)){
-				dto.subtitle1 = timePastTextDayPrecision(start); 
+				dto.lines[2] = timePastTextDayPrecision(start); 
 			}
 			if(isHappening){
-				dto.subtitle2 = timeText(start);
+				dto.lines[3] = timeText(start);
 			}else{
 				String startStr = timeText(start);
 				String endStr = timeText(end);
 				if(startStr.equals(endStr)){
-					dto.subtitle2 = startStr;
+					dto.lines[3] = startStr;
 				}else if(!isInSameDay(start, end)){
-					dto.subtitle1 = String.format("%s, %s", timePastTextDayPrecision(start), startStr); 
-					dto.subtitle2 = String.format("%s, %s", timePastTextDayPrecision(end), endStr);
+					dto.lines[2] = String.format("%s, %s", timePastTextDayPrecision(start), startStr); 
+					dto.lines[3] = String.format("%s, %s", timePastTextDayPrecision(end), endStr);
 				}else{
-					dto.subtitle2 = String.format("%s - %s", startStr, endStr);
+					dto.lines[3] = String.format("%s - %s", startStr, endStr);
 				}
 			}
 		}
