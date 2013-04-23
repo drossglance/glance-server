@@ -48,13 +48,13 @@ public class EventViewDTO {
 		}else if(event instanceof MoveEvent){
 			MoveEvent move = (MoveEvent)event;
 			if(isHappening){
-				dto.preTitle = "TRAVELING";
-				dto.title = "JUST LEFT " + toUpperCase(move.getStartLocation().getName());
+				dto.preTitle = "TRAVELING FROM";
+				dto.title = toUpperCase(move.getStartLocation().getName());
 			}else{
 				String originStr = toUpperCase(move.getStartLocation().getName());
 				String destStr = toUpperCase(move.getEndLocation().getName());
-				dto.preTitle = String.format("TRAVELLED FROM %s", originStr);
-				dto.title = String.format("TO %s", destStr);
+				dto.preTitle = String.format("%s", originStr);
+				dto.title = String.format("%s", destStr);
 			}
 		}else if(event instanceof ListenEvent){
 			ListenEvent listen = (ListenEvent)event;

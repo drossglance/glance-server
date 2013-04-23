@@ -112,7 +112,7 @@ public class PresentationUtil {
 	}
 
 	public static List<Position> cleanTrail(List<Position> trail) {
-		final double STEP = EventGenerationLogic.BIG_RADIUS; // min distance between each step in the trail
+		final double STEP = EventGenerationLogic.SMALL_RADIUS; // min distance between each step in the trail
 		List<Position> cleanTrail = new ArrayList<Position>();
 
 		cleanTrail.add(trail.get(0));
