@@ -6,6 +6,8 @@ import java.util.List;
 
 import javax.persistence.ElementCollection;
 import javax.persistence.Entity;
+import javax.persistence.EnumType;
+import javax.persistence.Enumerated;
 import javax.persistence.Inheritance;
 import javax.persistence.InheritanceType;
 import javax.persistence.OneToMany;
@@ -28,6 +30,7 @@ import uk.frequency.glance.server.model.user.User;
 @Proxy(lazy=false)
 public class Event extends UserExpression {
 
+	@Enumerated(EnumType.STRING)
 	EventType type;
 	
 	@Index(name="time_index")

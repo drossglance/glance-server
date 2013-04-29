@@ -61,3 +61,25 @@ delete from event where id in (select id from event where user_id = %id);
 delete from friendship where user_id=%id or friend_id=%id;
 delete from user_profile_history where user_id=%id;
 delete from tb_user where id=%id;
+
+
+
+
+
+//ALTER TABLE
+alter table event alter column type type varchar(20);
+update event set type='STAY' where type='0';
+update event set type='HOME' where type='1';
+update event set type='WORK' where type='2';
+update event set type='PUB' where type='3';
+update event set type='EXERCISE' where type='4';
+update event set type='SLEEP' where type='5';
+update event set type='WAKE' where type='6';
+update event set type='WALK' where type='7';
+update event set type='CYCLING' where type='8';
+update event set type='COMUTE' where type='9';
+update event set type='TRAVEL' where type='10';
+update event set type='MEETING' where type='11';
+update event set type='MUSIC' where type='12';
+update event set type='MOVIE' where type='13';
+update event set type='JOIN' where type='14';
