@@ -63,10 +63,7 @@ delete from user_profile_history where user_id=%id;
 delete from tb_user where id=%id;
 
 
-
-
-
-//ALTER TABLE
+//CHANGE TABLE TYPE
 alter table event alter column type type varchar(20);
 update event set type='STAY' where type='0';
 update event set type='HOME' where type='1';
@@ -83,3 +80,4 @@ update event set type='MEETING' where type='11';
 update event set type='MUSIC' where type='12';
 update event set type='MOVIE' where type='13';
 update event set type='JOIN' where type='14';
+

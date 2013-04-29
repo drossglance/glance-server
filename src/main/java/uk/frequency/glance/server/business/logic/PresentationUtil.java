@@ -1,5 +1,8 @@
 package uk.frequency.glance.server.business.logic;
 
+import static uk.frequency.glance.server.business.logic.TimeUtil.*;
+import static uk.frequency.glance.server.business.logic.geometry.LatLngGeometryUtil.*;
+
 import java.awt.Color;
 import java.text.DateFormat;
 import java.text.SimpleDateFormat;
@@ -8,10 +11,10 @@ import java.util.Date;
 import java.util.List;
 import java.util.Locale;
 
-import static uk.frequency.glance.server.business.logic.geometry.LatLngGeometryUtil.*;
-import static uk.frequency.glance.server.business.logic.TimeUtil.*;
+import uk.frequency.glance.server.business.UserBL;
 import uk.frequency.glance.server.business.logic.event.EventGenerationLogic;
 import uk.frequency.glance.server.business.remote.GoogleStaticMaps;
+import uk.frequency.glance.server.debug.LogEntry;
 import uk.frequency.glance.server.model.component.Position;
 import uk.frequency.glance.server.model.event.MoveEvent;
 
@@ -84,6 +87,12 @@ public class PresentationUtil {
 	}
 
 	public static String timeText(Date time) {
+		LogEntry log = new LogEntry();
+		log.text = timeFormat.getTimeZone().getDisplayName() + ", " + timeFormat.getTimeZone().getDSTSavings();
+		log.time = new Date();
+		System.err.println(log.text);
+		new UserBL().saveLogEntry(log);
+		
 		return timeFormat.format(time);
 	}
 	
