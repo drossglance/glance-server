@@ -11,10 +11,8 @@ import java.util.Date;
 import java.util.List;
 import java.util.Locale;
 
-import uk.frequency.glance.server.business.UserBL;
 import uk.frequency.glance.server.business.logic.event.EventGenerationLogic;
 import uk.frequency.glance.server.business.remote.GoogleStaticMaps;
-import uk.frequency.glance.server.debug.LogEntry;
 import uk.frequency.glance.server.model.component.Position;
 import uk.frequency.glance.server.model.event.MoveEvent;
 
@@ -87,12 +85,6 @@ public class PresentationUtil {
 	}
 
 	public static String timeText(Date time) {
-		LogEntry log = new LogEntry();
-		log.text = timeFormat.getTimeZone().getDisplayName() + ", " + timeFormat.getTimeZone().getDSTSavings();
-		log.time = new Date();
-		System.err.println(log.text);
-		new UserBL().saveLogEntry(log);
-		
 		return timeFormat.format(time);
 	}
 	
