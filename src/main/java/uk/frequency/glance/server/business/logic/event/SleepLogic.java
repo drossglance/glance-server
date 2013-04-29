@@ -30,7 +30,7 @@ public class SleepLogic extends Thread {
 	}
 
 	public void handleTrace(SleepTrace currentTrace) {
-		int index = genInfo.getSleepStaticImageIndex();
+		int index = genInfo.getSleepCount();
 		User user = genInfo.getUser();
 		Date begin = currentTrace.getBegin();
 		Date end = currentTrace.getTime();
@@ -38,7 +38,7 @@ public class SleepLogic extends Thread {
 		Event newEvent = createSleepEvent(user, begin, end, index);
 		eventDal.save(newEvent);
 		
-		genInfo.setSleepStaticImageIndex(index+1);
+		genInfo.setSleepCount(index+1);
 		userDal.merge(genInfo);
 	}
 	

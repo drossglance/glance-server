@@ -32,17 +32,13 @@ public class EventGenerationInfo {
 	
 	@LazyToOne(LazyToOneOption.FALSE)
 	@OneToOne
-	Event lastEvent;
-	
-	@LazyToOne(LazyToOneOption.FALSE)
-	@OneToOne
 	Event currentPositionEvent;
 	
 	@LazyToOne(LazyToOneOption.FALSE)
 	@OneToOne
 	PositionTrace lastPositionTrace;
 
-	Integer sleepStaticImageIndex = 0;
+	Integer sleepCount = 0;
 	
 	public User getUser() {
 		return user;
@@ -50,14 +46,6 @@ public class EventGenerationInfo {
 
 	public void setUser(User user) {
 		this.user = user;
-	}
-
-	public Event getLastEvent() {
-		return lastEvent;
-	}
-
-	public void setLastEvent(Event lastEvent) {
-		this.lastEvent = lastEvent;
 	}
 
 	public Event getCurrentPositionEvent() {
@@ -76,12 +64,12 @@ public class EventGenerationInfo {
 		this.lastPositionTrace = lastPositionTrace;
 	}
 
-	public Integer getSleepStaticImageIndex() {
-		return sleepStaticImageIndex;
+	public Integer getSleepCount() {
+		return sleepCount;
 	}
 
-	public void setSleepStaticImageIndex(Integer sleepStaticImageIndex) {
-		this.sleepStaticImageIndex = sleepStaticImageIndex;
+	public void setSleepCount(Integer sleepCount) {
+		this.sleepCount = sleepCount;
 	}
 
 	@Override

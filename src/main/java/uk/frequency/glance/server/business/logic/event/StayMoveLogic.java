@@ -45,6 +45,10 @@ public class StayMoveLogic extends Thread {
 		this.traceDal = traceDal;
 		this.userDal = userDal;
 	}
+	
+	
+	
+	//MAIN LOGIC
 
 	public void handleTrace(PositionTrace currentTrace) {
 
@@ -142,70 +146,9 @@ public class StayMoveLogic extends Thread {
 		// TODO notify client device
 	}
 	
-	private StayEvent createStayEvent(User user, EventDataFinder finder, Date start) {
-		Location location = finder.getLocation();
-		String imageUrl = finder.getImageUrl();
-
-		StayEvent event = new StayEvent();
-		event.setType(EventType.STAY);
-		event.setUser(user);
-		event.setStartTime(start);
-		event.setLocation(location);
-		event.setSingleImage(imageUrl);
-		event.setScore(new EventScore());
-		return event;
-	}
 	
-	private void closeStayEvent(StayEvent event, Date end){
-		event.setEndTime(end);
-		EventScore score = EventScoreLogic.assignScore(event);
-		event.setScore(score);
-	}
 	
-	private MoveEvent createMoveEvent(User user, EventDataFinder finder, Date start) {
-		Location location = finder.getLocation();
-//		String imageUrl = finder.getImageUrl();
-		return createMoveEvent(user, location, start);
-	}
-	
-	private MoveEvent createMoveEvent(User user, StayEvent stay, Date start) {
-		Location location = stay.getLocation();
-//		String imageUrl = stay.getMedia().get(0).getUrl();
-		return createMoveEvent(user, location, start);
-	}
-	
-	private MoveEvent createMoveEvent(User user, Location location, Date start) {
-		List<Position> trail = new ArrayList<Position>();
-		trail.add(location.getPosition());
-		MoveEvent event = new MoveEvent();
-		event.setType(EventType.TRAVEL);
-		event.setUser(user);
-		event.setStartTime(start);
-		event.setStartLocation(location);
-		event.setTrail(trail);
-		event.setScore(new EventScore());
-		
-		String imageUrl = moveEventMapImageUrl(event);
-		event.setSingleImage(imageUrl);
-		
-		return event;
-	}
-
-	private void closeMoveEvent(MoveEvent event, Date end, Location location){
-		event.setEndTime(end);
-		event.setEndLocation(location);
-		EventScore score = EventScoreLogic.assignScore(event);
-		event.setScore(score);
-		
-		String imageUrl = moveEventMapImageUrl(event);
-		event.setSingleImage(imageUrl);
-	}
-	
-	private void updateMoveEvent(MoveEvent event, Position position){
-		event.getTrail().add(position);
-		String imageUrl = moveEventMapImageUrl(event);
-		event.setSingleImage(imageUrl);
-	}
+	//TRACE HISTORY ANALYSIS
 	
 	private class RecentTraces{
 		
@@ -293,6 +236,73 @@ public class StayMoveLogic extends Thread {
 						> TELEPORT_DISTANCE;
 		}
 		
+	}
+	
+	
+	
+	//EVENT CREATION
+	
+	private StayEvent createStayEvent(User user, EventDataFinder finder, Date start) {
+		Location location = finder.getLocation();
+		String imageUrl = finder.getImageUrl();
+
+		StayEvent event = new StayEvent();
+		event.setType(EventType.STAY);
+		event.setUser(user);
+		event.setStartTime(start);
+		event.setLocation(location);
+		event.setSingleImage(imageUrl);
+		event.setScore(new EventScore());
+		return event;
+	}
+	
+	private void closeStayEvent(StayEvent event, Date end){
+		event.setEndTime(end);
+		EventScore score = EventScoreLogic.assignScore(event);
+		event.setScore(score);
+	}
+	
+	private MoveEvent createMoveEvent(User user, EventDataFinder finder, Date start) {
+		Location location = finder.getLocation();
+		return createMoveEvent(user, location, start);
+	}
+	
+	private MoveEvent createMoveEvent(User user, StayEvent stay, Date start) {
+		Location location = stay.getLocation();
+		return createMoveEvent(user, location, start);
+	}
+	
+	private MoveEvent createMoveEvent(User user, Location location, Date start) {
+		List<Position> trail = new ArrayList<Position>();
+		trail.add(location.getPosition());
+		MoveEvent event = new MoveEvent();
+		event.setType(EventType.TRAVEL);
+		event.setUser(user);
+		event.setStartTime(start);
+		event.setStartLocation(location);
+		event.setTrail(trail);
+		event.setScore(new EventScore());
+		
+		String imageUrl = moveEventMapImageUrl(event);
+		event.setSingleImage(imageUrl);
+		
+		return event;
+	}
+
+	private void closeMoveEvent(MoveEvent event, Date end, Location location){
+		event.setEndTime(end);
+		event.setEndLocation(location);
+		EventScore score = EventScoreLogic.assignScore(event);
+		event.setScore(score);
+		
+		String imageUrl = moveEventMapImageUrl(event);
+		event.setSingleImage(imageUrl);
+	}
+	
+	private void updateMoveEvent(MoveEvent event, Position position){
+		event.getTrail().add(position);
+		String imageUrl = moveEventMapImageUrl(event);
+		event.setSingleImage(imageUrl);
 	}
 	
 }
