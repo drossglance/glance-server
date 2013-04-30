@@ -150,7 +150,8 @@ public class EventSL extends GenericSL<Event, EventDTO>{
 	public Response eventFeedPage(
 		@PathParam("id") long userId,
 		@QueryParam("wl_width") long width,
-		@QueryParam("wl_height") long height){
+		@QueryParam("wl_height") long height,
+		@QueryParam("time_offset") long timeOffset){
 		
 		try{
 			
@@ -163,7 +164,7 @@ public class EventSL extends GenericSL<Event, EventDTO>{
 					.queryParam("height", height)
 					.build(userId).toString();
 			
-			return eventFeedPage(userId, events, waveUrl);
+			return eventFeedPage(userId, events, waveUrl, timeOffset);
 			
 		}catch (ObjectNotFoundException e){
 			return Response.status(Status.NOT_FOUND).build();
@@ -178,7 +179,8 @@ public class EventSL extends GenericSL<Event, EventDTO>{
 		@PathParam("start") long start,
 		@PathParam("end") long end,
 		@QueryParam("wl_width") long width,
-		@QueryParam("wl_height") long height){
+		@QueryParam("wl_height") long height,
+		@QueryParam("time_offset") long timeOffset){
 		
 		try{
 			
@@ -190,14 +192,14 @@ public class EventSL extends GenericSL<Event, EventDTO>{
 					.queryParam("height", height)
 					.build(userId, start, end).toString();
 			
-			return eventFeedPage(userId, events, waveUrl);
+			return eventFeedPage(userId, events, waveUrl, timeOffset);
 		
 		}catch (ObjectNotFoundException e){
 			return Response.status(Status.NOT_FOUND).build();
 		}
 	}
 	
-	private Response eventFeedPage(long userId, List<Event> events, String waveUrl){
+	private Response eventFeedPage(long userId, List<Event> events, String waveUrl, long timeOffset){
 		User user = userBl.findById(userId);
 	
 		WavelineDataAdapter adapter = new WavelineDataAdapter();
@@ -206,7 +208,7 @@ public class EventSL extends GenericSL<Event, EventDTO>{
 		
 		List<EventViewDTO> eventDtos = new ArrayList<EventViewDTO>();
 		for(Event event : events){
-			eventDtos.add(EventViewDTO.from(event));
+			eventDtos.add(EventViewDTO.from(event, timeOffset));
 		}
 		
 		UserDTO dto = new UserDTO();
@@ -230,7 +232,7 @@ public class EventSL extends GenericSL<Event, EventDTO>{
 			if(isBeforeToday(trace.getTime())){
 				timeStr = timePastTextDayPrecision(trace.getTime()) + " ";
 			}
-			timeStr += timeText(trace.getTime());
+			timeStr += timeText(trace.getTime(), timeOffset);
 			dto.recentLocationTime = timeStr;
 		}
 		

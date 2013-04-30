@@ -88,6 +88,11 @@ public class PresentationUtil {
 		return timeFormat.format(time);
 	}
 	
+	public static String timeText(Date time, long timeOffset) {
+		time = new Date(time.getTime() + timeOffset);
+		return timeFormat.format(time);
+	}
+	
 	public static String dateText(Date time){
 //		String str = new SimpleDateFormat("MMMM d, yyyy").format(time);
 		String str = new SimpleDateFormat("d").format(time);

@@ -69,7 +69,7 @@ public class PositionTraceDebug {
 		String url = maps.getImageUrl(markers, trail);
 		RemoteAPIClient client = new RemoteAPIClient("");
 		Image map = client.getImage(url);
-		EventViewDTO view = EventViewDTO.from(EventSL.staticFromDTO(move));
+		EventViewDTO view = EventViewDTO.from(EventSL.staticFromDTO(move), 0);
 		DebugUtil.showOnFrame(map, view.lines[0] + " " + view.lines[1]);
 	}
 	

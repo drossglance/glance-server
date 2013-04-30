@@ -30,7 +30,7 @@ public class EventViewDTO {
 		ONGOING, COMPLETE; //states relevant to presentation formatting
 	}
 
-	public static EventViewDTO from(Event event){
+	public static EventViewDTO from(Event event, long timeOffset){
 		boolean isHappening = event.getEndTime() == null;
 		
 		EventViewDTO dto = new EventViewDTO();
@@ -76,6 +76,11 @@ public class EventViewDTO {
 		
 		Date start = event.getStartTime();
 		Date end = event.getEndTime();
+		if(timeOffset != 0){
+			start = new Date(start.getTime() + timeOffset);
+			end = new Date(end.getTime() + timeOffset);
+		}
+		
 		if(event instanceof StayEvent){
 			if(event.getType() == JOIN){
 				dto.lines[3] = dateText(start);
