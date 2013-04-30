@@ -78,7 +78,7 @@ public class EventViewDTO {
 		Date end = event.getEndTime();
 		if(timeOffset != 0){
 			start = new Date(start.getTime() + timeOffset);
-			end = new Date(end.getTime() + timeOffset);
+			end = end != null ? new Date(end.getTime() + timeOffset) : null;
 		}
 		
 		if(event instanceof StayEvent){
